@@ -74,6 +74,15 @@ def test_load_rows_rejects_non_finite_numbers(tmp_path, price, qty):
     assert errors == ["line 2: price and qty must be finite numbers"]
 
 
+def test_load_rows_accepts_utf8_bom(tmp_path):
+    # Excel on Windows saves "CSV UTF-8" with a byte order mark
+    path = tmp_path / "products.csv"
+    path.write_text("sku,name,price,qty\nA1,Shoe,25.5,10\n", encoding="utf-8-sig")
+    rows, errors = load_rows(path)
+    assert rows == [ProductRow("A1", "Shoe", 25.5, 10.0)]
+    assert errors == []
+
+
 def test_load_rows_missing_columns(tmp_path):
     path = write_csv(tmp_path, "sku,name\nA1,Shoe\n")
     with pytest.raises(ValueError, match="missing columns"):

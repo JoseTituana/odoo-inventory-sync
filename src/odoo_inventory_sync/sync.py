@@ -44,7 +44,8 @@ def load_rows(path: str | Path) -> tuple[list[ProductRow], list[str]]:
     rows: list[ProductRow] = []
     errors: list[str] = []
     seen: set[str] = set()
-    with open(path, newline="", encoding="utf-8") as handle:
+    # utf-8-sig strips the byte order mark Excel adds; plain UTF-8 still works
+    with open(path, newline="", encoding="utf-8-sig") as handle:
         reader = csv.DictReader(handle)
         missing = [c for c in REQUIRED_COLUMNS if c not in (reader.fieldnames or [])]
         if missing:
