@@ -16,7 +16,7 @@ It comes from a real use case: connecting a custom inventory system and a point 
 ## Install
 
 ```bash
-git clone https://github.com/<your-user>/odoo-inventory-sync.git
+git clone https://github.com/JoseTituana/odoo-inventory-sync.git
 cd odoo-inventory-sync
 python -m venv .venv && source .venv/bin/activate   # Windows: .venv\Scripts\activate
 pip install -e ".[dev]"
