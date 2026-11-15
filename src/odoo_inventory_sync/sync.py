@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import csv
+import math
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Protocol
@@ -62,6 +63,9 @@ def load_rows(path: str | Path) -> tuple[list[ProductRow], list[str]]:
                     raise ValueError(f"duplicate sku {sku}")
                 price = float(raw["price"])
                 qty = float(raw["qty"])
+                # float() accepts "nan" and "inf", and NaN fails every comparison
+                if not (math.isfinite(price) and math.isfinite(qty)):
+                    raise ValueError("price and qty must be finite numbers")
                 if price < 0 or qty < 0:
                     raise ValueError("price and qty must not be negative")
             except ValueError as error:

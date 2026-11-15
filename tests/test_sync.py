@@ -64,6 +64,16 @@ def test_load_rows_reports_short_rows(tmp_path):
     assert errors == ["line 3: missing values for price, qty"]
 
 
+@pytest.mark.parametrize(
+    "price, qty", [("nan", "1"), ("inf", "1"), ("-inf", "1"), ("25", "nan"), ("25", "inf")]
+)
+def test_load_rows_rejects_non_finite_numbers(tmp_path, price, qty):
+    path = write_csv(tmp_path, f"sku,name,price,qty\nA1,Shoe,{price},{qty}\n")
+    rows, errors = load_rows(path)
+    assert rows == []
+    assert errors == ["line 2: price and qty must be finite numbers"]
+
+
 def test_load_rows_missing_columns(tmp_path):
     path = write_csv(tmp_path, "sku,name\nA1,Shoe\n")
     with pytest.raises(ValueError, match="missing columns"):
