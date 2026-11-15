@@ -52,6 +52,10 @@ def load_rows(path: str | Path) -> tuple[list[ProductRow], list[str]]:
             sku = (raw["sku"] or "").strip()
             name = (raw["name"] or "").strip()
             try:
+                # csv.DictReader fills fields missing from a short row with None
+                missing = [c for c in REQUIRED_COLUMNS if raw[c] is None]
+                if missing:
+                    raise ValueError(f"missing values for {', '.join(missing)}")
                 if not sku or not name:
                     raise ValueError("sku and name are required")
                 if sku in seen:

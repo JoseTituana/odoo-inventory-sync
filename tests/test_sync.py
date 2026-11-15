@@ -57,6 +57,13 @@ def test_load_rows_reports_bad_lines_and_duplicates(tmp_path):
     assert any("duplicate" in e for e in errors)
 
 
+def test_load_rows_reports_short_rows(tmp_path):
+    path = write_csv(tmp_path, "sku,name,price,qty\nA1,Shoe,25,1\nB2,Short\n")
+    rows, errors = load_rows(path)
+    assert [r.sku for r in rows] == ["A1"]
+    assert errors == ["line 3: missing values for price, qty"]
+
+
 def test_load_rows_missing_columns(tmp_path):
     path = write_csv(tmp_path, "sku,name\nA1,Shoe\n")
     with pytest.raises(ValueError, match="missing columns"):
