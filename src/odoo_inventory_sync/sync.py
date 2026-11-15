@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import csv
+import math
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Protocol
@@ -43,7 +44,8 @@ def load_rows(path: str | Path) -> tuple[list[ProductRow], list[str]]:
     rows: list[ProductRow] = []
     errors: list[str] = []
     seen: set[str] = set()
-    with open(path, newline="", encoding="utf-8") as handle:
+    # utf-8-sig strips the byte order mark Excel adds; plain UTF-8 still works
+    with open(path, newline="", encoding="utf-8-sig") as handle:
         reader = csv.DictReader(handle)
         missing = [c for c in REQUIRED_COLUMNS if c not in (reader.fieldnames or [])]
         if missing:
@@ -52,12 +54,19 @@ def load_rows(path: str | Path) -> tuple[list[ProductRow], list[str]]:
             sku = (raw["sku"] or "").strip()
             name = (raw["name"] or "").strip()
             try:
+                # csv.DictReader fills fields missing from a short row with None
+                missing = [c for c in REQUIRED_COLUMNS if raw[c] is None]
+                if missing:
+                    raise ValueError(f"missing values for {', '.join(missing)}")
                 if not sku or not name:
                     raise ValueError("sku and name are required")
                 if sku in seen:
                     raise ValueError(f"duplicate sku {sku}")
                 price = float(raw["price"])
                 qty = float(raw["qty"])
+                # float() accepts "nan" and "inf", and NaN fails every comparison
+                if not (math.isfinite(price) and math.isfinite(qty)):
+                    raise ValueError("price and qty must be finite numbers")
                 if price < 0 or qty < 0:
                     raise ValueError("price and qty must not be negative")
             except ValueError as error:
