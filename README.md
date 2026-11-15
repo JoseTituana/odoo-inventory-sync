@@ -65,9 +65,13 @@ tests/        pytest suite
 
 ## Roadmap
 
-- Batch lookups instead of one request per SKU.
-- Support product categories and barcodes.
-- Structured logging and a JSON report.
+The project is growing into a toolkit for a footwear business on Odoo. See the full [project plan](docs/project-plan.md).
+
+- **M0** Development environment: Odoo Community in Docker with sample shoes.
+- **M1** Matrix catalog import: one model with color and size variants, generated SKU and EAN-13 barcode.
+- **M2** Stock-based labels: one label per pair in stock, printer profiles for thermal rolls and A4/Letter sheets (PDF, then ZPL and TSPL).
+- **M3** POS stock lookup: type a model code in the point of sale and see a size × color stock grid.
+- **M4** Channels and reports: store, wholesale and warehouse 2.
 
 ## License
 
