@@ -1,0 +1,21 @@
+; Copy to config/odoo.conf and replace every CHANGE_ME value.
+[options]
+; Master password: protects creating, copying and deleting databases.
+admin_passwd = CHANGE_ME
+db_host = db
+db_port = 5432
+db_user = odoo
+; Must match POSTGRES_PASSWORD in .env
+db_password = CHANGE_ME
+addons_path = /mnt/extra-addons,/usr/lib/python3/dist-packages/odoo/addons
+data_dir = /var/lib/odoo
+; Odoo runs behind a reverse proxy that terminates HTTPS.
+proxy_mode = True
+; Threaded mode: a single process, lowest memory use.
+workers = 0
+; Set to True only to create the first database, then back to False.
+list_db = False
+; Serve only this database.
+dbfilter = ^CHANGE_ME$
+limit_time_cpu = 120
+limit_time_real = 240

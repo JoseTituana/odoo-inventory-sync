@@ -1,0 +1,31 @@
+# Odoo 19 Community + PostgreSQL 16, sized for a small shared server.
+# Odoo listens on localhost only; a reverse proxy (Caddy) provides HTTPS.
+services:
+  db:
+    image: postgres:16
+    env_file: .env
+    command: >
+      postgres -c shared_buffers=64MB -c work_mem=4MB
+      -c maintenance_work_mem=32MB -c effective_cache_size=256MB
+      -c max_connections=30
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    mem_limit: 256m
+    restart: unless-stopped
+
+  odoo:
+    image: odoo:19
+    depends_on:
+      - db
+    ports:
+      - "127.0.0.1:8069:8069"
+    volumes:
+      - odoo-data:/var/lib/odoo
+      - ./config:/etc/odoo
+      - ./addons:/mnt/extra-addons
+    mem_limit: 900m
+    restart: unless-stopped
+
+volumes:
+  db-data:
+  odoo-data:

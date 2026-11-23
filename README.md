@@ -1,5 +1,7 @@
 # odoo-inventory-sync
 
+[![tests](https://github.com/JoseTituana/odoo-inventory-sync/actions/workflows/tests.yml/badge.svg)](https://github.com/JoseTituana/odoo-inventory-sync/actions/workflows/tests.yml)
+
 A small Python tool that syncs a product CSV with [Odoo](https://www.odoo.com) through its external XML-RPC API. It creates new products, updates changed names and prices, and can optionally adjust on-hand stock. It has no runtime dependencies.
 
 It comes from a real use case: connecting a custom inventory system and a point of sale to a self-hosted Odoo ERP using the Odoo API and Python, with no plugin.
@@ -8,7 +10,7 @@ It comes from a real use case: connecting a custom inventory system and a point 
 
 - Matches products by SKU (`default_code` in Odoo).
 - `--dry-run` shows what would change without writing anything.
-- Validates the CSV first: missing columns, empty SKU, duplicates, negative or non-numeric values. Bad lines are reported and skipped.
+- Validates the CSV first: missing columns, short rows, empty SKU, duplicates, negative, non-numeric or non-finite values. Files saved by Excel (UTF-8 with BOM) are accepted. Bad lines are reported and skipped.
 - Retries network errors with exponential backoff. Odoo errors (access denied, validation) are not retried.
 - One failing row never stops the whole run; errors are listed at the end.
 - Credentials come from environment variables or a local `.env` file that is never committed.
@@ -61,6 +63,8 @@ src/odoo_inventory_sync/
   sync.py     CSV parsing and create/update logic
   cli.py      command line interface
 tests/        pytest suite
+docs/         project plan
+deploy/       Odoo 19 + PostgreSQL with Docker Compose, behind Caddy
 ```
 
 ## Roadmap
