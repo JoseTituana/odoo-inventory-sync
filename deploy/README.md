@@ -54,3 +54,28 @@ systemctl reload caddy
 ## Custom modules
 
 Odoo modules from this repository (such as the POS stock lookup, M3 in the [project plan](../docs/project-plan.md)) go in `/opt/odoo/addons`, which is mounted at `/mnt/extra-addons`.
+
+## Staging
+
+A second Odoo service, `odoo-staging`, serves only the database `jats_staging`, a
+copy of production restored from the newest backup. It is meant for training and
+for trying changes before they reach `jats`.
+
+- It listens on `127.0.0.1:8070` only and is **not** published by Caddy. Open it
+  through an SSH tunnel, keep the window open, and browse to `http://localhost:8070`:
+  `ssh -N -L 8070:127.0.0.1:8070 vps`
+- Its database user, `odoo_staging`, owns `jats_staging` and has no right to
+  connect to `jats`.
+- Outgoing email goes to a port where nothing listens, so staging never mails anyone.
+- Production sets `db_name = jats`, otherwise its scheduled jobs would also run on
+  every other database on the server, including staging.
+
+Create or refresh it (deletes and rebuilds `jats_staging`; `jats` is not modified):
+
+```bash
+cd /opt/odoo && ./setup-staging.sh --yes
+```
+
+Logins are the same as in production at the time of the copy. Remove staging with
+`docker compose rm -sf odoo-staging`, `dropdb jats_staging`, and by deleting
+`staging-data/` and `config-staging/`.
