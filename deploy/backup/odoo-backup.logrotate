@@ -1,0 +1,8 @@
+# Install as /etc/logrotate.d/odoo-backup
+/var/log/odoo-backup.log {
+    monthly
+    rotate 12
+    compress
+    missingok
+    notifempty
+}

@@ -54,3 +54,7 @@ systemctl reload caddy
 ## Custom modules
 
 Odoo modules from this repository (such as the POS stock lookup, M3 in the [project plan](../docs/project-plan.md)) go in `/opt/odoo/addons`, which is mounted at `/mnt/extra-addons`.
+
+## Backups
+
+Nightly backups with an off-server copy on the POS PC: see [backup/README.md](backup/README.md).
