@@ -1,0 +1,23 @@
+{
+  "url": "http://localhost:8079",
+  "db": "e2e",
+  "config_id": 1,
+  "in_stock": {
+    "id": 15,
+    "barcode": "2000000000145",
+    "qty_available": 5.0,
+    "lst_price": 48.0
+  },
+  "one_left": {
+    "id": 13,
+    "barcode": "2000000000121",
+    "qty_available": 1.0,
+    "lst_price": 48.0
+  },
+  "no_stock": {
+    "id": 16,
+    "barcode": "2000000000152",
+    "qty_available": 0.0,
+    "lst_price": 48.0
+  }
+}

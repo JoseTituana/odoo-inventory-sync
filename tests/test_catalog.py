@@ -190,6 +190,9 @@ class FakeGateway:
             1 for v in self.products.values() if v["template"] == i))
             for i, t in self.templates.items() if t["name"].lower() == name.lower()]
 
+    def template_names(self):
+        return [t["name"] for t in self.templates.values()]
+
     def create_template(self, values):
         template_id = next(self.ids)
         self.templates[template_id] = {
@@ -445,3 +448,50 @@ def test_counted_at_option_accepts_date_and_time():
     assert _parse_counted_at("2026-11-27").tzinfo is not None
     with pytest.raises(ValueError):
         _parse_counted_at("27/11/2026")
+
+
+# ------------------------------------------------------------- accents
+
+def test_values_that_differ_only_by_accents_are_refused_in_the_file(tmp_path):
+    rows = [["Mocasin", "Cafe", "Cuero", 40, 55, 34, 1, ""],
+            ["Mocasin", "Café", "Cuero", 41, 55, 34, 1, ""]]
+    loaded, errors = load_catalog(write_xlsx(tmp_path, rows))
+    assert errors == []
+    _, errors = build_plans(loaded)
+    assert errors == ["los colores 'Cafe' y 'Café' solo se diferencian por tildes; escríbelos igual"]
+
+
+def test_models_that_differ_only_by_accents_are_refused_in_the_file(tmp_path):
+    rows = [["Escolar Clasico", "Negro", "Cuero", 30, 32, 19, 1, ""],
+            ["Escolar Clásico", "Negro", "Cuero", 31, 32, 19, 1, ""]]
+    loaded, _ = load_catalog(write_xlsx(tmp_path, rows))
+    _, errors = build_plans(loaded)
+    assert any("modelos 'Escolar Clasico' y 'Escolar Clásico'" in e for e in errors)
+
+
+def test_case_differences_are_still_the_same_value(tmp_path):
+    rows = [["Marina", "Negro", "Cuero", 38, 45, 28, 1, ""],
+            ["marina", "NEGRO", "cuero", 39, 45, 28, 1, ""]]
+    loaded, _ = load_catalog(write_xlsx(tmp_path, rows))
+    plans, errors = build_plans(loaded)
+    assert errors == [] and len(plans) == 1
+
+
+def test_value_odoo_has_with_other_accents_stops_before_writing(tmp_path):
+    gw = FakeGateway()
+    color = gw.add_attribute("Color")
+    gw.create_attribute_value(color, "Café", 10)
+    rows = [["Mocasin", "Cafe", "Cuero", 40, 55, 34, 1, ""]]
+    with pytest.raises(CatalogSyncError, match="'Cafe' ya existe en Odoo como 'Café'"):
+        import_catalog(gw, plans_from(tmp_path, rows))
+    assert gw.templates == {}
+    assert [a["name"] for a in gw.attributes.values()] == ["Color"]  # nothing created
+
+
+def test_model_odoo_has_with_other_accents_stops_before_writing(tmp_path):
+    gw = FakeGateway()
+    import_catalog(gw, plans_from(tmp_path, [["Escolar Clásico", "Negro", "Cuero", 30, 32, 19, 1, ""]]))
+    before = dict(gw.templates)
+    with pytest.raises(CatalogSyncError, match="ya existe en Odoo como 'Escolar Clásico'"):
+        import_catalog(gw, plans_from(tmp_path, [["Escolar Clasico", "Negro", "Cuero", 31, 32, 19, 1, ""]]))
+    assert gw.templates == before

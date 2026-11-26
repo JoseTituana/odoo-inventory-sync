@@ -154,7 +154,10 @@ def catalog_main(argv: list[str]) -> int:
                 return 1
         result = import_catalog(gateway, plans, dry_run=args.dry_run,
                                 location_id=args.location_id)
-    except (OdooError, CatalogSyncError) as error:
+    except CatalogSyncError as error:
+        print(f"No se importó nada: {error}", file=sys.stderr)
+        return 1
+    except OdooError as error:
         print(f"Error de Odoo: {error}", file=sys.stderr)
         return 1
 

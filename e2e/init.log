@@ -1,0 +1,1036 @@
+2026-11-26 22:32:50,911 1 WARNING ? odoo.tools.config: option --without-demo: since 19.0, invalid boolean value: 'all', assume True 
+2026-11-26 22:32:50,911 1 INFO ? odoo: Odoo version 19.0-20261123 
+2026-11-26 22:32:50,912 1 INFO ? odoo: Using configuration file at /etc/odoo/odoo.conf 
+2026-11-26 22:32:50,912 1 INFO ? odoo: addons paths: _NamespacePath(['/usr/lib/python3/dist-packages/odoo/addons', '/var/lib/odoo/addons/19.0', '/mnt/extra-addons', '/usr/lib/python3/dist-packages/addons']) 
+2026-11-26 22:32:50,912 1 INFO ? odoo: database: odoo@e2e-db:5432 
+2026-11-26 22:32:51,325 1 INFO e2e odoo.modules.loading: Initializing database e2e 
+2026-11-26 22:32:52,155 1 WARNING e2e odoo.modules.module: Missing `author` key in manifest for 'pos_stock_guard', defaulting to '' 
+2026-11-26 22:32:52,157 1 WARNING e2e odoo.modules.module: Missing `author` key in manifest for 'pos_stock_guard', defaulting to '' 
+2026-11-26 22:32:52,595 1 INFO e2e odoo.modules.loading: loading 1 modules... 
+2026-11-26 22:32:52,596 1 INFO e2e odoo.modules.loading: Loading module base (1/1) 
+2026-11-26 22:32:52,640 1 INFO e2e odoo.registry: module base: creating or updating database tables 
+2026-11-26 22:32:52,918 1 INFO e2e odoo.models: Prepare computation of ir.module.module.menus_by_module 
+2026-11-26 22:32:52,919 1 INFO e2e odoo.models: Prepare computation of ir.module.module.reports_by_module 
+2026-11-26 22:32:52,919 1 INFO e2e odoo.models: Prepare computation of ir.module.module.views_by_module 
+2026-11-26 22:32:53,012 1 INFO e2e odoo.models: Prepare computation of res.partner.user_id 
+2026-11-26 22:32:53,012 1 INFO e2e odoo.models: Prepare computation of res.partner.commercial_partner_id 
+2026-11-26 22:32:53,012 1 INFO e2e odoo.models: Prepare computation of res.partner.complete_name 
+2026-11-26 22:32:53,012 1 INFO e2e odoo.models: Prepare computation of res.partner.lang 
+2026-11-26 22:32:53,012 1 INFO e2e odoo.models: Prepare computation of res.partner.company_registry 
+2026-11-26 22:32:53,012 1 INFO e2e odoo.models: Prepare computation of res.partner.commercial_company_name 
+2026-11-26 22:32:53,012 1 INFO e2e odoo.models: Prepare computation of res.partner.properties 
+2026-11-26 22:32:53,013 1 INFO e2e odoo.models: Prepare computation of res.partner.partner_share 
+2026-11-26 22:32:53,042 1 INFO e2e odoo.models: Prepare computation of res.currency.decimal_places 
+2026-11-26 22:32:53,061 1 INFO e2e odoo.models: Prepare computation of res.company.uses_default_logo 
+2026-11-26 22:32:53,061 1 INFO e2e odoo.models: Prepare computation of res.company.logo_web 
+2026-11-26 22:32:53,063 1 INFO e2e odoo.models: Computing parent_path for table res_company... 
+2026-11-26 22:32:53,087 1 INFO e2e odoo.models: Prepare computation of res.users.signature 
+2026-11-26 22:32:53,088 1 INFO e2e odoo.models: Prepare computation of res.users.share 
+2026-11-26 22:32:54,420 1 INFO e2e odoo.modules.loading: loading base/data/res_bank.xml 
+2026-11-26 22:32:54,425 1 INFO e2e odoo.modules.loading: loading base/data/res.lang.csv 
+2026-11-26 22:32:54,461 1 INFO e2e odoo.modules.loading: loading base/data/res_lang_data.xml 
+2026-11-26 22:32:54,502 1 INFO e2e odoo.modules.loading: loading base/data/res_partner_data.xml 
+2026-11-26 22:32:54,547 1 INFO e2e odoo.modules.loading: loading base/data/res_currency_data.xml 
+2026-11-26 22:32:54,982 1 INFO e2e odoo.modules.loading: loading base/data/res_company_data.xml 
+2026-11-26 22:32:54,990 1 INFO e2e odoo.modules.loading: loading base/data/res_users_data.xml 
+2026-11-26 22:32:55,925 1 INFO e2e odoo.modules.loading: loading base/data/report_paperformat_data.xml 
+2026-11-26 22:32:55,934 1 INFO e2e odoo.modules.loading: loading base/data/res_country_data.xml 
+2026-11-26 22:32:56,652 1 INFO e2e odoo.modules.loading: loading base/data/ir_demo_data.xml 
+2026-11-26 22:32:56,670 1 INFO e2e odoo.modules.loading: loading base/security/base_groups.xml 
+2026-11-26 22:32:56,909 1 INFO e2e odoo.modules.loading: loading base/security/base_security.xml 
+2026-11-26 22:32:57,114 1 INFO e2e odoo.modules.loading: loading base/wizard/wizard_ir_model_menu_create_views.xml 
+2026-11-26 22:32:57,126 1 INFO e2e odoo.modules.loading: loading base/views/base_menus.xml 
+2026-11-26 22:32:57,190 1 INFO e2e odoo.modules.loading: loading base/views/decimal_precision_views.xml 
+2026-11-26 22:32:57,210 1 INFO e2e odoo.modules.loading: loading base/views/res_config_views.xml 
+2026-11-26 22:32:57,220 1 INFO e2e odoo.modules.loading: loading base/data/res.country.state.csv 
+2026-11-26 22:32:58,173 1 INFO e2e odoo.modules.loading: loading base/views/ir_actions_views.xml 
+2026-11-26 22:32:58,374 1 INFO e2e odoo.modules.loading: loading base/views/ir_asset_views.xml 
+2026-11-26 22:32:58,398 1 INFO e2e odoo.modules.loading: loading base/views/ir_config_parameter_views.xml 
+2026-11-26 22:32:58,420 1 INFO e2e odoo.modules.loading: loading base/views/ir_cron_views.xml 
+2026-11-26 22:32:58,458 1 INFO e2e odoo.modules.loading: loading base/views/ir_cron_trigger_views.xml 
+2026-11-26 22:32:58,483 1 INFO e2e odoo.modules.loading: loading base/views/ir_filters_views.xml 
+2026-11-26 22:32:58,519 1 INFO e2e odoo.modules.loading: loading base/views/ir_mail_server_views.xml 
+2026-11-26 22:32:58,546 1 INFO e2e odoo.modules.loading: loading base/views/ir_model_views.xml 
+2026-11-26 22:32:58,743 1 INFO e2e odoo.modules.loading: loading base/views/ir_attachment_views.xml 
+2026-11-26 22:32:58,766 1 INFO e2e odoo.modules.loading: loading base/views/ir_rule_views.xml 
+2026-11-26 22:32:58,788 1 INFO e2e odoo.modules.loading: loading base/views/ir_sequence_views.xml 
+2026-11-26 22:32:58,812 1 INFO e2e odoo.modules.loading: loading base/views/ir_ui_menu_views.xml 
+2026-11-26 22:32:58,835 1 INFO e2e odoo.modules.loading: loading base/views/ir_ui_view_views.xml 
+2026-11-26 22:32:58,887 1 INFO e2e odoo.modules.loading: loading base/views/ir_default_views.xml 
+2026-11-26 22:32:58,907 1 INFO e2e odoo.modules.loading: loading base/data/ir_config_parameter_data.xml 
+2026-11-26 22:32:58,911 1 INFO e2e odoo.modules.loading: loading base/data/ir_cron_data.xml 
+2026-11-26 22:32:58,924 1 INFO e2e odoo.modules.loading: loading base/report/ir_model_report.xml 
+2026-11-26 22:32:58,928 1 INFO e2e odoo.modules.loading: loading base/report/ir_model_templates.xml 
+2026-11-26 22:32:58,936 1 INFO e2e odoo.modules.loading: loading base/views/ir_logging_views.xml 
+2026-11-26 22:32:58,957 1 INFO e2e odoo.modules.loading: loading base/views/ir_qweb_widget_templates.xml 
+2026-11-26 22:32:58,972 1 INFO e2e odoo.modules.loading: loading base/views/ir_module_views.xml 
+2026-11-26 22:32:59,026 1 INFO e2e odoo.modules.loading: loading base/data/ir_module_category_data.xml 
+2026-11-26 22:32:59,066 1 INFO e2e odoo.modules.loading: loading base/data/ir_module_module.xml 
+2026-11-26 22:32:59,154 1 INFO e2e odoo.modules.loading: loading base/report/ir_module_reports.xml 
+2026-11-26 22:32:59,159 1 INFO e2e odoo.modules.loading: loading base/report/ir_module_report_templates.xml 
+2026-11-26 22:32:59,170 1 INFO e2e odoo.modules.loading: loading base/wizard/base_module_update_views.xml 
+2026-11-26 22:32:59,187 1 INFO e2e odoo.modules.loading: loading base/wizard/base_language_install_views.xml 
+2026-11-26 22:32:59,207 1 INFO e2e odoo.modules.loading: loading base/wizard/base_import_language_views.xml 
+2026-11-26 22:32:59,220 1 INFO e2e odoo.modules.loading: loading base/wizard/base_module_upgrade_views.xml 
+2026-11-26 22:32:59,241 1 INFO e2e odoo.modules.loading: loading base/wizard/base_module_uninstall_views.xml 
+2026-11-26 22:32:59,252 1 INFO e2e odoo.modules.loading: loading base/wizard/base_export_language_views.xml 
+2026-11-26 22:32:59,266 1 INFO e2e odoo.modules.loading: loading base/wizard/base_partner_merge_views.xml 
+2026-11-26 22:32:59,282 1 INFO e2e odoo.modules.loading: loading base/data/ir_demo_failure_data.xml 
+2026-11-26 22:32:59,299 1 INFO e2e odoo.modules.loading: loading base/views/ir_profile_views.xml 
+2026-11-26 22:32:59,327 1 INFO e2e odoo.modules.loading: loading base/views/res_company_views.xml 
+2026-11-26 22:32:59,356 1 INFO e2e odoo.modules.loading: loading base/views/res_lang_views.xml 
+2026-11-26 22:32:59,377 1 INFO e2e odoo.modules.loading: loading base/views/res_partner_views.xml 
+2026-11-26 22:32:59,464 1 INFO e2e odoo.modules.loading: loading base/views/res_bank_views.xml 
+2026-11-26 22:32:59,497 1 INFO e2e odoo.modules.loading: loading base/views/res_country_views.xml 
+2026-11-26 22:32:59,549 1 INFO e2e odoo.modules.loading: loading base/views/res_currency_views.xml 
+2026-11-26 22:32:59,594 1 INFO e2e odoo.modules.loading: loading base/views/res_groups_views.xml 
+2026-11-26 22:32:59,644 1 INFO e2e odoo.modules.loading: loading base/views/res_users_views.xml 
+2026-11-26 22:32:59,736 1 INFO e2e odoo.modules.loading: loading base/views/res_users_apikeys_views.xml 
+2026-11-26 22:32:59,742 1 INFO e2e odoo.modules.loading: loading base/views/res_device_views.xml 
+2026-11-26 22:32:59,763 1 INFO e2e odoo.modules.loading: loading base/views/res_users_identitycheck_views.xml 
+2026-11-26 22:32:59,771 1 INFO e2e odoo.modules.loading: loading base/views/res_config_settings_views.xml 
+2026-11-26 22:32:59,781 1 INFO e2e odoo.modules.loading: loading base/views/report_paperformat_views.xml 
+2026-11-26 22:32:59,804 1 INFO e2e odoo.modules.loading: loading base/security/ir.model.access.csv 
+2026-11-26 22:32:59,870 1 INFO e2e odoo.addons.base.models.ir_module: module base: loading translation file /usr/lib/python3/dist-packages/odoo/addons/base/i18n/es.po for language es_EC 
+2026-11-26 22:33:00,187 1 INFO e2e odoo.addons.base.models.ir_module: module base: loading translation file /usr/lib/python3/dist-packages/odoo/addons/base/i18n/es_419.po for language es_EC 
+2026-11-26 22:33:00,981 1 INFO e2e odoo.modules.loading: Module base loaded in 8.38s, 8496 queries (+8496 other) 
+2026-11-26 22:33:00,981 1 INFO e2e odoo.modules.loading: 1 modules loaded in 8.39s, 8496 queries (+8496 extra) 
+2026-11-26 22:33:00,999 1 INFO e2e odoo.addons.base.models.ir_module: module base: loading translation file /usr/lib/python3/dist-packages/odoo/addons/base/i18n/es.po for language es_EC 
+2026-11-26 22:33:01,328 1 INFO e2e odoo.addons.base.models.ir_module: module base: loading translation file /usr/lib/python3/dist-packages/odoo/addons/base/i18n/es_419.po for language es_EC 
+2026-11-26 22:33:01,987 1 INFO e2e odoo.modules.loading: updating modules list 
+2026-11-26 22:33:01,988 1 INFO e2e odoo.addons.base.models.ir_module: ALLOW access to module.update_list on [] to user __system__ #1 via n/a 
+2026-11-26 22:33:02,742 1 WARNING e2e odoo.modules.module: Missing `author` key in manifest for 'pos_stock_guard', defaulting to '' 
+2026-11-26 22:33:02,967 1 INFO e2e odoo.addons.base.models.ir_module: ALLOW access to module.button_install on ['POS Stock Guard'] to user __system__ #1 via n/a 
+2026-11-26 22:33:03,149 1 INFO e2e odoo.modules.loading: loading 67 modules... 
+2026-11-26 22:33:03,149 1 INFO e2e odoo.modules.loading: Loading module rpc (2/67) 
+2026-11-26 22:33:03,162 1 INFO e2e odoo.addons.base.models.ir_module: module rpc: no translation for language es_EC 
+2026-11-26 22:33:03,168 1 INFO e2e odoo.modules.loading: Module rpc loaded in 0.02s, 9 queries (+9 other) 
+2026-11-26 22:33:03,168 1 INFO e2e odoo.modules.loading: Loading module uom (3/67) 
+2026-11-26 22:33:03,173 1 INFO e2e odoo.registry: module uom: creating or updating database tables 
+2026-11-26 22:33:03,222 1 INFO e2e odoo.modules.loading: loading uom/data/uom_data.xml 
+2026-11-26 22:33:03,302 1 INFO e2e odoo.modules.loading: loading uom/security/uom_security.xml 
+2026-11-26 22:33:03,306 1 INFO e2e odoo.modules.loading: loading uom/security/ir.model.access.csv 
+2026-11-26 22:33:03,317 1 INFO e2e odoo.modules.loading: loading uom/views/uom_uom_views.xml 
+2026-11-26 22:33:03,349 1 INFO e2e odoo.addons.base.models.ir_module: module uom: loading translation file /usr/lib/python3/dist-packages/odoo/addons/uom/i18n/es.po for language es_EC 
+2026-11-26 22:33:03,355 1 INFO e2e odoo.addons.base.models.ir_module: module uom: loading translation file /usr/lib/python3/dist-packages/odoo/addons/uom/i18n/es_419.po for language es_EC 
+2026-11-26 22:33:03,378 1 INFO e2e odoo.modules.loading: Module uom loaded in 0.21s, 243 queries (+243 other) 
+2026-11-26 22:33:03,378 1 INFO e2e odoo.modules.loading: Loading module web (4/67) 
+2026-11-26 22:33:03,426 1 INFO e2e odoo.registry: module web: creating or updating database tables 
+2026-11-26 22:33:03,843 1 INFO e2e odoo.modules.loading: loading web/security/ir.model.access.csv 
+2026-11-26 22:33:03,853 1 INFO e2e odoo.modules.loading: loading web/security/web_security.xml 
+2026-11-26 22:33:03,869 1 INFO e2e odoo.modules.loading: loading web/views/webclient_templates.xml 
+2026-11-26 22:33:03,932 1 INFO e2e odoo.modules.loading: loading web/views/report_templates.xml 
+2026-11-26 22:33:04,030 1 INFO e2e odoo.modules.loading: loading web/views/base_document_layout_views.xml 
+2026-11-26 22:33:04,046 1 INFO e2e odoo.modules.loading: loading web/views/partner_view.xml 
+2026-11-26 22:33:04,053 1 INFO e2e odoo.modules.loading: loading web/views/speedscope_template.xml 
+2026-11-26 22:33:04,059 1 INFO e2e odoo.modules.loading: loading web/views/memory_template.xml 
+2026-11-26 22:33:04,064 1 INFO e2e odoo.modules.loading: loading web/views/speedscope_config_wizard.xml 
+2026-11-26 22:33:04,071 1 INFO e2e odoo.modules.loading: loading web/views/neutralize_views.xml 
+2026-11-26 22:33:04,080 1 INFO e2e odoo.modules.loading: loading web/views/ir_ui_view_views.xml 
+2026-11-26 22:33:04,091 1 INFO e2e odoo.modules.loading: loading web/data/ir_attachment.xml 
+2026-11-26 22:33:04,095 1 INFO e2e odoo.modules.loading: loading web/data/report_layout.xml 
+2026-11-26 22:33:04,126 1 INFO e2e odoo.addons.base.models.ir_module: module web: loading translation file /usr/lib/python3/dist-packages/odoo/addons/web/i18n/es.po for language es_EC 
+2026-11-26 22:33:04,300 1 INFO e2e odoo.addons.base.models.ir_module: module web: loading translation file /usr/lib/python3/dist-packages/odoo/addons/web/i18n/es_419.po for language es_EC 
+2026-11-26 22:33:04,476 1 INFO e2e odoo.modules.loading: Module web loaded in 1.10s, 1254 queries (+1254 other) 
+2026-11-26 22:33:04,476 1 INFO e2e odoo.modules.loading: Loading module api_doc (5/67) 
+2026-11-26 22:33:04,483 1 INFO e2e odoo.registry: module api_doc: creating or updating database tables 
+2026-11-26 22:33:04,503 1 INFO e2e odoo.modules.loading: loading api_doc/security/res_groups.xml 
+2026-11-26 22:33:04,526 1 INFO e2e odoo.modules.loading: loading api_doc/views/docclient.xml 
+2026-11-26 22:33:04,537 1 INFO e2e odoo.addons.base.models.ir_module: module api_doc: no translation for language es_EC 
+2026-11-26 22:33:04,548 1 INFO e2e odoo.modules.loading: Module api_doc loaded in 0.07s, 64 queries (+64 other) 
+2026-11-26 22:33:04,548 1 INFO e2e odoo.modules.loading: Loading module auth_totp (6/67) 
+2026-11-26 22:33:04,567 1 INFO e2e odoo.registry: module auth_totp: creating or updating database tables 
+2026-11-26 22:33:04,634 1 INFO e2e odoo.modules.loading: loading auth_totp/security/security.xml 
+2026-11-26 22:33:04,657 1 INFO e2e odoo.modules.loading: loading auth_totp/security/ir.model.access.csv 
+2026-11-26 22:33:04,665 1 INFO e2e odoo.modules.loading: loading auth_totp/data/ir_action_data.xml 
+2026-11-26 22:33:04,675 1 INFO e2e odoo.modules.loading: loading auth_totp/views/res_users_views.xml 
+2026-11-26 22:33:04,712 1 INFO e2e odoo.modules.loading: loading auth_totp/views/templates.xml 
+2026-11-26 22:33:04,720 1 INFO e2e odoo.modules.loading: loading auth_totp/wizard/auth_totp_wizard_views.xml 
+2026-11-26 22:33:04,734 1 INFO e2e odoo.addons.base.models.ir_module: module auth_totp: loading translation file /usr/lib/python3/dist-packages/odoo/addons/auth_totp/i18n/es.po for language es_EC 
+2026-11-26 22:33:04,739 1 INFO e2e odoo.addons.base.models.ir_module: module auth_totp: loading translation file /usr/lib/python3/dist-packages/odoo/addons/auth_totp/i18n/es_419.po for language es_EC 
+2026-11-26 22:33:04,770 1 INFO e2e odoo.modules.loading: Module auth_totp loaded in 0.22s, 226 queries (+226 other) 
+2026-11-26 22:33:04,770 1 INFO e2e odoo.modules.loading: Loading module barcodes (7/67) 
+2026-11-26 22:33:04,780 1 INFO e2e odoo.registry: module barcodes: creating or updating database tables 
+2026-11-26 22:33:04,854 1 INFO e2e odoo.modules.loading: loading barcodes/data/barcodes_data.xml 
+2026-11-26 22:33:04,861 1 INFO e2e odoo.modules.loading: loading barcodes/views/barcodes_view.xml 
+2026-11-26 22:33:04,887 1 INFO e2e odoo.modules.loading: loading barcodes/security/ir.model.access.csv 
+2026-11-26 22:33:04,907 1 INFO e2e odoo.addons.base.models.ir_module: module barcodes: loading translation file /usr/lib/python3/dist-packages/odoo/addons/barcodes/i18n/es.po for language es_EC 
+2026-11-26 22:33:04,910 1 INFO e2e odoo.addons.base.models.ir_module: module barcodes: loading translation file /usr/lib/python3/dist-packages/odoo/addons/barcodes/i18n/es_419.po for language es_EC 
+2026-11-26 22:33:04,933 1 INFO e2e odoo.modules.loading: Module barcodes loaded in 0.16s, 160 queries (+160 other) 
+2026-11-26 22:33:04,933 1 INFO e2e odoo.modules.loading: Loading module base_import (8/67) 
+2026-11-26 22:33:04,967 1 INFO e2e odoo.registry: module base_import: creating or updating database tables 
+2026-11-26 22:33:05,376 1 INFO e2e odoo.modules.loading: loading base_import/security/base_import_security.xml 
+2026-11-26 22:33:05,385 1 INFO e2e odoo.modules.loading: loading base_import/security/ir.model.access.csv 
+2026-11-26 22:33:05,397 1 INFO e2e odoo.addons.base.models.ir_module: module base_import: loading translation file /usr/lib/python3/dist-packages/odoo/addons/base_import/i18n/es.po for language es_EC 
+2026-11-26 22:33:05,403 1 INFO e2e odoo.addons.base.models.ir_module: module base_import: loading translation file /usr/lib/python3/dist-packages/odoo/addons/base_import/i18n/es_419.po for language es_EC 
+2026-11-26 22:33:05,418 1 INFO e2e odoo.modules.loading: Module base_import loaded in 0.49s, 991 queries (+991 other) 
+2026-11-26 22:33:05,418 1 INFO e2e odoo.modules.loading: Loading module base_import_module (9/67) 
+2026-11-26 22:33:05,426 1 INFO e2e odoo.registry: module base_import_module: creating or updating database tables 
+2026-11-26 22:33:05,495 1 INFO e2e odoo.modules.loading: loading base_import_module/security/ir.model.access.csv 
+2026-11-26 22:33:05,502 1 INFO e2e odoo.modules.loading: loading base_import_module/views/base_import_module_view.xml 
+2026-11-26 22:33:05,524 1 INFO e2e odoo.modules.loading: loading base_import_module/views/ir_module_views.xml 
+2026-11-26 22:33:05,578 1 INFO e2e odoo.addons.base.models.ir_module: module base_import_module: loading translation file /usr/lib/python3/dist-packages/odoo/addons/base_import_module/i18n/es.po for language es_EC 
+2026-11-26 22:33:05,581 1 INFO e2e odoo.addons.base.models.ir_module: module base_import_module: loading translation file /usr/lib/python3/dist-packages/odoo/addons/base_import_module/i18n/es_419.po for language es_EC 
+2026-11-26 22:33:05,604 1 INFO e2e odoo.modules.loading: Module base_import_module loaded in 0.19s, 183 queries (+183 other) 
+2026-11-26 22:33:05,604 1 INFO e2e odoo.modules.loading: Loading module base_setup (10/67) 
+2026-11-26 22:33:05,617 1 INFO e2e odoo.registry: module base_setup: creating or updating database tables 
+2026-11-26 22:33:05,676 1 INFO e2e odoo.modules.loading: loading base_setup/data/base_setup_data.xml 
+2026-11-26 22:33:05,682 1 INFO e2e odoo.modules.loading: loading base_setup/views/res_config_settings_views.xml 
+2026-11-26 22:33:05,728 1 INFO e2e odoo.modules.loading: loading base_setup/views/res_partner_views.xml 
+2026-11-26 22:33:05,744 1 INFO e2e odoo.addons.base.models.ir_module: module base_setup: loading translation file /usr/lib/python3/dist-packages/odoo/addons/base_setup/i18n/es.po for language es_EC 
+2026-11-26 22:33:05,751 1 INFO e2e odoo.addons.base.models.ir_module: module base_setup: loading translation file /usr/lib/python3/dist-packages/odoo/addons/base_setup/i18n/es_419.po for language es_EC 
+2026-11-26 22:33:05,781 1 INFO e2e odoo.modules.loading: Module base_setup loaded in 0.18s, 162 queries (+162 other) 
+2026-11-26 22:33:05,781 1 INFO e2e odoo.modules.loading: Loading module bus (11/67) 
+2026-11-26 22:33:05,806 1 INFO e2e odoo.registry: module bus: creating or updating database tables 
+2026-11-26 22:33:05,892 1 INFO e2e odoo.modules.loading: loading bus/security/ir.model.access.csv 
+2026-11-26 22:33:05,903 1 INFO e2e odoo.addons.base.models.ir_module: module bus: loading translation file /usr/lib/python3/dist-packages/odoo/addons/bus/i18n/es.po for language es_EC 
+2026-11-26 22:33:05,905 1 INFO e2e odoo.addons.base.models.ir_module: module bus: loading translation file /usr/lib/python3/dist-packages/odoo/addons/bus/i18n/es_419.po for language es_EC 
+2026-11-26 22:33:05,915 1 INFO e2e odoo.modules.loading: Module bus loaded in 0.13s, 162 queries (+162 other) 
+2026-11-26 22:33:05,915 1 INFO e2e odoo.modules.loading: Loading module google_address_autocomplete (12/67) 
+2026-11-26 22:33:05,926 1 INFO e2e odoo.registry: module google_address_autocomplete: creating or updating database tables 
+2026-11-26 22:33:05,987 1 INFO e2e odoo.modules.loading: loading google_address_autocomplete/views/res_config_settings_views.xml 
+2026-11-26 22:33:06,007 1 INFO e2e odoo.modules.loading: loading google_address_autocomplete/views/res_partner_views.xml 
+2026-11-26 22:33:06,025 1 INFO e2e odoo.modules.loading: loading google_address_autocomplete/views/res_company_views.xml 
+2026-11-26 22:33:06,041 1 INFO e2e odoo.addons.base.models.ir_module: module google_address_autocomplete: loading translation file /usr/lib/python3/dist-packages/odoo/addons/google_address_autocomplete/i18n/es.po for language es_EC 
+2026-11-26 22:33:06,043 1 INFO e2e odoo.addons.base.models.ir_module: module google_address_autocomplete: loading translation file /usr/lib/python3/dist-packages/odoo/addons/google_address_autocomplete/i18n/es_419.po for language es_EC 
+2026-11-26 22:33:06,057 1 INFO e2e odoo.modules.loading: Module google_address_autocomplete loaded in 0.14s, 131 queries (+131 other) 
+2026-11-26 22:33:06,057 1 INFO e2e odoo.modules.loading: Loading module http_routing (13/67) 
+2026-11-26 22:33:06,065 1 INFO e2e odoo.registry: module http_routing: creating or updating database tables 
+2026-11-26 22:33:06,088 1 INFO e2e odoo.modules.loading: loading http_routing/views/http_routing_template.xml 
+2026-11-26 22:33:06,138 1 INFO e2e odoo.modules.loading: loading http_routing/views/res_lang_views.xml 
+2026-11-26 22:33:06,164 1 INFO e2e odoo.addons.base.models.ir_module: module http_routing: loading translation file /usr/lib/python3/dist-packages/odoo/addons/http_routing/i18n/es.po for language es_EC 
+2026-11-26 22:33:06,166 1 INFO e2e odoo.addons.base.models.ir_module: module http_routing: loading translation file /usr/lib/python3/dist-packages/odoo/addons/http_routing/i18n/es_419.po for language es_EC 
+2026-11-26 22:33:06,182 1 INFO e2e odoo.modules.loading: Module http_routing loaded in 0.12s, 120 queries (+120 other) 
+2026-11-26 22:33:06,182 1 INFO e2e odoo.modules.loading: Loading module iot_base (14/67) 
+2026-11-26 22:33:06,194 1 INFO e2e odoo.addons.base.models.ir_module: module iot_base: no translation for language es_EC 
+2026-11-26 22:33:06,201 1 INFO e2e odoo.modules.loading: Module iot_base loaded in 0.02s, 10 queries (+10 other) 
+2026-11-26 22:33:06,201 1 INFO e2e odoo.modules.loading: Loading module onboarding (15/67) 
+2026-11-26 22:33:06,208 1 INFO e2e odoo.registry: module onboarding: creating or updating database tables 
+2026-11-26 22:33:06,339 1 INFO e2e odoo.modules.loading: loading onboarding/views/onboarding_templates.xml 
+2026-11-26 22:33:06,354 1 INFO e2e odoo.modules.loading: loading onboarding/views/onboarding_views.xml 
+2026-11-26 22:33:06,380 1 INFO e2e odoo.modules.loading: loading onboarding/views/onboarding_menus.xml 
+2026-11-26 22:33:06,388 1 INFO e2e odoo.modules.loading: loading onboarding/security/ir.model.access.csv 
+2026-11-26 22:33:06,402 1 INFO e2e odoo.addons.base.models.ir_module: module onboarding: loading translation file /usr/lib/python3/dist-packages/odoo/addons/onboarding/i18n/es.po for language es_EC 
+2026-11-26 22:33:06,405 1 INFO e2e odoo.addons.base.models.ir_module: module onboarding: loading translation file /usr/lib/python3/dist-packages/odoo/addons/onboarding/i18n/es_419.po for language es_EC 
+2026-11-26 22:33:06,436 1 INFO e2e odoo.modules.loading: Module onboarding loaded in 0.23s, 256 queries (+256 other) 
+2026-11-26 22:33:06,436 1 INFO e2e odoo.modules.loading: Loading module resource (16/67) 
+2026-11-26 22:33:06,450 1 INFO e2e odoo.registry: module resource: creating or updating database tables 
+2026-11-26 22:33:06,596 1 INFO e2e odoo.modules.loading: loading resource/data/resource_data.xml 
+2026-11-26 22:33:06,618 1 INFO e2e odoo.modules.loading: loading resource/security/ir.model.access.csv 
+2026-11-26 22:33:06,633 1 INFO e2e odoo.modules.loading: loading resource/security/resource_security.xml 
+2026-11-26 22:33:06,669 1 INFO e2e odoo.modules.loading: loading resource/views/resource_resource_views.xml 
+2026-11-26 22:33:06,701 1 INFO e2e odoo.modules.loading: loading resource/views/res_company_views.xml 
+2026-11-26 22:33:06,712 1 INFO e2e odoo.modules.loading: loading resource/views/resource_calendar_leaves_views.xml 
+2026-11-26 22:33:06,744 1 INFO e2e odoo.modules.loading: loading resource/views/resource_calendar_attendance_views.xml 
+2026-11-26 22:33:06,759 1 INFO e2e odoo.modules.loading: loading resource/views/resource_calendar_views.xml 
+2026-11-26 22:33:06,790 1 INFO e2e odoo.modules.loading: loading resource/views/menuitems.xml 
+2026-11-26 22:33:06,813 1 INFO e2e odoo.addons.base.models.ir_module: module resource: loading translation file /usr/lib/python3/dist-packages/odoo/addons/resource/i18n/es.po for language es_EC 
+2026-11-26 22:33:06,830 1 INFO e2e odoo.addons.base.models.ir_module: module resource: loading translation file /usr/lib/python3/dist-packages/odoo/addons/resource/i18n/es_419.po for language es_EC 
+2026-11-26 22:33:06,881 1 INFO e2e odoo.modules.loading: Module resource loaded in 0.45s, 441 queries (+441 other) 
+2026-11-26 22:33:06,881 1 INFO e2e odoo.modules.loading: Loading module web_hierarchy (17/67) 
+2026-11-26 22:33:06,942 1 INFO e2e odoo.registry: module web_hierarchy: creating or updating database tables 
+2026-11-26 22:33:07,414 1 INFO e2e odoo.addons.base.models.ir_module: module web_hierarchy: loading translation file /usr/lib/python3/dist-packages/odoo/addons/web_hierarchy/i18n/es.po for language es_EC 
+2026-11-26 22:33:07,415 1 INFO e2e odoo.addons.base.models.ir_module: module web_hierarchy: loading translation file /usr/lib/python3/dist-packages/odoo/addons/web_hierarchy/i18n/es_419.po for language es_EC 
+2026-11-26 22:33:07,424 1 INFO e2e odoo.modules.loading: Module web_hierarchy loaded in 0.54s, 1036 queries (+1036 other) 
+2026-11-26 22:33:07,425 1 INFO e2e odoo.modules.loading: Loading module web_tour (18/67) 
+2026-11-26 22:33:07,433 1 INFO e2e odoo.registry: module web_tour: creating or updating database tables 
+2026-11-26 22:33:07,437 1 INFO e2e odoo.models: Prepare computation of res.users.tour_enabled 
+2026-11-26 22:33:07,526 1 INFO e2e odoo.modules.loading: loading web_tour/security/ir.model.access.csv 
+2026-11-26 22:33:07,538 1 INFO e2e odoo.modules.loading: loading web_tour/views/tour_views.xml 
+2026-11-26 22:33:07,583 1 INFO e2e odoo.addons.base.models.ir_module: module web_tour: loading translation file /usr/lib/python3/dist-packages/odoo/addons/web_tour/i18n/es.po for language es_EC 
+2026-11-26 22:33:07,587 1 INFO e2e odoo.addons.base.models.ir_module: module web_tour: loading translation file /usr/lib/python3/dist-packages/odoo/addons/web_tour/i18n/es_419.po for language es_EC 
+2026-11-26 22:33:07,616 1 INFO e2e odoo.modules.loading: Module web_tour loaded in 0.19s, 192 queries (+192 other) 
+2026-11-26 22:33:07,616 1 INFO e2e odoo.modules.loading: Loading module auth_passkey (19/67) 
+2026-11-26 22:33:07,678 1 INFO e2e odoo.registry: module auth_passkey: creating or updating database tables 
+2026-11-26 22:33:07,744 1 INFO e2e odoo.modules.loading: loading auth_passkey/views/auth_passkey_key_views.xml 
+2026-11-26 22:33:07,767 1 INFO e2e odoo.modules.loading: loading auth_passkey/views/auth_passkey_login_templates.xml 
+2026-11-26 22:33:07,782 1 INFO e2e odoo.modules.loading: loading auth_passkey/views/res_users_identitycheck_views.xml 
+2026-11-26 22:33:07,796 1 INFO e2e odoo.modules.loading: loading auth_passkey/views/res_users_views.xml 
+2026-11-26 22:33:07,825 1 INFO e2e odoo.modules.loading: loading auth_passkey/security/ir.model.access.csv 
+2026-11-26 22:33:07,841 1 INFO e2e odoo.modules.loading: loading auth_passkey/security/security.xml 
+2026-11-26 22:33:07,870 1 INFO e2e odoo.addons.base.models.ir_module: module auth_passkey: loading translation file /usr/lib/python3/dist-packages/odoo/addons/auth_passkey/i18n/es.po for language es_EC 
+2026-11-26 22:33:07,873 1 INFO e2e odoo.addons.base.models.ir_module: module auth_passkey: loading translation file /usr/lib/python3/dist-packages/odoo/addons/auth_passkey/i18n/es_419.po for language es_EC 
+2026-11-26 22:33:07,895 1 INFO e2e odoo.modules.loading: Module auth_passkey loaded in 0.28s, 226 queries (+226 other) 
+2026-11-26 22:33:07,895 1 INFO e2e odoo.modules.loading: Loading module barcodes_gs1_nomenclature (20/67) 
+2026-11-26 22:33:07,902 1 INFO e2e odoo.registry: module barcodes_gs1_nomenclature: creating or updating database tables 
+2026-11-26 22:33:07,939 1 INFO e2e odoo.modules.loading: loading barcodes_gs1_nomenclature/data/barcodes_gs1_rules.xml 
+2026-11-26 22:33:08,014 1 INFO e2e odoo.modules.loading: loading barcodes_gs1_nomenclature/views/barcodes_view.xml 
+2026-11-26 22:33:08,062 1 INFO e2e odoo.addons.base.models.ir_module: module barcodes_gs1_nomenclature: loading translation file /usr/lib/python3/dist-packages/odoo/addons/barcodes_gs1_nomenclature/i18n/es.po for language es_EC 
+2026-11-26 22:33:08,065 1 INFO e2e odoo.addons.base.models.ir_module: module barcodes_gs1_nomenclature: loading translation file /usr/lib/python3/dist-packages/odoo/addons/barcodes_gs1_nomenclature/i18n/es_419.po for language es_EC 
+2026-11-26 22:33:08,081 1 INFO e2e odoo.modules.loading: Module barcodes_gs1_nomenclature loaded in 0.19s, 203 queries (+203 other) 
+2026-11-26 22:33:08,081 1 INFO e2e odoo.modules.loading: Loading module html_editor (21/67) 
+2026-11-26 22:33:08,230 1 INFO e2e odoo.registry: module html_editor: creating or updating database tables 
+2026-11-26 22:33:08,699 1 INFO e2e odoo.modules.loading: loading html_editor/security/ir.model.access.csv 
+2026-11-26 22:33:08,714 1 INFO e2e odoo.addons.base.models.ir_module: module html_editor: loading translation file /usr/lib/python3/dist-packages/odoo/addons/html_editor/i18n/es.po for language es_EC 
+2026-11-26 22:33:08,725 1 INFO e2e odoo.addons.base.models.ir_module: module html_editor: loading translation file /usr/lib/python3/dist-packages/odoo/addons/html_editor/i18n/es_419.po for language es_EC 
+2026-11-26 22:33:08,747 1 INFO e2e odoo.modules.loading: Module html_editor loaded in 0.67s, 1124 queries (+1124 other) 
+2026-11-26 22:33:08,747 1 INFO e2e odoo.modules.loading: Loading module iap (22/67) 
+2026-11-26 22:33:08,752 1 INFO e2e odoo.registry: module iap: creating or updating database tables 
+2026-11-26 22:33:08,821 1 INFO e2e odoo.modules.loading: loading iap/data/services.xml 
+2026-11-26 22:33:08,826 1 INFO e2e odoo.modules.loading: loading iap/security/ir.model.access.csv 
+2026-11-26 22:33:08,835 1 INFO e2e odoo.modules.loading: loading iap/security/ir_rule.xml 
+2026-11-26 22:33:08,842 1 INFO e2e odoo.modules.loading: loading iap/views/iap_views.xml 
+2026-11-26 22:33:08,873 1 INFO e2e odoo.modules.loading: loading iap/views/res_config_settings.xml 
+2026-11-26 22:33:08,894 1 INFO e2e odoo.addons.base.models.ir_module: module iap: loading translation file /usr/lib/python3/dist-packages/odoo/addons/iap/i18n/es.po for language es_EC 
+2026-11-26 22:33:08,898 1 INFO e2e odoo.addons.base.models.ir_module: module iap: loading translation file /usr/lib/python3/dist-packages/odoo/addons/iap/i18n/es_419.po for language es_EC 
+2026-11-26 22:33:08,924 1 INFO e2e odoo.modules.loading: Module iap loaded in 0.18s, 201 queries (+201 other) 
+2026-11-26 22:33:08,924 1 INFO e2e odoo.modules.loading: Loading module mail (23/67) 
+2026-11-26 22:33:09,011 1 INFO e2e odoo.registry: module mail: creating or updating database tables 
+2026-11-26 22:33:09,257 1 INFO e2e odoo.models: Prepare computation of ir.actions.server.partner_ids 
+2026-11-26 22:33:09,258 1 INFO e2e odoo.models: Prepare computation of ir.actions.server.activity_user_id 
+2026-11-26 22:33:09,258 1 INFO e2e odoo.models: Prepare computation of ir.actions.server.activity_type_id 
+2026-11-26 22:33:09,258 1 INFO e2e odoo.models: Prepare computation of ir.actions.server.template_id 
+2026-11-26 22:33:09,258 1 INFO e2e odoo.models: Prepare computation of ir.actions.server.activity_date_deadline_range 
+2026-11-26 22:33:09,258 1 INFO e2e odoo.models: Prepare computation of ir.actions.server.activity_summary 
+2026-11-26 22:33:09,258 1 INFO e2e odoo.models: Prepare computation of ir.actions.server.followers_type 
+2026-11-26 22:33:09,258 1 INFO e2e odoo.models: Prepare computation of ir.actions.server.followers_partner_field_name 
+2026-11-26 22:33:09,258 1 INFO e2e odoo.models: Prepare computation of ir.actions.server.mail_post_method 
+2026-11-26 22:33:09,258 1 INFO e2e odoo.models: Prepare computation of ir.actions.server.activity_date_deadline_range_type 
+2026-11-26 22:33:09,258 1 INFO e2e odoo.models: Prepare computation of ir.actions.server.activity_user_type 
+2026-11-26 22:33:09,258 1 INFO e2e odoo.models: Prepare computation of ir.actions.server.activity_user_field_name 
+2026-11-26 22:33:09,258 1 INFO e2e odoo.models: Prepare computation of ir.actions.server.activity_note 
+2026-11-26 22:33:09,258 1 INFO e2e odoo.models: Prepare computation of ir.actions.server.mail_post_autofollow 
+2026-11-26 22:33:09,315 1 INFO e2e odoo.models: Prepare computation of res.users.notification_type 
+2026-11-26 22:33:09,367 1 INFO e2e odoo.models: Prepare computation of res.partner.email_normalized 
+2026-11-26 22:33:10,684 1 INFO e2e odoo.modules.loading: loading mail/data/mail_groups.xml 
+2026-11-26 22:33:10,710 1 INFO e2e odoo.modules.loading: loading mail/wizard/mail_activity_schedule_views.xml 
+2026-11-26 22:33:10,725 1 INFO e2e odoo.modules.loading: loading mail/wizard/mail_blacklist_remove_views.xml 
+2026-11-26 22:33:10,734 1 INFO e2e odoo.modules.loading: loading mail/wizard/mail_compose_message_views.xml 
+2026-11-26 22:33:10,755 1 INFO e2e odoo.modules.loading: loading mail/wizard/mail_template_preview_views.xml 
+2026-11-26 22:33:10,767 1 INFO e2e odoo.modules.loading: loading mail/wizard/mail_followers_edit_views.xml 
+2026-11-26 22:33:10,782 1 INFO e2e odoo.modules.loading: loading mail/wizard/mail_template_reset_views.xml 
+2026-11-26 22:33:10,794 1 INFO e2e odoo.modules.loading: loading mail/views/fetchmail_views.xml 
+2026-11-26 22:33:10,819 1 INFO e2e odoo.modules.loading: loading mail/views/ir_cron_views.xml 
+2026-11-26 22:33:10,834 1 INFO e2e odoo.modules.loading: loading mail/views/ir_filters_views.xml 
+2026-11-26 22:33:10,854 1 INFO e2e odoo.modules.loading: loading mail/views/ir_mail_server_views.xml 
+2026-11-26 22:33:10,865 1 INFO e2e odoo.modules.loading: loading mail/views/mail_message_subtype_views.xml 
+2026-11-26 22:33:10,882 1 INFO e2e odoo.modules.loading: loading mail/views/mail_tracking_value_views.xml 
+2026-11-26 22:33:10,897 1 INFO e2e odoo.modules.loading: loading mail/views/mail_notification_views.xml 
+2026-11-26 22:33:10,911 1 INFO e2e odoo.modules.loading: loading mail/views/mail_message_views.xml 
+2026-11-26 22:33:10,946 1 INFO e2e odoo.modules.loading: loading mail/views/mail_message_schedule_views.xml 
+2026-11-26 22:33:10,965 1 INFO e2e odoo.modules.loading: loading mail/views/mail_mail_views.xml 
+2026-11-26 22:33:10,990 1 INFO e2e odoo.modules.loading: loading mail/views/mail_followers_views.xml 
+2026-11-26 22:33:11,003 1 INFO e2e odoo.modules.loading: loading mail/views/mail_ice_server_views.xml 
+2026-11-26 22:33:11,027 1 INFO e2e odoo.modules.loading: loading mail/views/discuss_channel_member_views.xml 
+2026-11-26 22:33:11,042 1 INFO e2e odoo.modules.loading: loading mail/views/discuss_channel_rtc_session_views.xml 
+2026-11-26 22:33:11,062 1 INFO e2e odoo.modules.loading: loading mail/views/mail_link_preview_views.xml 
+2026-11-26 22:33:11,086 1 INFO e2e odoo.modules.loading: loading mail/views/discuss/discuss_gif_favorite_views.xml 
+2026-11-26 22:33:11,100 1 INFO e2e odoo.modules.loading: loading mail/views/discuss_channel_views.xml 
+2026-11-26 22:33:11,140 1 INFO e2e odoo.modules.loading: loading mail/views/mail_canned_response_views.xml 
+2026-11-26 22:33:11,168 1 INFO e2e odoo.modules.loading: loading mail/views/res_role_views.xml 
+2026-11-26 22:33:11,188 1 INFO e2e odoo.modules.loading: loading mail/views/mail_activity_views.xml 
+2026-11-26 22:33:11,292 1 INFO e2e odoo.modules.loading: loading mail/views/mail_activity_plan_views.xml 
+2026-11-26 22:33:11,334 1 INFO e2e odoo.modules.loading: loading mail/views/mail_activity_plan_template_views.xml 
+2026-11-26 22:33:11,345 1 INFO e2e odoo.modules.loading: loading mail/views/res_config_settings_views.xml 
+2026-11-26 22:33:11,369 1 INFO e2e odoo.modules.loading: loading mail/data/ir_config_parameter_data.xml 
+2026-11-26 22:33:11,377 1 INFO e2e odoo.modules.loading: loading mail/data/res_partner_data.xml 
+2026-11-26 22:33:11,447 1 INFO e2e odoo.modules.loading: loading mail/data/mail_message_subtype_data.xml 
+2026-11-26 22:33:11,456 1 INFO e2e odoo.modules.loading: loading mail/data/mail_templates_chatter.xml 
+2026-11-26 22:33:11,477 1 INFO e2e odoo.modules.loading: loading mail/data/mail_templates_email_layouts.xml 
+2026-11-26 22:33:11,496 1 INFO e2e odoo.modules.loading: loading mail/data/mail_templates_mailgateway.xml 
+2026-11-26 22:33:11,514 1 INFO e2e odoo.modules.loading: loading mail/data/discuss_channel_data.xml 
+2026-11-26 22:33:11,555 1 INFO e2e odoo.modules.loading: loading mail/data/mail_activity_type_data.xml 
+2026-11-26 22:33:11,569 1 INFO e2e odoo.modules.loading: loading mail/data/security_notifications_templates.xml 
+2026-11-26 22:33:11,575 1 INFO e2e odoo.modules.loading: loading mail/data/ir_cron_data.xml 
+2026-11-26 22:33:11,830 1 INFO e2e odoo.modules.loading: loading mail/data/ir_actions_client.xml 
+2026-11-26 22:33:11,836 1 INFO e2e odoo.modules.loading: loading mail/security/mail_security.xml 
+2026-11-26 22:33:11,992 1 INFO e2e odoo.modules.loading: loading mail/security/ir.model.access.csv 
+2026-11-26 22:33:12,043 1 INFO e2e odoo.modules.loading: loading mail/views/discuss_public_templates.xml 
+2026-11-26 22:33:12,049 1 INFO e2e odoo.modules.loading: loading mail/views/mail_alias_domain_views.xml 
+2026-11-26 22:33:12,068 1 INFO e2e odoo.modules.loading: loading mail/views/mail_alias_views.xml 
+2026-11-26 22:33:12,088 1 INFO e2e odoo.modules.loading: loading mail/views/mail_gateway_allowed_views.xml 
+2026-11-26 22:33:12,100 1 INFO e2e odoo.modules.loading: loading mail/views/mail_guest_views.xml 
+2026-11-26 22:33:12,113 1 INFO e2e odoo.modules.loading: loading mail/views/mail_message_reaction_views.xml 
+2026-11-26 22:33:12,126 1 INFO e2e odoo.modules.loading: loading mail/views/mail_templates_public.xml 
+2026-11-26 22:33:12,135 1 INFO e2e odoo.modules.loading: loading mail/views/res_users_views.xml 
+2026-11-26 22:33:12,166 1 INFO e2e odoo.modules.loading: loading mail/views/res_users_settings_views.xml 
+2026-11-26 22:33:12,183 1 INFO e2e odoo.modules.loading: loading mail/views/mail_template_views.xml 
+2026-11-26 22:33:12,208 1 INFO e2e odoo.modules.loading: loading mail/views/ir_actions_server_views.xml 
+2026-11-26 22:33:12,226 1 INFO e2e odoo.modules.loading: loading mail/views/ir_model_views.xml 
+2026-11-26 22:33:12,263 1 INFO e2e odoo.modules.loading: loading mail/views/res_partner_views.xml 
+2026-11-26 22:33:12,312 1 INFO e2e odoo.modules.loading: loading mail/views/mail_blacklist_views.xml 
+2026-11-26 22:33:12,331 1 INFO e2e odoo.modules.loading: loading mail/views/mail_menus.xml 
+2026-11-26 22:33:12,443 1 INFO e2e odoo.modules.loading: loading mail/views/discuss/discuss_menus.xml 
+2026-11-26 22:33:12,447 1 INFO e2e odoo.modules.loading: loading mail/views/discuss/discuss_call_history_views.xml 
+2026-11-26 22:33:12,464 1 INFO e2e odoo.modules.loading: loading mail/views/res_company_views.xml 
+2026-11-26 22:33:12,476 1 INFO e2e odoo.modules.loading: loading mail/views/mail_scheduled_message_views.xml 
+2026-11-26 22:33:12,484 1 INFO e2e odoo.modules.loading: loading mail/data/mail_canned_response_data.xml 
+2026-11-26 22:33:12,492 1 INFO e2e odoo.modules.loading: loading mail/data/mail_templates_invite.xml 
+2026-11-26 22:33:12,505 1 INFO e2e odoo.modules.loading: loading mail/data/web_tour_tour.xml 
+2026-11-26 22:33:12,513 1 INFO e2e odoo.addons.base.models.ir_module: module mail: loading translation file /usr/lib/python3/dist-packages/odoo/addons/mail/i18n/es.po for language es_EC 
+2026-11-26 22:33:12,634 1 INFO e2e odoo.addons.base.models.ir_module: module mail: loading translation file /usr/lib/python3/dist-packages/odoo/addons/mail/i18n/es_419.po for language es_EC 
+2026-11-26 22:33:12,907 1 INFO e2e odoo.modules.loading: Module mail loaded in 3.98s, 5106 queries (+5107 other) 
+2026-11-26 22:33:12,907 1 INFO e2e odoo.modules.loading: Loading module web_unsplash (24/67) 
+2026-11-26 22:33:12,921 1 INFO e2e odoo.registry: module web_unsplash: creating or updating database tables 
+2026-11-26 22:33:12,974 1 INFO e2e odoo.modules.loading: loading web_unsplash/views/res_config_settings_view.xml 
+2026-11-26 22:33:13,019 1 INFO e2e odoo.addons.base.models.ir_module: module web_unsplash: loading translation file /usr/lib/python3/dist-packages/odoo/addons/web_unsplash/i18n/es.po for language es_EC 
+2026-11-26 22:33:13,021 1 INFO e2e odoo.addons.base.models.ir_module: module web_unsplash: loading translation file /usr/lib/python3/dist-packages/odoo/addons/web_unsplash/i18n/es_419.po for language es_EC 
+2026-11-26 22:33:13,036 1 INFO e2e odoo.modules.loading: Module web_unsplash loaded in 0.13s, 107 queries (+107 other) 
+2026-11-26 22:33:13,036 1 INFO e2e odoo.modules.loading: Loading module analytic (25/67) 
+2026-11-26 22:33:13,050 1 INFO e2e odoo.registry: module analytic: creating or updating database tables 
+2026-11-26 22:33:13,222 1 INFO e2e odoo.modules.loading: loading analytic/security/analytic_security.xml 
+2026-11-26 22:33:13,245 1 INFO e2e odoo.modules.loading: loading analytic/security/ir.model.access.csv 
+2026-11-26 22:33:13,257 1 INFO e2e odoo.modules.loading: loading analytic/views/analytic_line_views.xml 
+2026-11-26 22:33:13,299 1 INFO e2e odoo.modules.loading: loading analytic/views/analytic_account_views.xml 
+2026-11-26 22:33:13,335 1 INFO e2e odoo.modules.loading: loading analytic/views/analytic_plan_views.xml 
+2026-11-26 22:33:13,354 1 INFO e2e odoo.modules.loading: loading analytic/views/analytic_distribution_model_views.xml 
+2026-11-26 22:33:13,371 1 INFO e2e odoo.modules.loading: loading analytic/data/analytic_data.xml 
+2026-11-26 22:33:13,406 1 INFO e2e odoo.addons.base.models.ir_module: module analytic: loading translation file /usr/lib/python3/dist-packages/odoo/addons/analytic/i18n/es.po for language es_EC 
+2026-11-26 22:33:13,412 1 INFO e2e odoo.addons.base.models.ir_module: module analytic: loading translation file /usr/lib/python3/dist-packages/odoo/addons/analytic/i18n/es_419.po for language es_EC 
+2026-11-26 22:33:13,453 1 INFO e2e odoo.modules.loading: Module analytic loaded in 0.42s, 441 queries (+441 other) 
+2026-11-26 22:33:13,453 1 INFO e2e odoo.modules.loading: Loading module auth_signup (26/67) 
+2026-11-26 22:33:13,470 1 INFO e2e odoo.registry: module auth_signup: creating or updating database tables 
+2026-11-26 22:33:13,542 1 INFO e2e odoo.modules.loading: loading auth_signup/data/ir_config_parameter_data.xml 
+2026-11-26 22:33:13,546 1 INFO e2e odoo.modules.loading: loading auth_signup/data/ir_cron_data.xml 
+2026-11-26 22:33:13,570 1 INFO e2e odoo.modules.loading: loading auth_signup/data/mail_template_data.xml 
+2026-11-26 22:33:13,646 1 INFO e2e odoo.modules.loading: loading auth_signup/views/res_config_settings_views.xml 
+2026-11-26 22:33:13,665 1 INFO e2e odoo.modules.loading: loading auth_signup/views/res_users_views.xml 
+2026-11-26 22:33:13,696 1 INFO e2e odoo.modules.loading: loading auth_signup/views/auth_signup_login_templates.xml 
+2026-11-26 22:33:13,720 1 INFO e2e odoo.modules.loading: loading auth_signup/views/auth_signup_templates_email.xml 
+2026-11-26 22:33:13,726 1 INFO e2e odoo.modules.loading: loading auth_signup/views/webclient_templates.xml 
+2026-11-26 22:33:13,736 1 INFO e2e odoo.addons.base.models.ir_module: module auth_signup: loading translation file /usr/lib/python3/dist-packages/odoo/addons/auth_signup/i18n/es.po for language es_EC 
+2026-11-26 22:33:13,746 1 INFO e2e odoo.addons.base.models.ir_module: module auth_signup: loading translation file /usr/lib/python3/dist-packages/odoo/addons/auth_signup/i18n/es_419.po for language es_EC 
+2026-11-26 22:33:13,804 1 INFO e2e odoo.modules.loading: Module auth_signup loaded in 0.35s, 267 queries (+267 other) 
+2026-11-26 22:33:13,804 1 INFO e2e odoo.modules.loading: Loading module auth_totp_mail (27/67) 
+2026-11-26 22:33:13,820 1 INFO e2e odoo.registry: module auth_totp_mail: creating or updating database tables 
+2026-11-26 22:33:13,867 1 INFO e2e odoo.modules.loading: loading auth_totp_mail/data/ir_action_data.xml 
+2026-11-26 22:33:13,896 1 INFO e2e odoo.modules.loading: loading auth_totp_mail/data/mail_template_data.xml 
+2026-11-26 22:33:13,950 1 INFO e2e odoo.modules.loading: loading auth_totp_mail/data/security_notifications_template.xml 
+2026-11-26 22:33:13,960 1 INFO e2e odoo.modules.loading: loading auth_totp_mail/views/res_config_settings_views.xml 
+2026-11-26 22:33:13,984 1 INFO e2e odoo.modules.loading: loading auth_totp_mail/views/res_users_views.xml 
+2026-11-26 22:33:14,009 1 INFO e2e odoo.modules.loading: loading auth_totp_mail/views/templates.xml 
+2026-11-26 22:33:14,021 1 INFO e2e odoo.addons.base.models.ir_module: module auth_totp_mail: loading translation file /usr/lib/python3/dist-packages/odoo/addons/auth_totp_mail/i18n/es.po for language es_EC 
+2026-11-26 22:33:14,026 1 INFO e2e odoo.addons.base.models.ir_module: module auth_totp_mail: loading translation file /usr/lib/python3/dist-packages/odoo/addons/auth_totp_mail/i18n/es_419.po for language es_EC 
+2026-11-26 22:33:14,069 1 INFO e2e odoo.modules.loading: Module auth_totp_mail loaded in 0.26s, 202 queries (+202 other) 
+2026-11-26 22:33:14,069 1 INFO e2e odoo.modules.loading: Loading module base_install_request (28/67) 
+2026-11-26 22:33:14,077 1 INFO e2e odoo.registry: module base_install_request: creating or updating database tables 
+2026-11-26 22:33:14,142 1 INFO e2e odoo.modules.loading: loading base_install_request/security/ir.model.access.csv 
+2026-11-26 22:33:14,151 1 INFO e2e odoo.modules.loading: loading base_install_request/wizard/base_module_install_request_views.xml 
+2026-11-26 22:33:14,173 1 INFO e2e odoo.modules.loading: loading base_install_request/data/mail_template_data.xml 
+2026-11-26 22:33:14,180 1 INFO e2e odoo.modules.loading: loading base_install_request/data/mail_templates_module_install.xml 
+2026-11-26 22:33:14,186 1 INFO e2e odoo.modules.loading: loading base_install_request/views/ir_module_module_views.xml 
+2026-11-26 22:33:14,207 1 INFO e2e odoo.addons.base.models.ir_module: module base_install_request: loading translation file /usr/lib/python3/dist-packages/odoo/addons/base_install_request/i18n/es.po for language es_EC 
+2026-11-26 22:33:14,209 1 INFO e2e odoo.addons.base.models.ir_module: module base_install_request: loading translation file /usr/lib/python3/dist-packages/odoo/addons/base_install_request/i18n/es_419.po for language es_EC 
+2026-11-26 22:33:14,228 1 INFO e2e odoo.modules.loading: Module base_install_request loaded in 0.16s, 164 queries (+164 other) 
+2026-11-26 22:33:14,228 1 INFO e2e odoo.modules.loading: Loading module google_gmail (29/67) 
+2026-11-26 22:33:14,245 1 INFO e2e odoo.registry: module google_gmail: creating or updating database tables 
+2026-11-26 22:33:14,322 1 INFO e2e odoo.modules.loading: loading google_gmail/views/fetchmail_server_views.xml 
+2026-11-26 22:33:14,345 1 INFO e2e odoo.modules.loading: loading google_gmail/views/ir_mail_server_views.xml 
+2026-11-26 22:33:14,358 1 INFO e2e odoo.modules.loading: loading google_gmail/views/res_config_settings_views.xml 
+2026-11-26 22:33:14,379 1 INFO e2e odoo.modules.loading: loading google_gmail/views/templates.xml 
+2026-11-26 22:33:14,388 1 INFO e2e odoo.addons.base.models.ir_module: module google_gmail: loading translation file /usr/lib/python3/dist-packages/odoo/addons/google_gmail/i18n/es.po for language es_EC 
+2026-11-26 22:33:14,390 1 INFO e2e odoo.addons.base.models.ir_module: module google_gmail: loading translation file /usr/lib/python3/dist-packages/odoo/addons/google_gmail/i18n/es_419.po for language es_EC 
+2026-11-26 22:33:14,410 1 INFO e2e odoo.modules.loading: Module google_gmail loaded in 0.18s, 161 queries (+161 other) 
+2026-11-26 22:33:14,410 1 INFO e2e odoo.modules.loading: Loading module iap_mail (30/67) 
+2026-11-26 22:33:14,420 1 INFO e2e odoo.registry: module iap_mail: creating or updating database tables 
+2026-11-26 22:33:14,465 1 INFO e2e odoo.modules.loading: loading iap_mail/data/mail_templates.xml 
+2026-11-26 22:33:14,481 1 INFO e2e odoo.modules.loading: loading iap_mail/views/iap_views.xml 
+2026-11-26 22:33:14,498 1 INFO e2e odoo.addons.base.models.ir_module: module iap_mail: loading translation file /usr/lib/python3/dist-packages/odoo/addons/iap_mail/i18n/es.po for language es_EC 
+2026-11-26 22:33:14,502 1 INFO e2e odoo.addons.base.models.ir_module: module iap_mail: loading translation file /usr/lib/python3/dist-packages/odoo/addons/iap_mail/i18n/es_419.po for language es_EC 
+2026-11-26 22:33:14,525 1 INFO e2e odoo.modules.loading: Module iap_mail loaded in 0.11s, 77 queries (+77 other) 
+2026-11-26 22:33:14,525 1 INFO e2e odoo.modules.loading: Loading module mail_bot (31/67) 
+2026-11-26 22:33:14,542 1 INFO e2e odoo.registry: module mail_bot: creating or updating database tables 
+2026-11-26 22:33:14,606 1 INFO e2e odoo.modules.loading: loading mail_bot/views/res_users_views.xml 
+2026-11-26 22:33:14,632 1 INFO e2e odoo.modules.loading: loading mail_bot/data/mailbot_data.xml 
+2026-11-26 22:33:14,641 1 INFO e2e odoo.addons.base.models.ir_module: module mail_bot: loading translation file /usr/lib/python3/dist-packages/odoo/addons/mail_bot/i18n/es.po for language es_EC 
+2026-11-26 22:33:14,644 1 INFO e2e odoo.addons.base.models.ir_module: module mail_bot: loading translation file /usr/lib/python3/dist-packages/odoo/addons/mail_bot/i18n/es_419.po for language es_EC 
+2026-11-26 22:33:14,657 1 INFO e2e odoo.modules.loading: Module mail_bot loaded in 0.13s, 114 queries (+114 other) 
+2026-11-26 22:33:14,657 1 INFO e2e odoo.modules.loading: Loading module microsoft_outlook (32/67) 
+2026-11-26 22:33:14,671 1 INFO e2e odoo.registry: module microsoft_outlook: creating or updating database tables 
+2026-11-26 22:33:14,742 1 INFO e2e odoo.modules.loading: loading microsoft_outlook/views/fetchmail_server_views.xml 
+2026-11-26 22:33:14,760 1 INFO e2e odoo.modules.loading: loading microsoft_outlook/views/ir_mail_server_views.xml 
+2026-11-26 22:33:14,774 1 INFO e2e odoo.modules.loading: loading microsoft_outlook/views/res_config_settings_views.xml 
+2026-11-26 22:33:14,803 1 INFO e2e odoo.modules.loading: loading microsoft_outlook/views/templates.xml 
+2026-11-26 22:33:14,813 1 INFO e2e odoo.addons.base.models.ir_module: module microsoft_outlook: loading translation file /usr/lib/python3/dist-packages/odoo/addons/microsoft_outlook/i18n/es.po for language es_EC 
+2026-11-26 22:33:14,817 1 INFO e2e odoo.addons.base.models.ir_module: module microsoft_outlook: loading translation file /usr/lib/python3/dist-packages/odoo/addons/microsoft_outlook/i18n/es_419.po for language es_EC 
+2026-11-26 22:33:14,844 1 INFO e2e odoo.modules.loading: Module microsoft_outlook loaded in 0.19s, 164 queries (+164 other) 
+2026-11-26 22:33:14,845 1 INFO e2e odoo.modules.loading: Loading module phone_validation (33/67) 
+2026-11-26 22:33:14,954 1 INFO e2e odoo.registry: module phone_validation: creating or updating database tables 
+2026-11-26 22:33:14,972 1 INFO e2e odoo.models: Prepare computation of res.partner.phone_sanitized 
+2026-11-26 22:33:15,649 1 INFO e2e odoo.modules.loading: loading phone_validation/security/ir.model.access.csv 
+2026-11-26 22:33:15,659 1 INFO e2e odoo.modules.loading: loading phone_validation/views/phone_blacklist_views.xml 
+2026-11-26 22:33:15,696 1 INFO e2e odoo.modules.loading: loading phone_validation/views/res_partner_views.xml 
+2026-11-26 22:33:15,711 1 INFO e2e odoo.modules.loading: loading phone_validation/wizard/phone_blacklist_remove_view.xml 
+2026-11-26 22:33:15,725 1 INFO e2e odoo.addons.base.models.ir_module: module phone_validation: loading translation file /usr/lib/python3/dist-packages/odoo/addons/phone_validation/i18n/es.po for language es_EC 
+2026-11-26 22:33:15,731 1 INFO e2e odoo.addons.base.models.ir_module: module phone_validation: loading translation file /usr/lib/python3/dist-packages/odoo/addons/phone_validation/i18n/es_419.po for language es_EC 
+2026-11-26 22:33:15,760 1 INFO e2e odoo.modules.loading: Module phone_validation loaded in 0.92s, 1774 queries (+1774 other) 
+2026-11-26 22:33:15,761 1 INFO e2e odoo.modules.loading: Loading module privacy_lookup (34/67) 
+2026-11-26 22:33:15,776 1 INFO e2e odoo.registry: module privacy_lookup: creating or updating database tables 
+2026-11-26 22:33:15,881 1 INFO e2e odoo.modules.loading: loading privacy_lookup/wizard/privacy_lookup_wizard_views.xml 
+2026-11-26 22:33:15,951 1 INFO e2e odoo.modules.loading: loading privacy_lookup/views/privacy_log_views.xml 
+2026-11-26 22:33:15,974 1 INFO e2e odoo.modules.loading: loading privacy_lookup/security/ir.model.access.csv 
+2026-11-26 22:33:15,994 1 INFO e2e odoo.modules.loading: loading privacy_lookup/data/ir_actions_server_data.xml 
+2026-11-26 22:33:16,023 1 INFO e2e odoo.addons.base.models.ir_module: module privacy_lookup: loading translation file /usr/lib/python3/dist-packages/odoo/addons/privacy_lookup/i18n/es.po for language es_EC 
+2026-11-26 22:33:16,027 1 INFO e2e odoo.addons.base.models.ir_module: module privacy_lookup: loading translation file /usr/lib/python3/dist-packages/odoo/addons/privacy_lookup/i18n/es_419.po for language es_EC 
+2026-11-26 22:33:16,064 1 INFO e2e odoo.modules.loading: Module privacy_lookup loaded in 0.30s, 306 queries (+306 other) 
+2026-11-26 22:33:16,064 1 INFO e2e odoo.modules.loading: Loading module product (35/67) 
+2026-11-26 22:33:16,103 1 INFO e2e odoo.registry: module product: creating or updating database tables 
+2026-11-26 22:33:16,829 1 INFO e2e odoo.modules.loading: loading product/data/product_data.xml 
+2026-11-26 22:33:16,866 1 INFO e2e odoo.modules.loading: loading product/security/product_security.xml 
+2026-11-26 22:33:16,959 1 INFO e2e odoo.modules.loading: loading product/security/ir.model.access.csv 
+2026-11-26 22:33:16,982 1 INFO e2e odoo.modules.loading: loading product/wizard/product_label_layout_views.xml 
+2026-11-26 22:33:16,997 1 INFO e2e odoo.modules.loading: loading product/wizard/update_product_attribute_value_views.xml 
+2026-11-26 22:33:17,006 1 INFO e2e odoo.modules.loading: loading product/views/product_tag_views.xml 
+2026-11-26 22:33:17,021 1 INFO e2e odoo.modules.loading: loading product/views/product_views.xml 
+2026-11-26 22:33:17,146 1 INFO e2e odoo.modules.loading: loading product/views/res_config_settings_views.xml 
+2026-11-26 22:33:17,167 1 INFO e2e odoo.modules.loading: loading product/views/product_attribute_views.xml 
+2026-11-26 22:33:17,224 1 INFO e2e odoo.modules.loading: loading product/views/product_attribute_value_views.xml 
+2026-11-26 22:33:17,230 1 INFO e2e odoo.modules.loading: loading product/views/product_category_views.xml 
+2026-11-26 22:33:17,254 1 INFO e2e odoo.modules.loading: loading product/views/product_combo_views.xml 
+2026-11-26 22:33:17,276 1 INFO e2e odoo.modules.loading: loading product/views/product_document_views.xml 
+2026-11-26 22:33:17,301 1 INFO e2e odoo.modules.loading: loading product/views/product_pricelist_item_views.xml 
+2026-11-26 22:33:17,337 1 INFO e2e odoo.modules.loading: loading product/views/product_pricelist_views.xml 
+2026-11-26 22:33:17,367 1 INFO e2e odoo.modules.loading: loading product/views/product_supplierinfo_views.xml 
+2026-11-26 22:33:17,393 1 INFO e2e odoo.modules.loading: loading product/views/product_template_attribute_line_views.xml 
+2026-11-26 22:33:17,399 1 INFO e2e odoo.modules.loading: loading product/views/product_template_views.xml 
+2026-11-26 22:33:17,462 1 INFO e2e odoo.modules.loading: loading product/views/res_country_group_views.xml 
+2026-11-26 22:33:17,474 1 INFO e2e odoo.modules.loading: loading product/views/res_partner_views.xml 
+2026-11-26 22:33:17,491 1 INFO e2e odoo.modules.loading: loading product/views/uom_views.xml 
+2026-11-26 22:33:17,511 1 INFO e2e odoo.modules.loading: loading product/report/product_reports.xml 
+2026-11-26 22:33:17,543 1 INFO e2e odoo.modules.loading: loading product/report/product_product_templates.xml 
+2026-11-26 22:33:17,580 1 INFO e2e odoo.modules.loading: loading product/report/product_template_templates.xml 
+2026-11-26 22:33:17,599 1 INFO e2e odoo.modules.loading: loading product/report/product_packaging.xml 
+2026-11-26 22:33:17,604 1 INFO e2e odoo.modules.loading: loading product/report/product_pricelist_report_templates.xml 
+2026-11-26 22:33:17,618 1 INFO e2e odoo.addons.base.models.ir_module: module product: loading translation file /usr/lib/python3/dist-packages/odoo/addons/product/i18n/es.po for language es_EC 
+2026-11-26 22:33:17,651 1 INFO e2e odoo.addons.base.models.ir_module: module product: loading translation file /usr/lib/python3/dist-packages/odoo/addons/product/i18n/es_419.po for language es_EC 
+2026-11-26 22:33:17,805 1 INFO e2e odoo.modules.loading: Module product loaded in 1.74s, 1671 queries (+1671 other) 
+2026-11-26 22:33:17,806 1 INFO e2e odoo.modules.loading: Loading module resource_mail (36/67) 
+2026-11-26 22:33:17,817 1 INFO e2e odoo.registry: module resource_mail: creating or updating database tables 
+2026-11-26 22:33:17,860 1 INFO e2e odoo.addons.base.models.ir_module: module resource_mail: loading translation file /usr/lib/python3/dist-packages/odoo/addons/resource_mail/i18n/es.po for language es_EC 
+2026-11-26 22:33:17,862 1 INFO e2e odoo.addons.base.models.ir_module: module resource_mail: loading translation file /usr/lib/python3/dist-packages/odoo/addons/resource_mail/i18n/es_419.po for language es_EC 
+2026-11-26 22:33:17,872 1 INFO e2e odoo.modules.loading: Module resource_mail loaded in 0.07s, 39 queries (+39 other) 
+2026-11-26 22:33:17,872 1 INFO e2e odoo.modules.loading: Loading module partner_autocomplete (37/67) 
+2026-11-26 22:33:17,903 1 INFO e2e odoo.registry: module partner_autocomplete: creating or updating database tables 
+2026-11-26 22:33:17,997 1 INFO e2e odoo.modules.loading: loading partner_autocomplete/views/res_company_views.xml 
+2026-11-26 22:33:18,018 1 INFO e2e odoo.modules.loading: loading partner_autocomplete/views/res_config_settings_views.xml 
+2026-11-26 22:33:18,035 1 INFO e2e odoo.modules.loading: loading partner_autocomplete/data/iap_service_data.xml 
+2026-11-26 22:33:18,043 1 INFO e2e odoo.addons.base.models.ir_module: module partner_autocomplete: loading translation file /usr/lib/python3/dist-packages/odoo/addons/partner_autocomplete/i18n/es.po for language es_EC 
+2026-11-26 22:33:18,045 1 INFO e2e odoo.addons.base.models.ir_module: module partner_autocomplete: loading translation file /usr/lib/python3/dist-packages/odoo/addons/partner_autocomplete/i18n/es_419.po for language es_EC 
+2026-11-26 22:33:18,057 1 INFO e2e odoo.modules.loading: Module partner_autocomplete loaded in 0.19s, 150 queries (+150 other) 
+2026-11-26 22:33:18,058 1 INFO e2e odoo.modules.loading: Loading module portal (38/67) 
+2026-11-26 22:33:18,098 1 INFO e2e odoo.registry: module portal: creating or updating database tables 
+2026-11-26 22:33:18,371 1 INFO e2e odoo.modules.loading: loading portal/security/ir.model.access.csv 
+2026-11-26 22:33:18,381 1 INFO e2e odoo.modules.loading: loading portal/data/mail_templates.xml 
+2026-11-26 22:33:18,390 1 INFO e2e odoo.modules.loading: loading portal/views/address_templates.xml 
+2026-11-26 22:33:18,431 1 INFO e2e odoo.modules.loading: loading portal/views/mail_templates_public.xml 
+2026-11-26 22:33:18,441 1 INFO e2e odoo.modules.loading: loading portal/views/portal_templates.xml 
+2026-11-26 22:33:18,598 1 INFO e2e odoo.modules.loading: loading portal/views/res_config_settings_views.xml 
+2026-11-26 22:33:18,640 1 INFO e2e odoo.modules.loading: loading portal/wizard/portal_share_views.xml 
+2026-11-26 22:33:18,655 1 INFO e2e odoo.modules.loading: loading portal/wizard/portal_wizard_views.xml 
+2026-11-26 22:33:18,699 1 INFO e2e odoo.addons.base.models.ir_module: module portal: loading translation file /usr/lib/python3/dist-packages/odoo/addons/portal/i18n/es.po for language es_EC 
+2026-11-26 22:33:18,718 1 INFO e2e odoo.addons.base.models.ir_module: module portal: loading translation file /usr/lib/python3/dist-packages/odoo/addons/portal/i18n/es_419.po for language es_EC 
+2026-11-26 22:33:18,803 1 INFO e2e odoo.modules.loading: Module portal loaded in 0.74s, 614 queries (+614 other) 
+2026-11-26 22:33:18,803 1 INFO e2e odoo.modules.loading: Loading module sms (39/67) 
+2026-11-26 22:33:18,952 1 INFO e2e odoo.registry: module sms: creating or updating database tables 
+2026-11-26 22:33:18,960 1 INFO e2e odoo.models: Prepare computation of ir.actions.server.sms_template_id 
+2026-11-26 22:33:18,960 1 INFO e2e odoo.models: Prepare computation of ir.actions.server.sms_method 
+2026-11-26 22:33:20,000 1 INFO e2e odoo.modules.loading: loading sms/data/iap_service_data.xml 
+2026-11-26 22:33:20,005 1 INFO e2e odoo.modules.loading: loading sms/data/ir_cron_data.xml 
+2026-11-26 22:33:20,035 1 INFO e2e odoo.modules.loading: loading sms/wizard/sms_account_code_views.xml 
+2026-11-26 22:33:20,052 1 INFO e2e odoo.modules.loading: loading sms/wizard/sms_account_phone_views.xml 
+2026-11-26 22:33:20,061 1 INFO e2e odoo.modules.loading: loading sms/wizard/sms_account_sender_views.xml 
+2026-11-26 22:33:20,069 1 INFO e2e odoo.modules.loading: loading sms/wizard/sms_composer_views.xml 
+2026-11-26 22:33:20,083 1 INFO e2e odoo.modules.loading: loading sms/wizard/sms_template_preview_views.xml 
+2026-11-26 22:33:20,093 1 INFO e2e odoo.modules.loading: loading sms/wizard/sms_template_reset_views.xml 
+2026-11-26 22:33:20,104 1 INFO e2e odoo.modules.loading: loading sms/views/ir_actions_server_views.xml 
+2026-11-26 22:33:20,124 1 INFO e2e odoo.modules.loading: loading sms/views/mail_notification_views.xml 
+2026-11-26 22:33:20,146 1 INFO e2e odoo.modules.loading: loading sms/views/res_config_settings_views.xml 
+2026-11-26 22:33:20,167 1 INFO e2e odoo.modules.loading: loading sms/views/res_partner_views.xml 
+2026-11-26 22:33:20,188 1 INFO e2e odoo.modules.loading: loading sms/views/iap_account_views.xml 
+2026-11-26 22:33:20,202 1 INFO e2e odoo.modules.loading: loading sms/views/sms_sms_views.xml 
+2026-11-26 22:33:20,242 1 INFO e2e odoo.modules.loading: loading sms/views/sms_template_views.xml 
+2026-11-26 22:33:20,274 1 INFO e2e odoo.modules.loading: loading sms/security/ir.model.access.csv 
+2026-11-26 22:33:20,317 1 INFO e2e odoo.modules.loading: loading sms/security/sms_security.xml 
+2026-11-26 22:33:20,332 1 INFO e2e odoo.addons.base.models.ir_module: module sms: loading translation file /usr/lib/python3/dist-packages/odoo/addons/sms/i18n/es.po for language es_EC 
+2026-11-26 22:33:20,344 1 INFO e2e odoo.addons.base.models.ir_module: module sms: loading translation file /usr/lib/python3/dist-packages/odoo/addons/sms/i18n/es_419.po for language es_EC 
+2026-11-26 22:33:20,418 1 INFO e2e odoo.modules.loading: Module sms loaded in 1.62s, 2385 queries (+2385 other) 
+2026-11-26 22:33:20,418 1 INFO e2e odoo.modules.loading: Loading module snailmail (40/67) 
+2026-11-26 22:33:20,518 1 INFO e2e odoo.registry: module snailmail: creating or updating database tables 
+2026-11-26 22:33:20,812 1 INFO e2e odoo.modules.loading: loading snailmail/data/iap_service_data.xml 
+2026-11-26 22:33:20,817 1 INFO e2e odoo.modules.loading: loading snailmail/data/snailmail_data.xml 
+2026-11-26 22:33:20,845 1 INFO e2e odoo.modules.loading: loading snailmail/views/report_assets.xml 
+2026-11-26 22:33:20,858 1 INFO e2e odoo.modules.loading: loading snailmail/views/snailmail_views.xml 
+2026-11-26 22:33:20,881 1 INFO e2e odoo.modules.loading: loading snailmail/security/ir.model.access.csv 
+2026-11-26 22:33:20,903 1 INFO e2e odoo.addons.base.models.ir_module: module snailmail: loading translation file /usr/lib/python3/dist-packages/odoo/addons/snailmail/i18n/es.po for language es_EC 
+2026-11-26 22:33:20,909 1 INFO e2e odoo.addons.base.models.ir_module: module snailmail: loading translation file /usr/lib/python3/dist-packages/odoo/addons/snailmail/i18n/es_419.po for language es_EC 
+2026-11-26 22:33:20,944 1 INFO e2e odoo.modules.loading: Module snailmail loaded in 0.53s, 480 queries (+480 other) 
+2026-11-26 22:33:20,944 1 INFO e2e odoo.modules.loading: Loading module auth_passkey_portal (41/67) 
+2026-11-26 22:33:20,963 1 INFO e2e odoo.modules.loading: loading auth_passkey_portal/views/templates.xml 
+2026-11-26 22:33:21,001 1 INFO e2e odoo.addons.base.models.ir_module: module auth_passkey_portal: loading translation file /usr/lib/python3/dist-packages/odoo/addons/auth_passkey_portal/i18n/es.po for language es_EC 
+2026-11-26 22:33:21,003 1 INFO e2e odoo.addons.base.models.ir_module: module auth_passkey_portal: loading translation file /usr/lib/python3/dist-packages/odoo/addons/auth_passkey_portal/i18n/es_419.po for language es_EC 
+2026-11-26 22:33:21,014 1 INFO e2e odoo.modules.loading: Module auth_passkey_portal loaded in 0.07s, 26 queries (+26 other) 
+2026-11-26 22:33:21,014 1 INFO e2e odoo.modules.loading: Loading module auth_totp_portal (42/67) 
+2026-11-26 22:33:21,031 1 INFO e2e odoo.registry: module auth_totp_portal: creating or updating database tables 
+2026-11-26 22:33:21,070 1 INFO e2e odoo.modules.loading: loading auth_totp_portal/security/security.xml 
+2026-11-26 22:33:21,085 1 INFO e2e odoo.modules.loading: loading auth_totp_portal/views/templates.xml 
+2026-11-26 22:33:21,101 1 INFO e2e odoo.addons.base.models.ir_module: module auth_totp_portal: loading translation file /usr/lib/python3/dist-packages/odoo/addons/auth_totp_portal/i18n/es.po for language es_EC 
+2026-11-26 22:33:21,103 1 INFO e2e odoo.addons.base.models.ir_module: module auth_totp_portal: loading translation file /usr/lib/python3/dist-packages/odoo/addons/auth_totp_portal/i18n/es_419.po for language es_EC 
+2026-11-26 22:33:21,125 1 INFO e2e odoo.modules.loading: Module auth_totp_portal loaded in 0.11s, 76 queries (+76 other) 
+2026-11-26 22:33:21,125 1 INFO e2e odoo.modules.loading: Loading module digest (43/67) 
+2026-11-26 22:33:21,148 1 INFO e2e odoo.registry: module digest: creating or updating database tables 
+2026-11-26 22:33:21,258 1 INFO e2e odoo.modules.loading: loading digest/security/ir.model.access.csv 
+2026-11-26 22:33:21,267 1 INFO e2e odoo.modules.loading: loading digest/data/digest_data.xml 
+2026-11-26 22:33:21,290 1 INFO e2e odoo.modules.loading: loading digest/data/digest_tips_data.xml 
+2026-11-26 22:33:21,312 1 INFO e2e odoo.modules.loading: loading digest/data/ir_cron_data.xml 
+2026-11-26 22:33:21,337 1 INFO e2e odoo.modules.loading: loading digest/data/res_config_settings_data.xml 
+2026-11-26 22:33:21,344 1 INFO e2e odoo.modules.loading: loading digest/views/digest_views.xml 
+2026-11-26 22:33:21,394 1 INFO e2e odoo.modules.loading: loading digest/views/digest_templates.xml 
+2026-11-26 22:33:21,399 1 INFO e2e odoo.modules.loading: loading digest/views/res_config_settings_views.xml 
+2026-11-26 22:33:21,420 1 INFO e2e odoo.addons.base.models.ir_module: module digest: loading translation file /usr/lib/python3/dist-packages/odoo/addons/digest/i18n/es.po for language es_EC 
+2026-11-26 22:33:21,424 1 INFO e2e odoo.addons.base.models.ir_module: module digest: loading translation file /usr/lib/python3/dist-packages/odoo/addons/digest/i18n/es_419.po for language es_EC 
+2026-11-26 22:33:21,470 1 INFO e2e odoo.modules.loading: Module digest loaded in 0.34s, 344 queries (+344 other) 
+2026-11-26 22:33:21,470 1 INFO e2e odoo.modules.loading: Loading module payment (44/67) 
+2026-11-26 22:33:21,502 1 INFO e2e odoo.registry: module payment: creating or updating database tables 
+2026-11-26 22:33:21,859 1 INFO e2e odoo.modules.loading: loading payment/data/ir_actions_server_data.xml 
+2026-11-26 22:33:21,878 1 INFO e2e odoo.modules.loading: loading payment/data/payment_method_data.xml 
+2026-11-26 22:33:23,461 1 INFO e2e odoo.modules.loading: loading payment/data/payment_provider_data.xml 
+2026-11-26 22:33:23,704 1 INFO e2e odoo.modules.loading: loading payment/data/payment_cron.xml 
+2026-11-26 22:33:23,726 1 INFO e2e odoo.modules.loading: loading payment/views/express_checkout_templates.xml 
+2026-11-26 22:33:23,733 1 INFO e2e odoo.modules.loading: loading payment/views/payment_form_templates.xml 
+2026-11-26 22:33:23,779 1 INFO e2e odoo.modules.loading: loading payment/views/portal_templates.xml 
+2026-11-26 22:33:23,821 1 INFO e2e odoo.modules.loading: loading payment/views/payment_provider_views.xml 
+2026-11-26 22:33:23,858 1 INFO e2e odoo.modules.loading: loading payment/views/payment_method_views.xml 
+2026-11-26 22:33:23,881 1 INFO e2e odoo.modules.loading: loading payment/views/payment_transaction_views.xml 
+2026-11-26 22:33:23,916 1 INFO e2e odoo.modules.loading: loading payment/views/payment_token_views.xml 
+2026-11-26 22:33:23,935 1 INFO e2e odoo.modules.loading: loading payment/views/res_partner_views.xml 
+2026-11-26 22:33:23,950 1 INFO e2e odoo.modules.loading: loading payment/security/ir.model.access.csv 
+2026-11-26 22:33:24,643 1 INFO e2e odoo.modules.loading: loading payment/security/payment_security.xml 
+2026-11-26 22:33:24,678 1 INFO e2e odoo.modules.loading: loading payment/wizards/payment_capture_wizard_views.xml 
+2026-11-26 22:33:24,688 1 INFO e2e odoo.modules.loading: loading payment/wizards/payment_link_wizard_views.xml 
+2026-11-26 22:33:24,704 1 INFO e2e odoo.addons.base.models.ir_module: module payment: loading translation file /usr/lib/python3/dist-packages/odoo/addons/payment/i18n/es.po for language es_EC 
+2026-11-26 22:33:24,742 1 INFO e2e odoo.addons.base.models.ir_module: module payment: loading translation file /usr/lib/python3/dist-packages/odoo/addons/payment/i18n/es_419.po for language es_EC 
+2026-11-26 22:33:24,872 1 INFO e2e odoo.modules.loading: Module payment loaded in 3.40s, 2539 queries (+2539 other) 
+2026-11-26 22:33:24,873 1 INFO e2e odoo.modules.loading: Loading module spreadsheet (45/67) 
+2026-11-26 22:33:24,887 1 INFO e2e odoo.registry: module spreadsheet: creating or updating database tables 
+2026-11-26 22:33:24,965 1 INFO e2e odoo.modules.loading: loading spreadsheet/views/public_readonly_spreadsheet_templates.xml 
+2026-11-26 22:33:24,979 1 INFO e2e odoo.addons.base.models.ir_module: module spreadsheet: loading translation file /usr/lib/python3/dist-packages/odoo/addons/spreadsheet/i18n/es.po for language es_EC 
+2026-11-26 22:33:25,087 1 INFO e2e odoo.addons.base.models.ir_module: module spreadsheet: loading translation file /usr/lib/python3/dist-packages/odoo/addons/spreadsheet/i18n/es_419.po for language es_EC 
+2026-11-26 22:33:25,170 1 INFO e2e odoo.modules.loading: Module spreadsheet loaded in 0.30s, 99 queries (+99 other) 
+2026-11-26 22:33:25,170 1 INFO e2e odoo.modules.loading: Loading module account (46/67) 
+2026-11-26 22:33:25,292 1 INFO e2e odoo.registry: module account: creating or updating database tables 
+2026-11-26 22:33:25,457 1 INFO e2e odoo.models: Prepare computation of res.company.domestic_fiscal_position_id 
+2026-11-26 22:33:25,457 1 INFO e2e odoo.models: Prepare computation of res.company.account_fiscal_country_id 
+2026-11-26 22:33:25,457 1 INFO e2e odoo.models: Prepare computation of res.company.invoice_terms_html 
+2026-11-26 22:33:25,457 1 INFO e2e odoo.models: Prepare computation of res.company.account_storno 
+2026-11-26 22:33:27,716 1 INFO e2e odoo.modules.loading: loading account/security/account_security.xml 
+2026-11-26 22:33:27,980 1 INFO e2e odoo.modules.loading: loading account/security/ir.model.access.csv 
+2026-11-26 22:33:28,037 1 INFO e2e odoo.modules.loading: loading account/data/account_data.xml 
+2026-11-26 22:33:28,161 1 INFO e2e odoo.modules.loading: loading account/data/digest_data.xml 
+2026-11-26 22:33:28,171 1 INFO e2e odoo.modules.loading: loading account/views/account_report.xml 
+2026-11-26 22:33:28,197 1 INFO e2e odoo.modules.loading: loading account/data/mail_template_data.xml 
+2026-11-26 22:33:28,258 1 INFO e2e odoo.modules.loading: loading account/data/onboarding_data.xml 
+2026-11-26 22:33:28,295 1 INFO e2e odoo.modules.loading: loading account/data/account_tour.xml 
+2026-11-26 22:33:28,300 1 INFO e2e odoo.modules.loading: loading account/data/ir_sequence.xml 
+2026-11-26 22:33:28,305 1 INFO e2e odoo.modules.loading: loading account/data/res_country_group.xml 
+2026-11-26 22:33:28,323 1 INFO e2e odoo.modules.loading: loading account/views/account_payment_view.xml 
+2026-11-26 22:33:28,407 1 INFO e2e odoo.modules.loading: loading account/wizard/account_automatic_entry_wizard_views.xml 
+2026-11-26 22:33:28,420 1 INFO e2e odoo.modules.loading: loading account/wizard/account_autopost_bills_wizard.xml 
+2026-11-26 22:33:28,431 1 INFO e2e odoo.modules.loading: loading account/wizard/account_unreconcile_view.xml 
+2026-11-26 22:33:28,444 1 INFO e2e odoo.modules.loading: loading account/wizard/account_move_reversal_view.xml 
+2026-11-26 22:33:28,457 1 INFO e2e odoo.modules.loading: loading account/wizard/account_resequence_views.xml 
+2026-11-26 22:33:28,470 1 INFO e2e odoo.modules.loading: loading account/wizard/account_payment_register_views.xml 
+2026-11-26 22:33:28,483 1 INFO e2e odoo.modules.loading: loading account/views/account_move_views.xml 
+2026-11-26 22:33:29,067 1 INFO e2e odoo.modules.loading: loading account/wizard/setup_wizards_view.xml 
+2026-11-26 22:33:29,094 1 INFO e2e odoo.modules.loading: loading account/views/account_account_views.xml 
+2026-11-26 22:33:29,139 1 INFO e2e odoo.modules.loading: loading account/views/account_group_views.xml 
+2026-11-26 22:33:29,159 1 INFO e2e odoo.modules.loading: loading account/views/account_journal_views.xml 
+2026-11-26 22:33:29,218 1 INFO e2e odoo.modules.loading: loading account/views/account_account_tag_views.xml 
+2026-11-26 22:33:29,233 1 INFO e2e odoo.modules.loading: loading account/views/account_bank_statement_views.xml 
+2026-11-26 22:33:29,266 1 INFO e2e odoo.modules.loading: loading account/views/account_reconcile_model_views.xml 
+2026-11-26 22:33:29,293 1 INFO e2e odoo.modules.loading: loading account/views/account_tax_views.xml 
+2026-11-26 22:33:29,373 1 INFO e2e odoo.modules.loading: loading account/views/account_full_reconcile_views.xml 
+2026-11-26 22:33:29,384 1 INFO e2e odoo.modules.loading: loading account/views/account_payment_term_views.xml 
+2026-11-26 22:33:29,421 1 INFO e2e odoo.modules.loading: loading account/views/account_payment_method.xml 
+2026-11-26 22:33:29,431 1 INFO e2e odoo.modules.loading: loading account/views/res_partner_bank_views.xml 
+2026-11-26 22:33:29,456 1 INFO e2e odoo.modules.loading: loading account/views/report_statement.xml 
+2026-11-26 22:33:29,471 1 INFO e2e odoo.modules.loading: loading account/views/terms_template.xml 
+2026-11-26 22:33:29,485 1 INFO e2e odoo.modules.loading: loading account/wizard/account_validate_move_view.xml 
+2026-11-26 22:33:29,508 1 INFO e2e odoo.modules.loading: loading account/views/res_company_views.xml 
+2026-11-26 22:33:29,542 1 INFO e2e odoo.modules.loading: loading account/views/product_view.xml 
+2026-11-26 22:33:29,606 1 INFO e2e odoo.modules.loading: loading account/views/account_analytic_plan_views.xml 
+2026-11-26 22:33:29,622 1 INFO e2e odoo.modules.loading: loading account/views/account_analytic_account_views.xml 
+2026-11-26 22:33:29,644 1 INFO e2e odoo.modules.loading: loading account/views/account_analytic_distribution_model_views.xml 
+2026-11-26 22:33:29,665 1 INFO e2e odoo.modules.loading: loading account/views/account_analytic_line_views.xml 
+2026-11-26 22:33:29,706 1 INFO e2e odoo.modules.loading: loading account/views/report_invoice.xml 
+2026-11-26 22:33:29,751 1 INFO e2e odoo.modules.loading: loading account/report/account_invoice_report_view.xml 
+2026-11-26 22:33:29,797 1 INFO e2e odoo.modules.loading: loading account/views/account_cash_rounding_view.xml 
+2026-11-26 22:33:29,815 1 INFO e2e odoo.modules.loading: loading account/views/ir_actions_views.xml 
+2026-11-26 22:33:29,826 1 INFO e2e odoo.modules.loading: loading account/views/ir_module_views.xml 
+2026-11-26 22:33:29,836 1 INFO e2e odoo.modules.loading: loading account/views/base_document_layout_views.xml 
+2026-11-26 22:33:29,848 1 INFO e2e odoo.modules.loading: loading account/views/res_config_settings_views.xml 
+2026-11-26 22:33:29,899 1 INFO e2e odoo.modules.loading: loading account/views/partner_view.xml 
+2026-11-26 22:33:29,979 1 INFO e2e odoo.modules.loading: loading account/views/account_journal_dashboard_view.xml 
+2026-11-26 22:33:29,999 1 INFO e2e odoo.modules.loading: loading account/views/account_portal_templates.xml 
+2026-11-26 22:33:30,051 1 INFO e2e odoo.modules.loading: loading account/views/report_payment_receipt_templates.xml 
+2026-11-26 22:33:30,061 1 INFO e2e odoo.modules.loading: loading account/data/service_cron.xml 
+2026-11-26 22:33:30,094 1 INFO e2e odoo.modules.loading: loading account/views/account_incoterms_view.xml 
+2026-11-26 22:33:30,113 1 INFO e2e odoo.modules.loading: loading account/data/account_incoterms_data.xml 
+2026-11-26 22:33:30,130 1 INFO e2e odoo.modules.loading: loading account/views/digest_views.xml 
+2026-11-26 22:33:30,142 1 INFO e2e odoo.modules.loading: loading account/wizard/account_move_send_wizard.xml 
+2026-11-26 22:33:30,151 1 INFO e2e odoo.modules.loading: loading account/wizard/account_move_send_batch_wizard.xml 
+2026-11-26 22:33:30,159 1 INFO e2e odoo.modules.loading: loading account/report/account_hash_integrity_templates.xml 
+2026-11-26 22:33:30,166 1 INFO e2e odoo.modules.loading: loading account/views/res_currency.xml 
+2026-11-26 22:33:30,180 1 INFO e2e odoo.modules.loading: loading account/views/res_country_group_view.xml 
+2026-11-26 22:33:30,191 1 INFO e2e odoo.modules.loading: loading account/views/account_menuitem.xml 
+2026-11-26 22:33:30,356 1 INFO e2e odoo.modules.loading: loading account/wizard/account_secure_entries_wizard.xml 
+2026-11-26 22:33:30,378 1 INFO e2e odoo.modules.loading: loading account/views/mail_message_views.xml 
+2026-11-26 22:33:30,407 1 INFO e2e odoo.modules.loading: loading account/wizard/accrued_orders.xml 
+2026-11-26 22:33:30,418 1 INFO e2e odoo.modules.loading: loading account/views/bill_preview_template.xml 
+2026-11-26 22:33:30,430 1 INFO e2e odoo.modules.loading: loading account/data/account_reports_data.xml 
+2026-11-26 22:33:30,479 1 INFO e2e odoo.modules.loading: loading account/views/uom_uom_views.xml 
+2026-11-26 22:33:30,493 1 INFO e2e odoo.modules.loading: loading account/views/product_views.xml 
+2026-11-26 22:33:30,510 1 INFO e2e odoo.modules.loading: loading account/views/tests_shared_js_python.xml 
+2026-11-26 22:33:30,515 1 INFO e2e odoo.modules.loading: loading account/views/account_lock_exception_views.xml 
+2026-11-26 22:33:30,525 1 INFO e2e odoo.modules.loading: loading account/views/report_templates.xml 
+2026-11-26 22:33:30,554 1 INFO e2e odoo.modules.loading: loading account/wizard/account_merge_wizard_views.xml 
+2026-11-26 22:33:30,574 1 INFO e2e odoo.modules.loading: loading account/data/ir_config_parameter_data.xml 
+2026-11-26 22:33:30,584 1 INFO e2e odoo.addons.base.models.ir_module: module account: loading translation file /usr/lib/python3/dist-packages/odoo/addons/account/i18n/es.po for language es_EC 
+2026-11-26 22:33:30,764 1 INFO e2e odoo.addons.base.models.ir_module: module account: loading translation file /usr/lib/python3/dist-packages/odoo/addons/account/i18n/es_419.po for language es_EC 
+2026-11-26 22:33:31,681 1 INFO e2e odoo.modules.loading: Module account loaded in 6.51s, 5884 queries (+5884 other) 
+2026-11-26 22:33:31,681 1 INFO e2e odoo.modules.loading: Loading module hr (47/67) 
+2026-11-26 22:33:31,850 1 INFO e2e odoo.registry: module hr: creating or updating database tables 
+2026-11-26 22:33:33,346 1 INFO e2e odoo.modules.loading: loading hr/security/hr_security.xml 
+2026-11-26 22:33:33,464 1 INFO e2e odoo.modules.loading: loading hr/security/ir.model.access.csv 
+2026-11-26 22:33:33,493 1 INFO e2e odoo.modules.loading: loading hr/data/digest_data.xml 
+2026-11-26 22:33:33,498 1 INFO e2e odoo.modules.loading: loading hr/data/report_paperformat.xml 
+2026-11-26 22:33:33,502 1 INFO e2e odoo.modules.loading: loading hr/wizard/hr_departure_wizard_views.xml 
+2026-11-26 22:33:33,513 1 INFO e2e odoo.modules.loading: loading hr/wizard/hr_contract_template_wizard.views.xml 
+2026-11-26 22:33:33,525 1 INFO e2e odoo.modules.loading: loading hr/wizard/mail_activity_schedule_views.xml 
+2026-11-26 22:33:33,538 1 INFO e2e odoo.modules.loading: loading hr/wizard/hr_bank_account_allocation_wizard.xml 
+2026-11-26 22:33:33,548 1 INFO e2e odoo.modules.loading: loading hr/wizard/hr_bank_account_allocation_wizard_line.xml 
+2026-11-26 22:33:33,555 1 INFO e2e odoo.modules.loading: loading hr/views/mail_activity_plan_views.xml 
+2026-11-26 22:33:33,610 1 INFO e2e odoo.modules.loading: loading hr/views/hr_version_views.xml 
+2026-11-26 22:33:33,646 1 INFO e2e odoo.modules.loading: loading hr/views/hr_contract_template_views.xml 
+2026-11-26 22:33:33,666 1 INFO e2e odoo.modules.loading: loading hr/views/hr_departure_reason_views.xml 
+2026-11-26 22:33:33,679 1 INFO e2e odoo.modules.loading: loading hr/views/hr_contract_type_views.xml 
+2026-11-26 22:33:33,697 1 INFO e2e odoo.modules.loading: loading hr/views/hr_job_views.xml 
+2026-11-26 22:33:33,727 1 INFO e2e odoo.modules.loading: loading hr/views/hr_employee_category_views.xml 
+2026-11-26 22:33:33,742 1 INFO e2e odoo.modules.loading: loading hr/views/hr_employee_public_views.xml 
+2026-11-26 22:33:33,781 1 INFO e2e odoo.modules.loading: loading hr/report/hr_employee_badge.xml 
+2026-11-26 22:33:33,791 1 INFO e2e odoo.modules.loading: loading hr/views/hr_employee_views.xml 
+2026-11-26 22:33:33,936 1 INFO e2e odoo.modules.loading: loading hr/views/hr_department_views.xml 
+2026-11-26 22:33:33,981 1 INFO e2e odoo.modules.loading: loading hr/views/hr_work_location_views.xml 
+2026-11-26 22:33:33,998 1 INFO e2e odoo.modules.loading: loading hr/views/hr_views.xml 
+2026-11-26 22:33:34,063 1 INFO e2e odoo.modules.loading: loading hr/views/res_config_settings_views.xml 
+2026-11-26 22:33:34,098 1 INFO e2e odoo.modules.loading: loading hr/views/res_partner_views.xml 
+2026-11-26 22:33:34,124 1 INFO e2e odoo.modules.loading: loading hr/views/res_partner_bank_views.xml 
+2026-11-26 22:33:34,140 1 INFO e2e odoo.modules.loading: loading hr/views/discuss_channel_views.xml 
+2026-11-26 22:33:34,153 1 INFO e2e odoo.modules.loading: loading hr/views/res_users.xml 
+2026-11-26 22:33:34,224 1 INFO e2e odoo.modules.loading: loading hr/views/hr_templates.xml 
+2026-11-26 22:33:34,230 1 INFO e2e odoo.modules.loading: loading hr/data/hr_data.xml 
+2026-11-26 22:33:34,501 1 INFO e2e odoo.addons.base.models.ir_module: module hr: loading translation file /usr/lib/python3/dist-packages/odoo/addons/hr/i18n/es.po for language es_EC 
+2026-11-26 22:33:34,545 1 INFO e2e odoo.addons.base.models.ir_module: module hr: loading translation file /usr/lib/python3/dist-packages/odoo/addons/hr/i18n/es_419.po for language es_EC 
+2026-11-26 22:33:34,807 1 INFO e2e odoo.modules.loading: Module hr loaded in 3.13s, 4264 queries (+4264 other) 
+2026-11-26 22:33:34,807 1 INFO e2e odoo.modules.loading: Loading module spreadsheet_dashboard (48/67) 
+2026-11-26 22:33:34,820 1 INFO e2e odoo.registry: module spreadsheet_dashboard: creating or updating database tables 
+2026-11-26 22:33:34,953 1 INFO e2e odoo.modules.loading: loading spreadsheet_dashboard/security/security.xml 
+2026-11-26 22:33:35,019 1 INFO e2e odoo.modules.loading: loading spreadsheet_dashboard/security/ir.model.access.csv 
+2026-11-26 22:33:35,028 1 INFO e2e odoo.modules.loading: loading spreadsheet_dashboard/views/spreadsheet_dashboard_views.xml 
+2026-11-26 22:33:35,054 1 INFO e2e odoo.modules.loading: loading spreadsheet_dashboard/views/menu_views.xml 
+2026-11-26 22:33:35,076 1 INFO e2e odoo.modules.loading: loading spreadsheet_dashboard/data/dashboard.xml 
+2026-11-26 22:33:35,092 1 INFO e2e odoo.addons.base.models.ir_module: module spreadsheet_dashboard: loading translation file /usr/lib/python3/dist-packages/odoo/addons/spreadsheet_dashboard/i18n/es.po for language es_EC 
+2026-11-26 22:33:35,095 1 INFO e2e odoo.addons.base.models.ir_module: module spreadsheet_dashboard: loading translation file /usr/lib/python3/dist-packages/odoo/addons/spreadsheet_dashboard/i18n/es_419.po for language es_EC 
+2026-11-26 22:33:35,124 1 INFO e2e odoo.modules.loading: Module spreadsheet_dashboard loaded in 0.32s, 330 queries (+330 other) 
+2026-11-26 22:33:35,124 1 INFO e2e odoo.modules.loading: Loading module stock (49/67) 
+2026-11-26 22:33:35,240 1 INFO e2e odoo.registry: module stock: creating or updating database tables 
+2026-11-26 22:33:36,988 1 INFO e2e odoo.modules.loading: loading stock/security/stock_security.xml 
+2026-11-26 22:33:37,125 1 INFO e2e odoo.modules.loading: loading stock/security/ir.model.access.csv 
+2026-11-26 22:33:37,162 1 INFO e2e odoo.modules.loading: loading stock/data/digest_data.xml 
+2026-11-26 22:33:37,169 1 INFO e2e odoo.modules.loading: loading stock/data/mail_templates.xml 
+2026-11-26 22:33:37,180 1 INFO e2e odoo.modules.loading: loading stock/data/default_barcode_patterns.xml 
+2026-11-26 22:33:37,191 1 INFO e2e odoo.modules.loading: loading stock/data/stock_data.xml 
+2026-11-26 22:33:37,702 1 INFO e2e odoo.modules.loading: loading stock/data/stock_sequence_data.xml 
+2026-11-26 22:33:37,749 1 INFO e2e odoo.modules.loading: loading stock/data/stock_traceability_report_data.xml 
+2026-11-26 22:33:37,753 1 INFO e2e odoo.modules.loading: loading stock/report/report_stock_quantity.xml 
+2026-11-26 22:33:37,761 1 INFO e2e odoo.modules.loading: loading stock/report/report_stock_reception.xml 
+2026-11-26 22:33:37,786 1 INFO e2e odoo.modules.loading: loading stock/report/stock_report_views.xml 
+2026-11-26 22:33:37,830 1 INFO e2e odoo.modules.loading: loading stock/report/report_package_barcode.xml 
+2026-11-26 22:33:37,858 1 INFO e2e odoo.modules.loading: loading stock/report/report_lot_barcode.xml 
+2026-11-26 22:33:37,863 1 INFO e2e odoo.modules.loading: loading stock/report/report_location_barcode.xml 
+2026-11-26 22:33:37,872 1 INFO e2e odoo.modules.loading: loading stock/report/report_stockpicking_operations.xml 
+2026-11-26 22:33:37,887 1 INFO e2e odoo.modules.loading: loading stock/report/report_deliveryslip.xml 
+2026-11-26 22:33:37,923 1 INFO e2e odoo.modules.loading: loading stock/report/report_stockinventory.xml 
+2026-11-26 22:33:37,931 1 INFO e2e odoo.modules.loading: loading stock/report/report_stock_rule.xml 
+2026-11-26 22:33:37,964 1 INFO e2e odoo.modules.loading: loading stock/report/package_templates.xml 
+2026-11-26 22:33:37,976 1 INFO e2e odoo.modules.loading: loading stock/report/packaging_barcode.xml 
+2026-11-26 22:33:37,982 1 INFO e2e odoo.modules.loading: loading stock/report/picking_templates.xml 
+2026-11-26 22:33:37,999 1 INFO e2e odoo.modules.loading: loading stock/report/product_templates.xml 
+2026-11-26 22:33:38,032 1 INFO e2e odoo.modules.loading: loading stock/report/report_return_slip.xml 
+2026-11-26 22:33:38,048 1 INFO e2e odoo.modules.loading: loading stock/data/mail_template_data.xml 
+2026-11-26 22:33:38,059 1 INFO e2e odoo.modules.loading: loading stock/views/stock_menu_views.xml 
+2026-11-26 22:33:38,124 1 INFO e2e odoo.modules.loading: loading stock/wizard/stock_picking_return_views.xml 
+2026-11-26 22:33:38,140 1 INFO e2e odoo.modules.loading: loading stock/wizard/stock_inventory_conflict.xml 
+2026-11-26 22:33:38,154 1 INFO e2e odoo.modules.loading: loading stock/wizard/stock_backorder_confirmation_views.xml 
+2026-11-26 22:33:38,165 1 INFO e2e odoo.modules.loading: loading stock/wizard/stock_quantity_history.xml 
+2026-11-26 22:33:38,172 1 INFO e2e odoo.modules.loading: loading stock/wizard/stock_request_count.xml 
+2026-11-26 22:33:38,184 1 INFO e2e odoo.modules.loading: loading stock/wizard/stock_replenishment_info.xml 
+2026-11-26 22:33:38,209 1 INFO e2e odoo.modules.loading: loading stock/wizard/stock_rules_report_views.xml 
+2026-11-26 22:33:38,221 1 INFO e2e odoo.modules.loading: loading stock/wizard/stock_warn_insufficient_qty_views.xml 
+2026-11-26 22:33:38,238 1 INFO e2e odoo.modules.loading: loading stock/wizard/product_replenish_views.xml 
+2026-11-26 22:33:38,250 1 INFO e2e odoo.modules.loading: loading stock/wizard/product_label_layout_views.xml 
+2026-11-26 22:33:38,270 1 INFO e2e odoo.modules.loading: loading stock/wizard/stock_orderpoint_snooze_views.xml 
+2026-11-26 22:33:38,285 1 INFO e2e odoo.modules.loading: loading stock/wizard/stock_package_destination_views.xml 
+2026-11-26 22:33:38,301 1 INFO e2e odoo.modules.loading: loading stock/wizard/stock_inventory_adjustment_name.xml 
+2026-11-26 22:33:38,314 1 INFO e2e odoo.modules.loading: loading stock/wizard/stock_inventory_warning.xml 
+2026-11-26 22:33:38,336 1 INFO e2e odoo.modules.loading: loading stock/wizard/stock_label_type.xml 
+2026-11-26 22:33:38,346 1 INFO e2e odoo.modules.loading: loading stock/wizard/stock_lot_label_layout.xml 
+2026-11-26 22:33:38,358 1 INFO e2e odoo.modules.loading: loading stock/wizard/stock_quant_relocate.xml 
+2026-11-26 22:33:38,372 1 INFO e2e odoo.modules.loading: loading stock/wizard/stock_put_in_pack_views.xml 
+2026-11-26 22:33:38,391 1 INFO e2e odoo.modules.loading: loading stock/views/res_partner_views.xml 
+2026-11-26 22:33:38,447 1 INFO e2e odoo.modules.loading: loading stock/views/product_strategy_views.xml 
+2026-11-26 22:33:38,491 1 INFO e2e odoo.modules.loading: loading stock/views/stock_lot_views.xml 
+2026-11-26 22:33:38,541 1 INFO e2e odoo.modules.loading: loading stock/views/stock_scrap_views.xml 
+2026-11-26 22:33:38,594 1 INFO e2e odoo.modules.loading: loading stock/views/stock_quant_views.xml 
+2026-11-26 22:33:38,889 1 INFO e2e odoo.modules.loading: loading stock/views/stock_warehouse_views.xml 
+2026-11-26 22:33:38,921 1 INFO e2e odoo.modules.loading: loading stock/views/stock_move_line_views.xml 
+2026-11-26 22:33:38,993 1 INFO e2e odoo.modules.loading: loading stock/views/stock_move_views.xml 
+2026-11-26 22:33:39,093 1 INFO e2e odoo.modules.loading: loading stock/views/stock_picking_views.xml 
+2026-11-26 22:33:39,300 1 INFO e2e odoo.modules.loading: loading stock/views/stock_picking_type_views.xml 
+2026-11-26 22:33:39,347 1 INFO e2e odoo.modules.loading: loading stock/views/product_views.xml 
+2026-11-26 22:33:39,559 1 INFO e2e odoo.modules.loading: loading stock/views/stock_location_views.xml 
+2026-11-26 22:33:39,632 1 INFO e2e odoo.modules.loading: loading stock/views/stock_orderpoint_views.xml 
+2026-11-26 22:33:39,699 1 INFO e2e odoo.modules.loading: loading stock/views/stock_storage_category_views.xml 
+2026-11-26 22:33:39,731 1 INFO e2e odoo.modules.loading: loading stock/views/res_config_settings_views.xml 
+2026-11-26 22:33:39,778 1 INFO e2e odoo.modules.loading: loading stock/views/report_stock_traceability.xml 
+2026-11-26 22:33:39,791 1 INFO e2e odoo.modules.loading: loading stock/views/stock_template.xml 
+2026-11-26 22:33:39,800 1 INFO e2e odoo.modules.loading: loading stock/views/stock_rule_views.xml 
+2026-11-26 22:33:39,831 1 INFO e2e odoo.modules.loading: loading stock/views/stock_package_history_views.xml 
+2026-11-26 22:33:39,843 1 INFO e2e odoo.modules.loading: loading stock/views/stock_package_type_view.xml 
+2026-11-26 22:33:39,870 1 INFO e2e odoo.modules.loading: loading stock/views/stock_package_views.xml 
+2026-11-26 22:33:39,913 1 INFO e2e odoo.modules.loading: loading stock/views/stock_forecasted.xml 
+2026-11-26 22:33:39,919 1 INFO e2e odoo.modules.loading: loading stock/views/stock_reference_views.xml 
+2026-11-26 22:33:39,942 1 INFO e2e odoo.modules.loading: loading stock/views/uom_uom_views.xml 
+2026-11-26 22:33:39,963 1 INFO e2e odoo.addons.base.models.ir_module: module stock: loading translation file /usr/lib/python3/dist-packages/odoo/addons/stock/i18n/es.po for language es_EC 
+2026-11-26 22:33:40,080 1 INFO e2e odoo.addons.base.models.ir_module: module stock: loading translation file /usr/lib/python3/dist-packages/odoo/addons/stock/i18n/es_419.po for language es_EC 
+2026-11-26 22:33:40,453 1 INFO e2e odoo.modules.loading: Module stock loaded in 5.33s, 5133 queries (+5133 other) 
+2026-11-26 22:33:40,453 1 INFO e2e odoo.modules.loading: Loading module account_add_gln (50/67) 
+2026-11-26 22:33:40,480 1 INFO e2e odoo.registry: module account_add_gln: creating or updating database tables 
+2026-11-26 22:33:40,587 1 INFO e2e odoo.modules.loading: loading account_add_gln/views/res_partner_views.xml 
+2026-11-26 22:33:40,620 1 INFO e2e odoo.addons.base.models.ir_module: module account_add_gln: loading translation file /usr/lib/python3/dist-packages/odoo/addons/account_add_gln/i18n/es.po for language es_EC 
+2026-11-26 22:33:40,621 1 INFO e2e odoo.addons.base.models.ir_module: module account_add_gln: loading translation file /usr/lib/python3/dist-packages/odoo/addons/account_add_gln/i18n/es_419.po for language es_EC 
+2026-11-26 22:33:40,638 1 INFO e2e odoo.modules.loading: Module account_add_gln loaded in 0.19s, 110 queries (+110 other) 
+2026-11-26 22:33:40,639 1 INFO e2e odoo.modules.loading: Loading module account_edi_ubl_cii (51/67) 
+2026-11-26 22:33:40,708 1 INFO e2e odoo.registry: module account_edi_ubl_cii: creating or updating database tables 
+2026-11-26 22:33:40,737 1 INFO e2e odoo.models: Prepare computation of res.partner.peppol_endpoint 
+2026-11-26 22:33:40,737 1 INFO e2e odoo.models: Prepare computation of res.partner.peppol_eas 
+2026-11-26 22:33:40,918 1 INFO e2e odoo.modules.loading: loading account_edi_ubl_cii/data/cii_22_templates.xml 
+2026-11-26 22:33:40,953 1 INFO e2e odoo.modules.loading: loading account_edi_ubl_cii/data/ir_config_parameter_data.xml 
+2026-11-26 22:33:40,958 1 INFO e2e odoo.modules.loading: loading account_edi_ubl_cii/views/account_tax_views.xml 
+2026-11-26 22:33:40,984 1 INFO e2e odoo.modules.loading: loading account_edi_ubl_cii/views/account_move_views.xml 
+2026-11-26 22:33:41,005 1 INFO e2e odoo.modules.loading: loading account_edi_ubl_cii/views/res_partner_views.xml 
+2026-11-26 22:33:41,022 1 INFO e2e odoo.modules.loading: loading account_edi_ubl_cii/report/account_edi_ubl_cii_report_templates.xml 
+2026-11-26 22:33:41,054 1 INFO e2e odoo.addons.base.models.ir_module: module account_edi_ubl_cii: loading translation file /usr/lib/python3/dist-packages/odoo/addons/account_edi_ubl_cii/i18n/es.po for language es_EC 
+2026-11-26 22:33:41,072 1 INFO e2e odoo.addons.base.models.ir_module: module account_edi_ubl_cii: loading translation file /usr/lib/python3/dist-packages/odoo/addons/account_edi_ubl_cii/i18n/es_419.po for language es_EC 
+2026-11-26 22:33:41,161 1 INFO e2e odoo.modules.loading: Module account_edi_ubl_cii loaded in 0.52s, 415 queries (+415 other) 
+2026-11-26 22:33:41,161 1 INFO e2e odoo.modules.loading: Loading module account_payment (52/67) 
+2026-11-26 22:33:41,198 1 INFO e2e odoo.registry: module account_payment: creating or updating database tables 
+2026-11-26 22:33:41,411 1 INFO e2e odoo.modules.loading: loading account_payment/data/ir_config_parameter.xml 
+2026-11-26 22:33:41,416 1 INFO e2e odoo.modules.loading: loading account_payment/security/ir.model.access.csv 
+2026-11-26 22:33:41,424 1 INFO e2e odoo.modules.loading: loading account_payment/security/ir_rules.xml 
+2026-11-26 22:33:41,432 1 INFO e2e odoo.modules.loading: loading account_payment/views/account_payment_menus.xml 
+2026-11-26 22:33:41,451 1 INFO e2e odoo.modules.loading: loading account_payment/views/account_portal_templates.xml 
+2026-11-26 22:33:41,525 1 INFO e2e odoo.modules.loading: loading account_payment/views/account_move_views.xml 
+2026-11-26 22:33:41,556 1 INFO e2e odoo.modules.loading: loading account_payment/views/account_journal_views.xml 
+2026-11-26 22:33:41,573 1 INFO e2e odoo.modules.loading: loading account_payment/views/account_payment_views.xml 
+2026-11-26 22:33:41,586 1 INFO e2e odoo.modules.loading: loading account_payment/views/payment_form_templates.xml 
+2026-11-26 22:33:41,595 1 INFO e2e odoo.modules.loading: loading account_payment/views/payment_provider_views.xml 
+2026-11-26 22:33:41,605 1 INFO e2e odoo.modules.loading: loading account_payment/views/payment_transaction_views.xml 
+2026-11-26 22:33:41,616 1 INFO e2e odoo.modules.loading: loading account_payment/wizards/account_payment_register_views.xml 
+2026-11-26 22:33:41,626 1 INFO e2e odoo.modules.loading: loading account_payment/wizards/payment_link_wizard_views.xml 
+2026-11-26 22:33:41,642 1 INFO e2e odoo.modules.loading: loading account_payment/wizards/payment_refund_wizard_views.xml 
+2026-11-26 22:33:41,653 1 INFO e2e odoo.modules.loading: loading account_payment/wizards/res_config_settings_views.xml 
+2026-11-26 22:33:41,699 1 INFO e2e odoo.addons.base.models.ir_module: module account_payment: loading translation file /usr/lib/python3/dist-packages/odoo/addons/account_payment/i18n/es.po for language es_EC 
+2026-11-26 22:33:41,704 1 INFO e2e odoo.addons.base.models.ir_module: module account_payment: loading translation file /usr/lib/python3/dist-packages/odoo/addons/account_payment/i18n/es_419.po for language es_EC 
+2026-11-26 22:33:41,751 1 INFO e2e odoo.modules.loading: Module account_payment loaded in 0.59s, 580 queries (+580 other) 
+2026-11-26 22:33:41,751 1 INFO e2e odoo.modules.loading: Loading module hr_homeworking (53/67) 
+2026-11-26 22:33:41,800 1 INFO e2e odoo.registry: module hr_homeworking: creating or updating database tables 
+2026-11-26 22:33:41,994 1 INFO e2e odoo.modules.loading: loading hr_homeworking/security/security.xml 
+2026-11-26 22:33:42,009 1 INFO e2e odoo.modules.loading: loading hr_homeworking/security/ir.model.access.csv 
+2026-11-26 22:33:42,016 1 INFO e2e odoo.modules.loading: loading hr_homeworking/views/hr_employee_views.xml 
+2026-11-26 22:33:42,068 1 INFO e2e odoo.modules.loading: loading hr_homeworking/views/res_users.xml 
+2026-11-26 22:33:42,104 1 INFO e2e odoo.addons.base.models.ir_module: module hr_homeworking: loading translation file /usr/lib/python3/dist-packages/odoo/addons/hr_homeworking/i18n/es.po for language es_EC 
+2026-11-26 22:33:42,108 1 INFO e2e odoo.addons.base.models.ir_module: module hr_homeworking: loading translation file /usr/lib/python3/dist-packages/odoo/addons/hr_homeworking/i18n/es_419.po for language es_EC 
+2026-11-26 22:33:42,137 1 INFO e2e odoo.modules.loading: Module hr_homeworking loaded in 0.39s, 288 queries (+288 other) 
+2026-11-26 22:33:42,137 1 INFO e2e odoo.modules.loading: Loading module hr_org_chart (54/67) 
+2026-11-26 22:33:42,159 1 INFO e2e odoo.registry: module hr_org_chart: creating or updating database tables 
+2026-11-26 22:33:42,242 1 INFO e2e odoo.modules.loading: loading hr_org_chart/views/hr_department_views.xml 
+2026-11-26 22:33:42,266 1 INFO e2e odoo.modules.loading: loading hr_org_chart/views/hr_employee_public_views.xml 
+2026-11-26 22:33:42,294 1 INFO e2e odoo.modules.loading: loading hr_org_chart/views/hr_views.xml 
+2026-11-26 22:33:42,349 1 INFO e2e odoo.addons.base.models.ir_module: module hr_org_chart: loading translation file /usr/lib/python3/dist-packages/odoo/addons/hr_org_chart/i18n/es.po for language es_EC 
+2026-11-26 22:33:42,351 1 INFO e2e odoo.addons.base.models.ir_module: module hr_org_chart: loading translation file /usr/lib/python3/dist-packages/odoo/addons/hr_org_chart/i18n/es_419.po for language es_EC 
+2026-11-26 22:33:42,374 1 INFO e2e odoo.modules.loading: Module hr_org_chart loaded in 0.24s, 167 queries (+167 other) 
+2026-11-26 22:33:42,374 1 INFO e2e odoo.modules.loading: Loading module hr_skills (55/67) 
+2026-11-26 22:33:42,410 1 INFO e2e odoo.registry: module hr_skills: creating or updating database tables 
+2026-11-26 22:33:42,419 1 INFO e2e odoo.models: Prepare computation of hr.employee.skill_ids 
+2026-11-26 22:33:42,683 1 INFO e2e odoo.modules.loading: loading hr_skills/security/ir.model.access.csv 
+2026-11-26 22:33:42,701 1 INFO e2e odoo.modules.loading: loading hr_skills/security/hr_skills_security.xml 
+2026-11-26 22:33:42,766 1 INFO e2e odoo.modules.loading: loading hr_skills/views/hr_views.xml 
+2026-11-26 22:33:42,967 1 INFO e2e odoo.modules.loading: loading hr_skills/views/hr_job_views.xml 
+2026-11-26 22:33:42,981 1 INFO e2e odoo.modules.loading: loading hr_skills/views/hr_job_skill_views.xml 
+2026-11-26 22:33:42,986 1 INFO e2e odoo.modules.loading: loading hr_skills/data/hr_resume_data.xml 
+2026-11-26 22:33:42,994 1 INFO e2e odoo.modules.loading: loading hr_skills/data/hr_skill_data.xml 
+2026-11-26 22:33:43,086 1 INFO e2e odoo.modules.loading: loading hr_skills/data/ir_actions_server_data.xml 
+2026-11-26 22:33:43,121 1 INFO e2e odoo.modules.loading: loading hr_skills/data/ir_cron_data.xml 
+2026-11-26 22:33:43,140 1 INFO e2e odoo.modules.loading: loading hr_skills/data/mail_activity_type_data.xml 
+2026-11-26 22:33:43,146 1 INFO e2e odoo.modules.loading: loading hr_skills/data/report_paperformat.xml 
+2026-11-26 22:33:43,151 1 INFO e2e odoo.modules.loading: loading hr_skills/report/hr_employee_certification_report_views.xml 
+2026-11-26 22:33:43,175 1 INFO e2e odoo.modules.loading: loading hr_skills/report/hr_employee_skill_history_report_views.xml 
+2026-11-26 22:33:43,186 1 INFO e2e odoo.modules.loading: loading hr_skills/report/hr_employee_skill_report_views.xml 
+2026-11-26 22:33:43,214 1 INFO e2e odoo.modules.loading: loading hr_skills/report/hr_employee_cv_report.xml 
+2026-11-26 22:33:43,217 1 INFO e2e odoo.modules.loading: loading hr_skills/views/hr_department_views.xml 
+2026-11-26 22:33:43,231 1 INFO e2e odoo.modules.loading: loading hr_skills/views/hr_employee_cv_templates.xml 
+2026-11-26 22:33:43,252 1 INFO e2e odoo.modules.loading: loading hr_skills/wizard/hr_employee_cv_wizard_views.xml 
+2026-11-26 22:33:43,265 1 INFO e2e odoo.addons.base.models.ir_module: module hr_skills: loading translation file /usr/lib/python3/dist-packages/odoo/addons/hr_skills/i18n/es.po for language es_EC 
+2026-11-26 22:33:43,281 1 INFO e2e odoo.addons.base.models.ir_module: module hr_skills: loading translation file /usr/lib/python3/dist-packages/odoo/addons/hr_skills/i18n/es_419.po for language es_EC 
+2026-11-26 22:33:43,395 1 INFO e2e odoo.modules.loading: Module hr_skills loaded in 1.02s, 1093 queries (+1093 other) 
+2026-11-26 22:33:43,395 1 INFO e2e odoo.modules.loading: Loading module mail_bot_hr (56/67) 
+2026-11-26 22:33:43,416 1 INFO e2e odoo.modules.loading: loading mail_bot_hr/views/res_users_views.xml 
+2026-11-26 22:33:43,508 1 INFO e2e odoo.addons.base.models.ir_module: module mail_bot_hr: no translation for language es_EC 
+2026-11-26 22:33:43,516 1 INFO e2e odoo.modules.loading: Module mail_bot_hr loaded in 0.12s, 47 queries (+47 other) 
+2026-11-26 22:33:43,516 1 INFO e2e odoo.modules.loading: Loading module snailmail_account (57/67) 
+2026-11-26 22:33:43,557 1 INFO e2e odoo.registry: module snailmail_account: creating or updating database tables 
+2026-11-26 22:33:43,718 1 INFO e2e odoo.modules.loading: loading snailmail_account/views/res_config_settings_views.xml 
+2026-11-26 22:33:43,751 1 INFO e2e odoo.addons.base.models.ir_module: module snailmail_account: loading translation file /usr/lib/python3/dist-packages/odoo/addons/snailmail_account/i18n/es.po for language es_EC 
+2026-11-26 22:33:43,752 1 INFO e2e odoo.addons.base.models.ir_module: module snailmail_account: loading translation file /usr/lib/python3/dist-packages/odoo/addons/snailmail_account/i18n/es_419.po for language es_EC 
+2026-11-26 22:33:43,767 1 INFO e2e odoo.modules.loading: Module snailmail_account loaded in 0.25s, 205 queries (+205 other) 
+2026-11-26 22:33:43,767 1 INFO e2e odoo.modules.loading: Loading module spreadsheet_account (58/67) 
+2026-11-26 22:33:43,790 1 INFO e2e odoo.registry: module spreadsheet_account: creating or updating database tables 
+2026-11-26 22:33:43,830 1 INFO e2e odoo.addons.base.models.ir_module: module spreadsheet_account: loading translation file /usr/lib/python3/dist-packages/odoo/addons/spreadsheet_account/i18n/es.po for language es_EC 
+2026-11-26 22:33:43,833 1 INFO e2e odoo.addons.base.models.ir_module: module spreadsheet_account: loading translation file /usr/lib/python3/dist-packages/odoo/addons/spreadsheet_account/i18n/es_419.po for language es_EC 
+2026-11-26 22:33:43,870 1 INFO e2e odoo.modules.loading: Module spreadsheet_account loaded in 0.10s, 61 queries (+61 other) 
+2026-11-26 22:33:43,870 1 INFO e2e odoo.modules.loading: Loading module spreadsheet_dashboard_account (59/67) 
+2026-11-26 22:33:43,886 1 INFO e2e odoo.modules.loading: loading spreadsheet_dashboard_account/data/dashboards.xml 
+2026-11-26 22:33:43,934 1 INFO e2e odoo.addons.base.models.ir_module: module spreadsheet_dashboard_account: loading translation file /usr/lib/python3/dist-packages/odoo/addons/spreadsheet_dashboard_account/i18n/es.po for language es_EC 
+2026-11-26 22:33:43,936 1 INFO e2e odoo.addons.base.models.ir_module: module spreadsheet_dashboard_account: loading translation file /usr/lib/python3/dist-packages/odoo/addons/spreadsheet_dashboard_account/i18n/es_419.po for language es_EC 
+2026-11-26 22:33:43,946 1 INFO e2e odoo.modules.loading: Module spreadsheet_dashboard_account loaded in 0.08s, 31 queries (+31 other) 
+2026-11-26 22:33:43,947 1 INFO e2e odoo.modules.loading: Loading module stock_account (60/67) 
+2026-11-26 22:33:44,002 1 INFO e2e odoo.registry: module stock_account: creating or updating database tables 
+2026-11-26 22:33:44,390 1 INFO e2e odoo.modules.loading: loading stock_account/security/stock_account_security.xml 
+2026-11-26 22:33:44,407 1 INFO e2e odoo.modules.loading: loading stock_account/security/ir.model.access.csv 
+2026-11-26 22:33:44,418 1 INFO e2e odoo.modules.loading: loading stock_account/data/stock_account_data.xml 
+2026-11-26 22:33:44,451 1 INFO e2e odoo.modules.loading: loading stock_account/views/account_account_views.xml 
+2026-11-26 22:33:44,473 1 INFO e2e odoo.modules.loading: loading stock_account/views/stock_account_views.xml 
+2026-11-26 22:33:44,485 1 INFO e2e odoo.modules.loading: loading stock_account/views/res_config_settings_views.xml 
+2026-11-26 22:33:44,506 1 INFO e2e odoo.modules.loading: loading stock_account/views/report_invoice.xml 
+2026-11-26 22:33:44,520 1 INFO e2e odoo.modules.loading: loading stock_account/views/stock_quant_views.xml 
+2026-11-26 22:33:44,694 1 INFO e2e odoo.modules.loading: loading stock_account/views/product_views.xml 
+2026-11-26 22:33:44,767 1 INFO e2e odoo.modules.loading: loading stock_account/views/product_value_views.xml 
+2026-11-26 22:33:44,779 1 INFO e2e odoo.modules.loading: loading stock_account/views/stock_location_views.xml 
+2026-11-26 22:33:44,793 1 INFO e2e odoo.modules.loading: loading stock_account/views/stock_lot_views.xml 
+2026-11-26 22:33:44,805 1 INFO e2e odoo.modules.loading: loading stock_account/views/stock_picking_views.xml 
+2026-11-26 22:33:44,822 1 INFO e2e odoo.modules.loading: loading stock_account/views/stock_move_views.xml 
+2026-11-26 22:33:44,859 1 INFO e2e odoo.modules.loading: loading stock_account/wizard/stock_inventory_adjustment_name_views.xml 
+2026-11-26 22:33:44,870 1 INFO e2e odoo.modules.loading: loading stock_account/report/account_invoice_report_view.xml 
+2026-11-26 22:33:44,875 1 INFO e2e odoo.modules.loading: loading stock_account/report/stock_avco_audit_report_views.xml 
+2026-11-26 22:33:44,887 1 INFO e2e odoo.modules.loading: loading stock_account/report/stock_valuation_report.xml 
+2026-11-26 22:33:44,895 1 INFO e2e odoo.addons.base.models.ir_module: module stock_account: loading translation file /usr/lib/python3/dist-packages/odoo/addons/stock_account/i18n/es.po for language es_EC 
+2026-11-26 22:33:44,904 1 INFO e2e odoo.addons.base.models.ir_module: module stock_account: loading translation file /usr/lib/python3/dist-packages/odoo/addons/stock_account/i18n/es_419.po for language es_EC 
+2026-11-26 22:33:44,978 1 INFO e2e odoo.modules.loading: Module stock_account loaded in 1.03s, 935 queries (+935 other) 
+2026-11-26 22:33:44,978 1 INFO e2e odoo.modules.loading: Loading module stock_sms (61/67) 
+2026-11-26 22:33:45,011 1 INFO e2e odoo.registry: module stock_sms: creating or updating database tables 
+2026-11-26 22:33:45,131 1 INFO e2e odoo.modules.loading: loading stock_sms/data/sms_data.xml 
+2026-11-26 22:33:45,137 1 INFO e2e odoo.modules.loading: loading stock_sms/views/res_config_settings_views.xml 
+2026-11-26 22:33:45,175 1 INFO e2e odoo.modules.loading: loading stock_sms/wizard/confirm_stock_sms_views.xml 
+2026-11-26 22:33:45,183 1 INFO e2e odoo.modules.loading: loading stock_sms/security/ir.model.access.csv 
+2026-11-26 22:33:45,194 1 INFO e2e odoo.modules.loading: loading stock_sms/security/sms_security.xml 
+2026-11-26 22:33:45,207 1 INFO e2e odoo.addons.base.models.ir_module: module stock_sms: loading translation file /usr/lib/python3/dist-packages/odoo/addons/stock_sms/i18n/es.po for language es_EC 
+2026-11-26 22:33:45,209 1 INFO e2e odoo.addons.base.models.ir_module: module stock_sms: loading translation file /usr/lib/python3/dist-packages/odoo/addons/stock_sms/i18n/es_419.po for language es_EC 
+2026-11-26 22:33:45,269 1 INFO e2e odoo.modules.loading: Module stock_sms loaded in 0.29s, 208 queries (+208 other) 
+2026-11-26 22:33:45,269 1 INFO e2e odoo.modules.loading: Loading module point_of_sale (62/67) 
+2026-11-26 22:33:45,379 1 INFO e2e odoo.registry: module point_of_sale: creating or updating database tables 
+2026-11-26 22:33:46,882 1 INFO e2e odoo.modules.loading: loading point_of_sale/security/point_of_sale_security.xml 
+2026-11-26 22:33:47,004 1 INFO e2e odoo.modules.loading: loading point_of_sale/security/ir.model.access.csv 
+2026-11-26 22:33:47,031 1 INFO e2e odoo.modules.loading: loading point_of_sale/data/default_barcode_patterns.xml 
+2026-11-26 22:33:47,042 1 INFO e2e odoo.modules.loading: loading point_of_sale/data/digest_data.xml 
+2026-11-26 22:33:47,047 1 INFO e2e odoo.modules.loading: loading point_of_sale/data/pos_note_data.xml 
+2026-11-26 22:33:47,057 1 INFO e2e odoo.modules.loading: loading point_of_sale/data/point_of_sale_tour.xml 
+2026-11-26 22:33:47,061 1 INFO e2e odoo.modules.loading: loading point_of_sale/data/mail_template_data.xml 
+2026-11-26 22:33:47,068 1 INFO e2e odoo.modules.loading: loading point_of_sale/data/ir_config_parameter_data.xml 
+2026-11-26 22:33:47,072 1 INFO e2e odoo.modules.loading: loading point_of_sale/wizard/pos_details.xml 
+2026-11-26 22:33:47,080 1 INFO e2e odoo.modules.loading: loading point_of_sale/wizard/pos_payment.xml 
+2026-11-26 22:33:47,089 1 INFO e2e odoo.modules.loading: loading point_of_sale/wizard/pos_close_session_wizard.xml 
+2026-11-26 22:33:47,097 1 INFO e2e odoo.modules.loading: loading point_of_sale/wizard/pos_daily_sales_reports.xml 
+2026-11-26 22:33:47,107 1 INFO e2e odoo.modules.loading: loading point_of_sale/wizard/pos_confirmation_wizard.xml 
+2026-11-26 22:33:47,117 1 INFO e2e odoo.modules.loading: loading point_of_sale/wizard/pos_make_invoice.xml 
+2026-11-26 22:33:47,126 1 INFO e2e odoo.modules.loading: loading point_of_sale/views/pos_assets_index.xml 
+2026-11-26 22:33:47,132 1 INFO e2e odoo.modules.loading: loading point_of_sale/views/point_of_sale_report.xml 
+2026-11-26 22:33:47,140 1 INFO e2e odoo.modules.loading: loading point_of_sale/views/point_of_sale_view.xml 
+2026-11-26 22:33:47,179 1 INFO e2e odoo.modules.loading: loading point_of_sale/views/pos_note_view.xml 
+2026-11-26 22:33:47,192 1 INFO e2e odoo.modules.loading: loading point_of_sale/views/pos_order_view.xml 
+2026-11-26 22:33:47,313 1 INFO e2e odoo.modules.loading: loading point_of_sale/views/pos_category_view.xml 
+2026-11-26 22:33:47,333 1 INFO e2e odoo.modules.loading: loading point_of_sale/views/product_combo_views.xml 
+2026-11-26 22:33:47,349 1 INFO e2e odoo.modules.loading: loading point_of_sale/views/product_view.xml 
+2026-11-26 22:33:47,499 1 INFO e2e odoo.modules.loading: loading point_of_sale/views/account_journal_view.xml 
+2026-11-26 22:33:47,507 1 INFO e2e odoo.modules.loading: loading point_of_sale/views/pos_payment_method_views.xml 
+2026-11-26 22:33:47,538 1 INFO e2e odoo.modules.loading: loading point_of_sale/views/pos_payment_views.xml 
+2026-11-26 22:33:47,561 1 INFO e2e odoo.modules.loading: loading point_of_sale/views/pos_config_view.xml 
+2026-11-26 22:33:47,600 1 INFO e2e odoo.modules.loading: loading point_of_sale/views/pos_bill_view.xml 
+2026-11-26 22:33:47,618 1 INFO e2e odoo.modules.loading: loading point_of_sale/views/pos_session_view.xml 
+2026-11-26 22:33:47,656 1 INFO e2e odoo.modules.loading: loading point_of_sale/views/point_of_sale_sequence.xml 
+2026-11-26 22:33:47,661 1 INFO e2e odoo.modules.loading: loading point_of_sale/data/point_of_sale_data.xml 
+2026-11-26 22:33:47,955 1 INFO e2e odoo.modules.loading: loading point_of_sale/views/pos_order_report_view.xml 
+2026-11-26 22:33:47,989 1 INFO e2e odoo.modules.loading: loading point_of_sale/views/digest_views.xml 
+2026-11-26 22:33:48,001 1 INFO e2e odoo.modules.loading: loading point_of_sale/views/res_partner_view.xml 
+2026-11-26 22:33:48,021 1 INFO e2e odoo.modules.loading: loading point_of_sale/views/report_userlabel.xml 
+2026-11-26 22:33:48,026 1 INFO e2e odoo.modules.loading: loading point_of_sale/views/report_saledetails.xml 
+2026-11-26 22:33:48,039 1 INFO e2e odoo.modules.loading: loading point_of_sale/views/pos_preset_view.xml 
+2026-11-26 22:33:48,059 1 INFO e2e odoo.modules.loading: loading point_of_sale/views/point_of_sale_dashboard.xml 
+2026-11-26 22:33:48,075 1 INFO e2e odoo.modules.loading: loading point_of_sale/views/report_invoice.xml 
+2026-11-26 22:33:48,091 1 INFO e2e odoo.modules.loading: loading point_of_sale/views/pos_printer_view.xml 
+2026-11-26 22:33:48,112 1 INFO e2e odoo.modules.loading: loading point_of_sale/views/pos_ticket_view.xml 
+2026-11-26 22:33:48,125 1 INFO e2e odoo.modules.loading: loading point_of_sale/views/res_config_settings_views.xml 
+2026-11-26 22:33:48,175 1 INFO e2e odoo.modules.loading: loading point_of_sale/views/customer_display_index.xml 
+2026-11-26 22:33:48,180 1 INFO e2e odoo.modules.loading: loading point_of_sale/views/account_move_views.xml 
+2026-11-26 22:33:48,198 1 INFO e2e odoo.modules.loading: loading point_of_sale/views/pos_session_sales_details.xml 
+2026-11-26 22:33:48,213 1 INFO e2e odoo.modules.loading: loading point_of_sale/views/product_tag_views.xml 
+2026-11-26 22:33:48,228 1 INFO e2e odoo.modules.loading: loading point_of_sale/views/stock_reference_views.xml 
+2026-11-26 22:33:48,243 1 INFO e2e odoo.addons.base.models.ir_module: module point_of_sale: loading translation file /usr/lib/python3/dist-packages/odoo/addons/point_of_sale/i18n/es.po for language es_EC 
+2026-11-26 22:33:48,312 1 INFO e2e odoo.addons.base.models.ir_module: module point_of_sale: loading translation file /usr/lib/python3/dist-packages/odoo/addons/point_of_sale/i18n/es_419.po for language es_EC 
+2026-11-26 22:33:48,570 1 INFO e2e odoo.modules.loading: Module point_of_sale loaded in 3.30s, 3057 queries (+3057 other) 
+2026-11-26 22:33:48,570 1 INFO e2e odoo.modules.loading: Loading module spreadsheet_dashboard_stock_account (63/67) 
+2026-11-26 22:33:48,592 1 INFO e2e odoo.modules.loading: loading spreadsheet_dashboard_stock_account/data/dashboards.xml 
+2026-11-26 22:33:48,652 1 INFO e2e odoo.addons.base.models.ir_module: module spreadsheet_dashboard_stock_account: loading translation file /usr/lib/python3/dist-packages/odoo/addons/spreadsheet_dashboard_stock_account/i18n/es.po for language es_EC 
+2026-11-26 22:33:48,654 1 INFO e2e odoo.addons.base.models.ir_module: module spreadsheet_dashboard_stock_account: loading translation file /usr/lib/python3/dist-packages/odoo/addons/spreadsheet_dashboard_stock_account/i18n/es_419.po for language es_EC 
+2026-11-26 22:33:48,667 1 INFO e2e odoo.modules.loading: Module spreadsheet_dashboard_stock_account loaded in 0.10s, 30 queries (+30 other) 
+2026-11-26 22:33:48,667 1 INFO e2e odoo.modules.loading: Loading module pos_hr (64/67) 
+2026-11-26 22:33:48,731 1 INFO e2e odoo.registry: module pos_hr: creating or updating database tables 
+2026-11-26 22:33:49,038 1 INFO e2e odoo.modules.loading: loading pos_hr/views/pos_config.xml 
+2026-11-26 22:33:49,065 1 INFO e2e odoo.modules.loading: loading pos_hr/views/pos_order_view.xml 
+2026-11-26 22:33:49,105 1 INFO e2e odoo.modules.loading: loading pos_hr/views/pos_payment_view.xml 
+2026-11-26 22:33:49,113 1 INFO e2e odoo.modules.loading: loading pos_hr/views/pos_order_report_view.xml 
+2026-11-26 22:33:49,129 1 INFO e2e odoo.modules.loading: loading pos_hr/views/single_employee_sales_report.xml 
+2026-11-26 22:33:49,145 1 INFO e2e odoo.modules.loading: loading pos_hr/views/res_config_settings_views.xml 
+2026-11-26 22:33:49,195 1 INFO e2e odoo.modules.loading: loading pos_hr/wizard/pos_daily_sales_reports.xml 
+2026-11-26 22:33:49,209 1 INFO e2e odoo.addons.base.models.ir_module: module pos_hr: loading translation file /usr/lib/python3/dist-packages/odoo/addons/pos_hr/i18n/es.po for language es_EC 
+2026-11-26 22:33:49,212 1 INFO e2e odoo.addons.base.models.ir_module: module pos_hr: loading translation file /usr/lib/python3/dist-packages/odoo/addons/pos_hr/i18n/es_419.po for language es_EC 
+2026-11-26 22:33:49,238 1 INFO e2e odoo.modules.loading: Module pos_hr loaded in 0.57s, 449 queries (+449 other) 
+2026-11-26 22:33:49,238 1 INFO e2e odoo.modules.loading: Loading module pos_online_payment (65/67) 
+2026-11-26 22:33:49,261 1 INFO e2e odoo.registry: module pos_online_payment: creating or updating database tables 
+2026-11-26 22:33:49,390 1 INFO e2e odoo.modules.loading: loading pos_online_payment/views/res_config_settings_views.xml 
+2026-11-26 22:33:49,430 1 INFO e2e odoo.modules.loading: loading pos_online_payment/security/ir.model.access.csv 
+2026-11-26 22:33:49,439 1 INFO e2e odoo.modules.loading: loading pos_online_payment/views/payment_transaction_views.xml 
+2026-11-26 22:33:49,455 1 INFO e2e odoo.modules.loading: loading pos_online_payment/views/pos_payment_views.xml 
+2026-11-26 22:33:49,465 1 INFO e2e odoo.modules.loading: loading pos_online_payment/views/pos_payment_method_views.xml 
+2026-11-26 22:33:49,487 1 INFO e2e odoo.modules.loading: loading pos_online_payment/views/payment_portal_templates.xml 
+2026-11-26 22:33:49,501 1 INFO e2e odoo.modules.loading: loading pos_online_payment/views/account_payment_views.xml 
+2026-11-26 22:33:49,519 1 INFO e2e odoo.addons.base.models.ir_module: module pos_online_payment: loading translation file /usr/lib/python3/dist-packages/odoo/addons/pos_online_payment/i18n/es.po for language es_EC 
+2026-11-26 22:33:49,525 1 INFO e2e odoo.addons.base.models.ir_module: module pos_online_payment: loading translation file /usr/lib/python3/dist-packages/odoo/addons/pos_online_payment/i18n/es_419.po for language es_EC 
+2026-11-26 22:33:49,555 1 INFO e2e odoo.modules.loading: Module pos_online_payment loaded in 0.32s, 286 queries (+286 other) 
+2026-11-26 22:33:49,556 1 INFO e2e odoo.modules.loading: Loading module pos_stock_guard (66/67) 
+2026-11-26 22:33:49,583 1 INFO e2e odoo.registry: module pos_stock_guard: creating or updating database tables 
+2026-11-26 22:33:49,699 1 INFO e2e odoo.modules.loading: loading pos_stock_guard/security/ir.model.access.csv 
+2026-11-26 22:33:49,708 1 INFO e2e odoo.modules.loading: loading pos_stock_guard/views/pos_stock_override_views.xml 
+2026-11-26 22:33:49,753 1 INFO e2e odoo.addons.base.models.ir_module: module pos_stock_guard: loading translation file /mnt/extra-addons/pos_stock_guard/i18n/es.po for language es_EC 
+2026-11-26 22:33:49,778 1 INFO e2e odoo.modules.loading: Module pos_stock_guard loaded in 0.22s, 173 queries (+173 other) 
+2026-11-26 22:33:49,778 1 INFO e2e odoo.modules.loading: Loading module spreadsheet_dashboard_pos_hr (67/67) 
+2026-11-26 22:33:49,799 1 INFO e2e odoo.modules.loading: loading spreadsheet_dashboard_pos_hr/data/dashboards.xml 
+2026-11-26 22:33:49,851 1 INFO e2e odoo.addons.base.models.ir_module: module spreadsheet_dashboard_pos_hr: loading translation file /usr/lib/python3/dist-packages/odoo/addons/spreadsheet_dashboard_pos_hr/i18n/es.po for language es_EC 
+2026-11-26 22:33:49,852 1 INFO e2e odoo.addons.base.models.ir_module: module spreadsheet_dashboard_pos_hr: loading translation file /usr/lib/python3/dist-packages/odoo/addons/spreadsheet_dashboard_pos_hr/i18n/es_419.po for language es_EC 
+2026-11-26 22:33:49,864 1 INFO e2e odoo.modules.loading: Module spreadsheet_dashboard_pos_hr loaded in 0.09s, 31 queries (+31 other) 
+2026-11-26 22:33:49,864 1 INFO e2e odoo.modules.loading: 67 modules loaded in 46.71s, 48477 queries (+48478 extra) 
+2026-11-26 22:33:50,974 1 INFO e2e odoo.modules.loading: Modules loaded. 
+2026-11-26 22:33:52,446 1 INFO e2e odoo.registry: Registry changed, signaling through the database 
+2026-11-26 22:33:52,448 1 INFO e2e odoo.registry: Registry loaded in 61.148s 
+2026-11-26 22:33:52,448 1 INFO e2e odoo.service.server: Initiating shutdown 
+2026-11-26 22:33:52,448 1 INFO e2e odoo.service.server: Hit CTRL-C again or send a second signal to force the shutdown. 
+2026-11-26 22:33:52,448 1 INFO e2e odoo.sql_db: ConnectionPool(read/write;used=0/count=0/max=64): Closed 1 connections  
