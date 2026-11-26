@@ -57,16 +57,16 @@ class Profile:
         right = self.margin_left + self.columns * self.label_width + (self.columns - 1) * self.gap_x
         bottom = self.margin_top + self.rows * self.label_height + (self.rows - 1) * self.gap_y
         if right > self.page_width + 0.01 or bottom > self.page_height + 0.01:
-            raise ValueError(f"profile {self.name}: labels do not fit on the page")
+            raise ValueError(f"perfil {self.name}: las etiquetas no caben en la página")
 
 
 PROFILES = {
     p.name: p for p in (
-        Profile("a4-21", "A4 sheet, 3 x 7 labels of 63.5 x 38.1 mm (home printer)",
+        Profile("a4-21", "Hoja A4, 3 x 7 etiquetas de 63,5 x 38,1 mm (impresora de casa)",
                 210, 297, 63.5, 38.1, 3, 7, margin_left=7.2, margin_top=15.15, gap_x=2.5),
-        Profile("letter-30", "Letter sheet, 3 x 10 labels of 66.7 x 25.4 mm (Avery 5160 type)",
+        Profile("letter-30", "Hoja Carta, 3 x 10 etiquetas de 66,7 x 25,4 mm (tipo Avery 5160)",
                 215.9, 279.4, 66.675, 25.4, 3, 10, margin_left=4.76, margin_top=12.7, gap_x=3.18),
-        Profile("roll-50x30", "Thermal roll, one 50 x 30 mm label per page",
+        Profile("roll-50x30", "Rollo térmico, una etiqueta de 50 x 30 mm por página",
                 50, 30, 50, 30, 1, 1),
     )
 }
@@ -94,8 +94,8 @@ class LabelPlan:
     skipped: list[str]
 
     def summary(self) -> str:
-        return (f"{len(self.labels)} labels for {self.variants} variants"
-                + (f", {len(self.skipped)} skipped" if self.skipped else ""))
+        return (f"{len(self.labels)} etiquetas de {self.variants} variantes"
+                + (f", {len(self.skipped)} omitidas" if self.skipped else ""))
 
 
 # ------------------------------------------------------------------- planning
@@ -111,10 +111,10 @@ def expand(stock: list[tuple[LabelData, float]]) -> LabelPlan:
             continue
         name = data.sku or f"{data.model} {data.color} {data.size}"
         if not data.barcode:
-            skipped.append(f"{name}: no barcode ({pairs} pairs)")
+            skipped.append(f"{name}: sin código de barras ({pairs} pares)")
             continue
         if qty - pairs > 1e-9:
-            skipped.append(f"{name}: {qty:g} in stock, printing {pairs}")
+            skipped.append(f"{name}: {qty:g} en stock, se imprimen {pairs}")
         variants += 1
         labels.extend([data] * pairs)
     return LabelPlan(labels, variants, skipped)
@@ -146,7 +146,7 @@ def _barcode(value: str, max_width_mm: float, height_mm: float):
     from reportlab.graphics.shapes import Drawing
 
     if len(value) != 13 or not value.isdigit() or ean13_check_digit(value[:12]) != int(value[12]):
-        raise ValueError(f"not a valid EAN-13 barcode: {value}")
+        raise ValueError(f"no es un código EAN-13 válido: {value}")
     module = min(MAX_MODULE_MM, max_width_mm / EAN13_MODULES)
     if module < MIN_MODULE_MM:
         return None, module
@@ -209,7 +209,7 @@ def draw_label(canvas, data: LabelData, x: float, y: float, profile: Profile,
     area_h = cursor - bottom
     drawing, _module = _barcode(data.barcode, inner - side - 1.0, area_h)
     if drawing is None:
-        raise ValueError(f"label too small for a readable barcode on profile {profile.name}")
+        raise ValueError(f"etiqueta demasiado pequeña para un código de barras legible en el perfil {profile.name}")
     renderPDF.draw(drawing, canvas, left * MM, bottom * MM)
 
     # Cap heights are about 0.72 of the font size; keep both inside the area.
@@ -233,9 +233,9 @@ def render_pdf(labels: list[LabelData], profile: Profile, path: str | Path,
 
     profile.check()
     if not 1 <= start_at <= profile.per_page:
-        raise ValueError(f"start-at must be between 1 and {profile.per_page}")
+        raise ValueError(f"start-at debe estar entre 1 y {profile.per_page}")
     canvas = Canvas(str(path), pagesize=(profile.page_width * MM, profile.page_height * MM))
-    canvas.setTitle("Product labels")
+    canvas.setTitle("Etiquetas de productos")
     slot = start_at - 1
     pages = 0
     for data in labels:
@@ -269,7 +269,7 @@ def read_stock_labels(client: Any, location_id: int | None = None, model: str | 
     if location_id is None:
         warehouses = client.search_read("stock.warehouse", [], ["lot_stock_id"], limit=1)
         if not warehouses:
-            raise ValueError("no warehouse found")
+            raise ValueError("no hay ninguna bodega")
         location_id = warehouses[0]["lot_stock_id"][0]
     domain: list = [["location_id", "child_of", location_id], ["quantity", ">", 0]]
     if model:

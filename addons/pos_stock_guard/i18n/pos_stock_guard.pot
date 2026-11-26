@@ -1,0 +1,233 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* pos_stock_guard
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0-20261123\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-26 21:13+0000\n"
+"PO-Revision-Date: 2026-11-26 21:13+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: pos_stock_guard
+#. odoo-javascript
+#: code:addons/pos_stock_guard/static/src/pos_store_patch.js:0
+msgid ""
+"%(product)s: the last stock this till downloaded is %(stock)s and this order"
+" needs %(qty)s. Without a connection a manager PIN cannot be checked, so "
+"this cannot be sold until the connection is back."
+msgstr ""
+
+#. module: pos_stock_guard
+#. odoo-javascript
+#: code:addons/pos_stock_guard/static/src/pos_store_patch.js:0
+msgid ""
+"%(product)s: the system has %(stock)s in stock and this order needs %(qty)s."
+" A manager PIN is required to sell it."
+msgstr ""
+
+#. module: pos_stock_guard
+#: model:ir.model.fields,field_description:pos_stock_guard.field_pos_stock_override__success
+#: model_terms:ir.ui.view,arch_db:pos_stock_guard.pos_stock_override_view_search
+msgid "Authorized"
+msgstr ""
+
+#. module: pos_stock_guard
+#: model:ir.model.fields,field_description:pos_stock_guard.field_pos_stock_override__employee_id
+msgid "Authorized by"
+msgstr ""
+
+#. module: pos_stock_guard
+#. odoo-javascript
+#: code:addons/pos_stock_guard/static/src/pos_store_patch.js:0
+msgid "Authorized by %s"
+msgstr ""
+
+#. module: pos_stock_guard
+#. odoo-javascript
+#: code:addons/pos_stock_guard/static/src/pos_store_patch.js:0
+msgid "Cancel"
+msgstr ""
+
+#. module: pos_stock_guard
+#. odoo-javascript
+#: code:addons/pos_stock_guard/static/src/pos_store_patch.js:0
+msgid "Cannot check stock"
+msgstr ""
+
+#. module: pos_stock_guard
+#: model:ir.model.fields,field_description:pos_stock_guard.field_pos_stock_override__cashier
+msgid "Cashier"
+msgstr ""
+
+#. module: pos_stock_guard
+#: model:ir.model.fields,field_description:pos_stock_guard.field_pos_stock_override__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: pos_stock_guard
+#: model:ir.model.fields,field_description:pos_stock_guard.field_pos_stock_override__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: pos_stock_guard
+#: model_terms:ir.ui.view,arch_db:pos_stock_guard.pos_stock_override_view_list
+msgid "Date"
+msgstr ""
+
+#. module: pos_stock_guard
+#: model:ir.model.fields,field_description:pos_stock_guard.field_pos_config__display_name
+#: model:ir.model.fields,field_description:pos_stock_guard.field_pos_stock_override__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: pos_stock_guard
+#. odoo-javascript
+#: code:addons/pos_stock_guard/static/src/pos_store_patch.js:0
+msgid "Enter manager PIN"
+msgstr ""
+
+#. module: pos_stock_guard
+#: model_terms:ir.ui.view,arch_db:pos_stock_guard.pos_stock_override_view_search
+msgid "Failed PIN"
+msgstr ""
+
+#. module: pos_stock_guard
+#: model:ir.model.fields,field_description:pos_stock_guard.field_pos_config__id
+#: model:ir.model.fields,field_description:pos_stock_guard.field_pos_stock_override__id
+msgid "ID"
+msgstr ""
+
+#. module: pos_stock_guard
+#: model:ir.model.fields,field_description:pos_stock_guard.field_pos_stock_override__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: pos_stock_guard
+#: model:ir.model.fields,field_description:pos_stock_guard.field_pos_stock_override__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: pos_stock_guard
+#. odoo-javascript
+#: code:addons/pos_stock_guard/static/src/pos_store_patch.js:0
+msgid "Manager PIN"
+msgstr ""
+
+#. module: pos_stock_guard
+#. odoo-python
+#: code:addons/pos_stock_guard/models/pos_config.py:0
+msgid ""
+"No manager with a PIN is set up for this point of sale. Add one in Point of "
+"Sale > Configuration > Settings > Employees."
+msgstr ""
+
+#. module: pos_stock_guard
+#. odoo-javascript
+#: code:addons/pos_stock_guard/static/src/pos_store_patch.js:0
+msgid "Not authorized"
+msgstr ""
+
+#. module: pos_stock_guard
+#. odoo-javascript
+#: code:addons/pos_stock_guard/static/src/pos_store_patch.js:0
+msgid "Not enough stock"
+msgstr ""
+
+#. module: pos_stock_guard
+#. odoo-javascript
+#: code:addons/pos_stock_guard/static/src/pos_store_patch.js:0
+msgid "Not enough stock (offline)"
+msgstr ""
+
+#. module: pos_stock_guard
+#: model:ir.model.fields,field_description:pos_stock_guard.field_pos_stock_override__offline_ref
+msgid "Offline reference"
+msgstr ""
+
+#. module: pos_stock_guard
+#: model:ir.actions.act_window,name:pos_stock_guard.pos_stock_override_action
+#: model:ir.ui.menu,name:pos_stock_guard.pos_stock_override_menu
+msgid "Out-of-stock authorizations"
+msgstr ""
+
+#. module: pos_stock_guard
+#: model:ir.model,name:pos_stock_guard.model_pos_stock_override
+msgid "POS out-of-stock authorization"
+msgstr ""
+
+#. module: pos_stock_guard
+#: model:ir.model.fields,field_description:pos_stock_guard.field_pos_stock_override__config_id
+msgid "Point of Sale"
+msgstr ""
+
+#. module: pos_stock_guard
+#: model:ir.model,name:pos_stock_guard.model_pos_config
+msgid "Point of Sale Configuration"
+msgstr ""
+
+#. module: pos_stock_guard
+#: model:ir.model.fields,field_description:pos_stock_guard.field_pos_stock_override__product_id
+msgid "Product"
+msgstr ""
+
+#. module: pos_stock_guard
+#: model:ir.model.fields,field_description:pos_stock_guard.field_pos_stock_override__qty_available
+msgid "Quantity in stock"
+msgstr ""
+
+#. module: pos_stock_guard
+#: model:ir.model.fields,field_description:pos_stock_guard.field_pos_stock_override__qty_requested
+msgid "Quantity on order"
+msgstr ""
+
+#. module: pos_stock_guard
+#: model:ir.model.fields,field_description:pos_stock_guard.field_pos_stock_override__session_id
+msgid "Session"
+msgstr ""
+
+#. module: pos_stock_guard
+#: model:ir.model.fields,field_description:pos_stock_guard.field_pos_stock_override__offline
+#: model_terms:ir.ui.view,arch_db:pos_stock_guard.pos_stock_override_view_search
+msgid "Sold offline"
+msgstr ""
+
+#. module: pos_stock_guard
+#: model:ir.model.fields,help:pos_stock_guard.field_pos_stock_override__offline
+msgid ""
+"Sold while the point of sale had no connection: checked only against the "
+"last stock the till had downloaded, without a manager PIN. Review and "
+"recount."
+msgstr ""
+
+#. module: pos_stock_guard
+#. odoo-javascript
+#: code:addons/pos_stock_guard/static/src/pos_store_patch.js:0
+msgid ""
+"The point of sale is offline, so the manager PIN cannot be checked. Try "
+"again when the connection is back."
+msgstr ""
+
+#. module: pos_stock_guard
+#. odoo-javascript
+#: code:addons/pos_stock_guard/static/src/pos_store_patch.js:0
+msgid "The server could not check the stock: %s"
+msgstr ""
+
+#. module: pos_stock_guard
+#. odoo-python
+#: code:addons/pos_stock_guard/models/pos_config.py:0
+msgid "Too many wrong PINs. Wait 10 minutes and try again."
+msgstr ""
+
+#. module: pos_stock_guard
+#. odoo-python
+#: code:addons/pos_stock_guard/models/pos_config.py:0
+msgid "Wrong PIN, or this employee is not a manager."
+msgstr ""

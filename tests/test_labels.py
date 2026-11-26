@@ -26,12 +26,12 @@ def test_labels_are_sorted_by_model_color_and_numeric_size():
 def test_variant_without_barcode_is_skipped_with_a_warning():
     plan = expand([(label(1, barcode=""), 2), (label(2), 1)])
     assert len(plan.labels) == 1
-    assert len(plan.skipped) == 1 and "no barcode" in plan.skipped[0]
+    assert len(plan.skipped) == 1 and "sin código de barras" in plan.skipped[0]
 
 
 def test_fractional_stock_prints_whole_pairs_and_warns():
     plan = expand([(label(1), 2.5)])
-    assert len(plan.labels) == 2 and "printing 2" in plan.skipped[0]
+    assert len(plan.labels) == 2 and "se imprimen 2" in plan.skipped[0]
 
 
 @pytest.mark.parametrize("count,start,pages", [(0, 1, 0), (21, 1, 1), (22, 1, 2), (21, 2, 2),
@@ -56,7 +56,7 @@ def test_slot_positions_run_left_to_right_then_down():
 
 
 def test_profile_that_overflows_is_rejected():
-    with pytest.raises(ValueError, match="do not fit"):
+    with pytest.raises(ValueError, match="no caben"):
         Profile("bad", "", 100, 100, 60, 60, 2, 1).check()
 
 

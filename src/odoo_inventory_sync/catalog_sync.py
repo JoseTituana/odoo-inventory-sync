@@ -47,10 +47,10 @@ class CatalogResult:
 
     def summary(self) -> str:
         return (
-            f"models: created={len(self.models_created)} updated={len(self.models_updated)} "
-            f"unchanged={len(self.models_unchanged)} | variants created={self.variants_created} "
-            f"| skus={self.skus_set} barcodes={self.barcodes_set} "
-            f"| stock changes={len(self.stock_changes)} | errors={len(self.errors)}"
+            f"modelos: nuevos={len(self.models_created)} actualizados={len(self.models_updated)} "
+            f"sin cambios={len(self.models_unchanged)} | variantes nuevas={self.variants_created} "
+            f"| códigos={self.skus_set} códigos de barras={self.barcodes_set} "
+            f"| cambios de stock={len(self.stock_changes)} | errores={len(self.errors)}"
         )
 
 
@@ -159,7 +159,7 @@ class OdooCatalogGateway:
     def default_location(self) -> int:
         found = self._search_read("stock.warehouse", [], ["lot_stock_id"], limit=1)
         if not found:
-            raise CatalogSyncError("no warehouse found; install Inventory first")
+            raise CatalogSyncError("no hay ninguna bodega; instala primero Inventario")
         return found[0]["lot_stock_id"][0]
 
     def on_hand(self, product_ids, location_id) -> dict[int, float]:
@@ -206,7 +206,7 @@ class OdooCatalogGateway:
             wrong = [pid for pid, qty in quantities.items()
                      if round(current.get(pid, 0.0), 3) != qty]
             if wrong:
-                raise CatalogSyncError(f"stock was not applied for product ids {wrong}")
+                raise CatalogSyncError(f"el stock no se aplicó a los productos con id {wrong}")
 
 
 # ------------------------------------------------------------------ the import
@@ -238,7 +238,7 @@ def changes_since_count(gw, plans: list[ModelPlan], since: datetime,
     lines = []
     for pid in sorted(refs, key=lambda p: names[p]):
         shown = ", ".join(refs[pid][:3]) + (" ..." if len(refs[pid]) > 3 else "")
-        lines.append(f"{names[pid]}: {net[pid]:+g} since the count ({shown})")
+        lines.append(f"{names[pid]}: {net[pid]:+g} desde el conteo ({shown})")
     return lines
 
 
@@ -260,8 +260,9 @@ def import_catalog(gw, plans: list[ModelPlan], dry_run: bool = False,
             attribute_id, mode = found
             if mode != "always":
                 raise CatalogSyncError(
-                    f"attribute {name!r} has Variant Creation = {mode!r}; it must be "
-                    f"'Instantly' (always). Change it in Inventory > Configuration > Attributes.")
+                    f"el atributo {name!r} tiene Creación de variantes = {mode!r}; debe ser "
+                    f"'Instantáneamente' (always). Cámbialo en Inventario > Configuración > "
+                    f"Atributos.")
             attribute_ids[role] = attribute_id
         else:
             attribute_ids[role] = None if dry_run else gw.create_attribute(name)
@@ -365,9 +366,9 @@ def _import_model(gw, plan, dry_run, location_id, attribute_ids, value_ids, valu
     wanted_ids = {role: [value_ids[role][key(v)] for v in plan.values[role]] for role in ROLES}
     matches = gw.find_templates(plan.name)
     if len(matches) > 1:
-        raise ValueError(f"{len(matches)} products are named like this; rename one in Odoo")
+        raise ValueError(f"hay {len(matches)} productos con este nombre; cambia el nombre de uno en Odoo")
     if matches and not matches[0]["active"]:
-        raise ValueError("an archived product has this name; unarchive or rename it first")
+        raise ValueError("un producto archivado tiene este nombre; desarchívalo o cámbiale el nombre primero")
     categ = category_id(plan.category)
 
     # --- new model
@@ -392,8 +393,8 @@ def _import_model(gw, plan, dry_run, location_id, attribute_ids, value_ids, valu
         lines = {line["attribute_id"][0]: line for line in gw.template_lines(template_id)}
         if set(lines) != {attribute_ids[role] for role in ROLES}:
             raise ValueError(
-                "its attributes are not exactly Color, Material and Talla; adding or removing "
-                "an attribute recreates all variants, so fix this product by hand")
+                "sus atributos no son exactamente Color, Material y Talla; añadir o quitar un "
+                "atributo recrea todas las variantes, así que corrige este producto a mano")
         changed = False
         grid = 1
         for role in ROLES:
@@ -463,7 +464,7 @@ def _import_model(gw, plan, dry_run, location_id, attribute_ids, value_ids, valu
     stock_updates = {pid: q for pid, q in targets.items() if round(current.get(pid, 0.0), 3) != q}
     not_in_file = {by_combination[c]["id"] for c in by_combination if c not in plan.quantities}
     for pid, qty in stock_updates.items():
-        note = " (not in the file)" if pid in not_in_file else ""
+        note = " (no está en el archivo)" if pid in not_in_file else ""
         result.stock_changes.append(
             f"{plan.name} {variant_label[pid]}: {current.get(pid, 0.0):g} -> {qty}{note}")
     if dry_run:  # combinations that do not exist yet

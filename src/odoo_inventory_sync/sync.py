@@ -34,8 +34,8 @@ class SyncResult:
 
     def summary(self) -> str:
         return (
-            f"created={len(self.created)} updated={len(self.updated)} "
-            f"unchanged={len(self.unchanged)} errors={len(self.errors)}"
+            f"nuevos={len(self.created)} actualizados={len(self.updated)} "
+            f"sin cambios={len(self.unchanged)} errores={len(self.errors)}"
         )
 
 
@@ -49,7 +49,7 @@ def load_rows(path: str | Path) -> tuple[list[ProductRow], list[str]]:
         reader = csv.DictReader(handle)
         missing = [c for c in REQUIRED_COLUMNS if c not in (reader.fieldnames or [])]
         if missing:
-            raise ValueError(f"CSV is missing columns: {', '.join(missing)}")
+            raise ValueError(f"al CSV le faltan columnas: {', '.join(missing)}")
         for line_no, raw in enumerate(reader, start=2):
             sku = (raw["sku"] or "").strip()
             name = (raw["name"] or "").strip()
@@ -57,20 +57,20 @@ def load_rows(path: str | Path) -> tuple[list[ProductRow], list[str]]:
                 # csv.DictReader fills fields missing from a short row with None
                 missing = [c for c in REQUIRED_COLUMNS if raw[c] is None]
                 if missing:
-                    raise ValueError(f"missing values for {', '.join(missing)}")
+                    raise ValueError(f"faltan valores en {', '.join(missing)}")
                 if not sku or not name:
-                    raise ValueError("sku and name are required")
+                    raise ValueError("sku y name son obligatorios")
                 if sku in seen:
-                    raise ValueError(f"duplicate sku {sku}")
+                    raise ValueError(f"sku repetido {sku}")
                 price = float(raw["price"])
                 qty = float(raw["qty"])
                 # float() accepts "nan" and "inf", and NaN fails every comparison
                 if not (math.isfinite(price) and math.isfinite(qty)):
-                    raise ValueError("price and qty must be finite numbers")
+                    raise ValueError("price y qty deben ser números finitos")
                 if price < 0 or qty < 0:
-                    raise ValueError("price and qty must not be negative")
+                    raise ValueError("price y qty no pueden ser negativos")
             except ValueError as error:
-                errors.append(f"line {line_no}: {error}")
+                errors.append(f"línea {line_no}: {error}")
                 continue
             seen.add(sku)
             rows.append(ProductRow(sku, name, round(price, 2), qty))
