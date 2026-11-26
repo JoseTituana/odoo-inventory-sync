@@ -227,7 +227,12 @@ def _read_xlsx(path: Path) -> list[list]:
 
 
 def _read_csv(path: Path) -> list[list]:
-    text = path.read_text(encoding="utf-8-sig")
+    raw = path.read_bytes()
+    try:
+        text = raw.decode("utf-8-sig")
+    except UnicodeDecodeError:
+        # Excel on Spanish Windows saves "CSV (delimitado por comas)" as cp1252.
+        text = raw.decode("cp1252")
     try:
         dialect = csv.Sniffer().sniff(text.splitlines()[0] if text else ",", delimiters=",;\t")
     except csv.Error:
