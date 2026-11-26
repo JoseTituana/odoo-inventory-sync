@@ -24,6 +24,8 @@ pip install -e ".[dev]"
 cp .env.example .env     # then set the Odoo URL, database, user and API key
 ```
 
+On the store's Windows PCs use `deploy/pos-pc/install-importer.ps1` instead: see [deploy/pos-pc/README.md](deploy/pos-pc/README.md). Without a `.env` in the current folder, the settings are read from `%APPDATA%\odoo-sync\.env` (`~/.config/odoo-sync/.env` on Linux and macOS).
+
 Use an API key, not a password, and a dedicated Odoo user with Inventory administrator rights only. `.env` is ignored by git.
 
 ## Catalog import

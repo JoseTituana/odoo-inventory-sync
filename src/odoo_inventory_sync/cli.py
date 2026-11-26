@@ -34,12 +34,31 @@ _ARGPARSE_ES = {
 argparse._ = lambda text: _ARGPARSE_ES.get(text, text)
 
 
-def load_dotenv(path: str = ".env") -> None:
-    """Load KEY=VALUE lines into the environment without overriding it."""
-    env_file = Path(path)
+def default_env_file() -> Path:
+    """Per-user settings file, so the command works from any folder."""
+    if os.name == "nt":
+        base = Path(os.environ.get("APPDATA") or Path.home() / "AppData" / "Roaming")
+    else:
+        base = Path(os.environ.get("XDG_CONFIG_HOME") or Path.home() / ".config")
+    return base / "odoo-sync" / ".env"
+
+
+def load_dotenv(path: str | None = None) -> None:
+    """Load KEY=VALUE lines into the environment without overriding it.
+
+    Reads ``path`` if given; otherwise ``.env`` in the current folder, or the
+    per-user file from :func:`default_env_file` when there is none.
+    """
+    if path is not None:
+        env_file = Path(path)
+    else:
+        env_file = Path(".env")
+        if not env_file.is_file():
+            env_file = default_env_file()
     if not env_file.is_file():
         return
-    for line in env_file.read_text(encoding="utf-8").splitlines():
+    # utf-8-sig: Notepad may save the file with a byte order mark.
+    for line in env_file.read_text(encoding="utf-8-sig").splitlines():
         line = line.strip()
         if not line or line.startswith("#") or "=" not in line:
             continue
@@ -68,7 +87,11 @@ def _client_from_env() -> OdooClient | None:
     load_dotenv()
     missing = [k for k in ENV_KEYS if not os.environ.get(k)]
     if missing:
-        print(f"Faltan variables de entorno: {', '.join(missing)}", file=sys.stderr)
+        print(
+            f"Faltan datos de conexión: {', '.join(missing)}. "
+            f"Escríbelos en {default_env_file()} (o en un .env en esta carpeta).",
+            file=sys.stderr,
+        )
         return None
     return OdooClient(*(os.environ[k] for k in ENV_KEYS))
 
@@ -253,7 +276,11 @@ def main(argv: list[str] | None = None) -> int:
 
     missing = [k for k in ENV_KEYS if not os.environ.get(k)]
     if missing:
-        print(f"Faltan variables de entorno: {', '.join(missing)}", file=sys.stderr)
+        print(
+            f"Faltan datos de conexión: {', '.join(missing)}. "
+            f"Escríbelos en {default_env_file()} (o en un .env en esta carpeta).",
+            file=sys.stderr,
+        )
         return 2
 
     try:
