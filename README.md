@@ -42,6 +42,7 @@ What it does:
 - One product template per model, with attributes Color, Material and Talla (created with Variant Creation = Instantly when missing). Every combination of the model's values becomes a variant; combinations without a row get stock 0.
 - Each variant gets a SKU such as `VALENTINA-NEG-CUE-36` and an internal EAN-13 barcode (prefix `2`, reserved for in-store use). Existing SKUs and barcodes are never changed, so printed labels stay valid.
 - Stock is set with an inventory adjustment at the main warehouse (or `--location-id`), only where the counted quantity differs, and read back to confirm it was applied.
+- The file is a full count of every model in it: a variant of that model without a row was not found, so its stock is set to 0 (shown as `(not in the file)`). Models that are not in the file are left alone, so you can count one category per night.
 - Price and cost are per model; categories such as `Calzado / Dama` are created when missing; models are made available in the point of sale.
 
 Safety rules:
@@ -50,6 +51,7 @@ Safety rules:
 - A model whose attributes are not exactly Color, Material and Talla is skipped with an error: adding or removing an attribute makes Odoo delete and recreate its variants.
 - An archived product with the same name is reported, never duplicated.
 - Running the same file twice changes nothing.
+- Stock moves after the count (sales, refunds, receipts) are listed before anything is written, because applying the count would undo them. The count time is when the file was last saved, or `--counted-at "2026-11-27 21:30"` (local time). The import then asks for confirmation; `--yes` skips the question, and without a terminal it stops.
 
 ## Labels from stock
 
@@ -74,9 +76,9 @@ Each label shows the model, color and material, the SKU, a large size and price,
 - Managers are the employees in **Advanced rights** of that point of sale, plus point of sale administrators, with a PIN set.
 - The PIN is checked on the server, never in the browser. Five wrong PINs in 10 minutes lock authorizations for that point of sale.
 - Every authorization and failed attempt is listed in **Point of Sale > Reporting > Out-of-stock authorizations**.
-- Offline, stock and PINs cannot be checked, so the product cannot be sold until the connection is back.
+- Offline, the till checks the last stock it downloaded (when it opened and on every check), minus the paid orders it has not sent yet. Sales within that stock go through and appear in the same report as **Sold offline** once the connection is back; review them and recount. Sales beyond it stay blocked, because a manager PIN can only be checked on the server.
 
-Install: copy the folder to the Odoo addons path, restart Odoo, then install **POS Stock Guard** from Apps. Its tests run inside Odoo:
+Install: copy the folder to the Odoo addons path, restart Odoo, then install **POS Stock Guard** from Apps. After updating the folder, upgrade the module (Apps > POS Stock Guard > Upgrade, or `odoo -u pos_stock_guard`) and reload the point of sale. Its tests run inside Odoo:
 
 ```bash
 odoo -d <test_db> -i pos_stock_guard --test-enable --test-tags /pos_stock_guard --stop-after-init

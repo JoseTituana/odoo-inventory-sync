@@ -9,11 +9,15 @@ Safety rules:
 - A model whose attributes differ from Color, Material and Talla is skipped:
   adding or removing an attribute line makes Odoo delete and recreate variants.
 - Archived products with the same name are reported, never duplicated.
-- Stock is adjusted only where the counted quantity differs.
+- The file is a full count of each model in it: a variant without a row gets
+  stock 0. Stock is adjusted only where the counted quantity differs.
+- Sales or other stock moves after the count are reported before applying
+  (``changes_since_count``), because the import would undo them.
 """
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from datetime import datetime, timezone
 from typing import Any
 
 from .client import OdooError
@@ -168,6 +172,18 @@ class OdooCatalogGateway:
             totals[pid] = totals.get(pid, 0.0) + quant["quantity"]
         return totals
 
+    def moves_since(self, product_ids, location_id, since: str) -> list[dict]:
+        """Done stock moves in or out of the location after ``since`` (UTC,
+        'YYYY-MM-DD HH:MM:SS'), leaving out inventory adjustments: sales,
+        refunds, receipts and transfers made after the count."""
+        if not product_ids:
+            return []
+        return self._search_read("stock.move", [
+            ["product_id", "in", list(product_ids)], ["state", "=", "done"],
+            ["date", ">", since], ["is_inventory", "=", False],
+            "|", ["location_id", "=", location_id], ["location_dest_id", "=", location_id],
+        ], ["product_id", "quantity", "location_id", "location_dest_id", "reference", "date"])
+
     def set_quantities(self, quantities: dict[int, int], location_id: int) -> None:
         """Inventory adjustment: counted quantity per product, applied in one go."""
         quant_ids = []
@@ -194,6 +210,37 @@ class OdooCatalogGateway:
 
 
 # ------------------------------------------------------------------ the import
+
+def changes_since_count(gw, plans: list[ModelPlan], since: datetime,
+                        location_id: int | None = None) -> list[str]:
+    """Stock movements of the file's models after the count was written down.
+
+    The import sets stock to the counted numbers, so a sale made after the
+    count would be undone. One line per variant that moved, for a warning.
+    """
+    if location_id is None:
+        location_id = gw.default_location()
+    names: dict[int, str] = {}
+    for plan in plans:
+        matches = [t for t in gw.find_templates(plan.name) if t["active"]]
+        if len(matches) != 1:
+            continue  # new model (nothing to undo) or an error reported later
+        for variant in gw.variants(matches[0]["id"]):
+            names[variant["id"]] = variant["default_code"] or f"{plan.name} #{variant['id']}"
+    stamp = since.astimezone(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
+    net: dict[int, float] = {}
+    refs: dict[int, list[str]] = {}
+    for move in gw.moves_since(list(names), location_id, stamp):
+        pid = move["product_id"][0]
+        incoming = move["location_dest_id"] and move["location_dest_id"][0] == location_id
+        net[pid] = net.get(pid, 0.0) + (move["quantity"] if incoming else -move["quantity"])
+        refs.setdefault(pid, []).append(move["reference"] or "?")
+    lines = []
+    for pid in sorted(refs, key=lambda p: names[p]):
+        shown = ", ".join(refs[pid][:3]) + (" ..." if len(refs[pid]) > 3 else "")
+        lines.append(f"{names[pid]}: {net[pid]:+g} since the count ({shown})")
+    return lines
+
 
 def _size_sequence(size: str) -> int:
     kind, number, _ = size_sort_key(size)
@@ -383,6 +430,7 @@ def _import_model(gw, plan, dry_run, location_id, attribute_ids, value_ids, valu
     codes = {role: abbreviations([value_names[v] for v in lines[attribute_ids[role]]["value_ids"]])
              for role in ("color", "material")}
     by_combination: dict[tuple[str, str, str], dict] = {}
+    variant_label: dict[int, str] = {}
     for variant in variants:
         names = {role: value_names[v] for v in variant["values"]
                  for role in ROLES if v in role_values[role]}
@@ -390,6 +438,7 @@ def _import_model(gw, plan, dry_run, location_id, attribute_ids, value_ids, valu
             continue
         combination = (key(names["color"]), key(names["material"]), key(names["size"]))
         by_combination[combination] = variant
+        variant_label[variant["id"]] = "/".join(names[role] for role in ROLES)
         updates: dict[str, Any] = {}
         if not variant["default_code"]:
             updates["default_code"] = build_sku(plan.name, codes["color"][combination[0]],
@@ -406,13 +455,17 @@ def _import_model(gw, plan, dry_run, location_id, attribute_ids, value_ids, valu
             if not dry_run:
                 gw.write_variant(variant["id"], updates)
 
-    # --- stock: adjust only where the counted quantity differs
-    targets = {by_combination[c]["id"]: q for c, q in plan.quantities.items() if c in by_combination}
+    # --- stock: adjust only where the counted quantity differs.
+    # The file is a full count of the model: a variant without a row was not
+    # found on the shelf, so its stock is 0.
+    targets = {v["id"]: plan.quantities.get(c, 0) for c, v in by_combination.items()}
     current = gw.on_hand(list(targets), location_id) if targets else {}
     stock_updates = {pid: q for pid, q in targets.items() if round(current.get(pid, 0.0), 3) != q}
-    label = {v["id"]: show(c) for c, v in by_combination.items()}
+    not_in_file = {by_combination[c]["id"] for c in by_combination if c not in plan.quantities}
     for pid, qty in stock_updates.items():
-        result.stock_changes.append(f"{plan.name} {label[pid]}: {current.get(pid, 0.0):g} -> {qty}")
+        note = " (not in the file)" if pid in not_in_file else ""
+        result.stock_changes.append(
+            f"{plan.name} {variant_label[pid]}: {current.get(pid, 0.0):g} -> {qty}{note}")
     if dry_run:  # combinations that do not exist yet
         result.stock_changes += [f"{plan.name} {show(c)}: 0 -> {q}"
                                  for c, q in plan.quantities.items() if c not in by_combination and q]

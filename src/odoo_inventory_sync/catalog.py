@@ -15,6 +15,7 @@ import math
 import re
 import unicodedata
 from dataclasses import dataclass, field
+from datetime import datetime, timezone
 from pathlib import Path
 
 ROLES = ("color", "material", "size")
@@ -219,6 +220,25 @@ def read_table(path: str | Path) -> list[list]:
     if path.suffix.lower() in (".csv", ".txt"):
         return _read_csv(path)
     raise CatalogError(f"unsupported file type {path.suffix!r}: use .xlsx or .csv")
+
+
+def file_saved_at(path: str | Path) -> datetime:
+    """When the count was written down: the workbook's own "modified" date
+    (kept when the file is copied), else the file's modification time. UTC."""
+    path = Path(path)
+    if path.suffix.lower() in (".xlsx", ".xlsm"):
+        import openpyxl
+
+        workbook = openpyxl.load_workbook(path, read_only=True)
+        try:
+            modified = workbook.properties.modified
+        finally:
+            workbook.close()
+        if modified:
+            # openpyxl returns the stored UTC time without a timezone.
+            return modified.replace(tzinfo=timezone.utc) if modified.tzinfo is None \
+                else modified.astimezone(timezone.utc)
+    return datetime.fromtimestamp(path.stat().st_mtime, tz=timezone.utc)
 
 
 def load_catalog(path: str | Path) -> tuple[list[CatalogRow], list[str]]:
