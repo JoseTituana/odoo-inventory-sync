@@ -9,10 +9,12 @@ description = "Sync a product CSV with Odoo over XML-RPC, with dry-run and retri
 readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "MIT" }
-dependencies = []
+dependencies = ["openpyxl>=3.1", "reportlab>=4.0"]
 
 [project.optional-dependencies]
-dev = ["pytest>=8"]
+# pymupdf, zxing-cpp and pillow: render labels and scan their barcodes back in tests.
+# zxing-cpp ships no Python 3.10 wheel; on 3.10 the scan test skips itself.
+dev = ["pytest>=8", "pymupdf", "zxing-cpp; python_version >= '3.11'", "pillow"]
 
 [project.scripts]
 odoo-sync = "odoo_inventory_sync.cli:main"

@@ -2,18 +2,15 @@
 
 [![tests](https://github.com/JoseTituana/odoo-inventory-sync/actions/workflows/tests.yml/badge.svg)](https://github.com/JoseTituana/odoo-inventory-sync/actions/workflows/tests.yml)
 
-A small Python tool that syncs a product CSV with [Odoo](https://www.odoo.com) through its external XML-RPC API. It creates new products, updates changed names and prices, and can optionally adjust on-hand stock. It has no runtime dependencies.
+Tools that run a footwear business on a self-hosted [Odoo 19](https://www.odoo.com) Community through its external XML-RPC API:
 
-It comes from a real use case: connecting a custom inventory system and a point of sale to a self-hosted Odoo ERP using the Odoo API and Python, with no plugin.
+- **Catalog import:** a spreadsheet of models, colors, materials and sizes becomes Odoo product variants with SKUs, internal EAN-13 barcodes and counted stock, in one run.
+- **Stock-based labels:** one label per pair actually in stock, as a PDF for adhesive A4/Letter sheets or a thermal roll. Odoo itself only prints labels per product or per received quantity.
+- **POS stock guard:** an Odoo module that blocks point of sale sales of out-of-stock variants unless a manager authorizes them with a PIN.
+- **Simple product sync:** the original CSV sync for products without variants.
+- **Deployment:** Odoo + PostgreSQL with Docker Compose behind Caddy, nightly backups with an off-server copy, and an isolated staging Odoo.
 
-## Features
-
-- Matches products by SKU (`default_code` in Odoo).
-- `--dry-run` shows what would change without writing anything.
-- Validates the CSV first: missing columns, short rows, empty SKU, duplicates, negative, non-numeric or non-finite values. Files saved by Excel (UTF-8 with BOM) are accepted. Bad lines are reported and skipped.
-- Retries network errors with exponential backoff. Odoo errors (access denied, validation) are not retried.
-- One failing row never stops the whole run; errors are listed at the end.
-- Credentials come from environment variables or a local `.env` file that is never committed.
+It comes from a real use case: Calzado Josheps, a shoe factory with its own store.
 
 ## Install
 
@@ -22,30 +19,77 @@ git clone https://github.com/JoseTituana/odoo-inventory-sync.git
 cd odoo-inventory-sync
 python -m venv .venv && source .venv/bin/activate   # Windows: .venv\Scripts\activate
 pip install -e ".[dev]"
+cp .env.example .env     # then set the Odoo URL, database, user and API key
 ```
 
-## Configure
+Use an API key, not a password, and a dedicated Odoo user with Inventory administrator rights only. `.env` is ignored by git.
+
+## Catalog import
+
+One row per model × color × material × size. Spanish or English headers are accepted, case and extra spaces in values do not matter, and `.xlsx` is read directly (CSV with `,` or `;` and decimal commas also works). See `examples/catalogo-prueba.xlsx`.
+
+| Modelo | Color | Material | Talla | Precio | Costo | Cantidad | Categoria |
+|---|---|---|---|---|---|---|---|
+| Valentina | Negro | Cuero | 36 | 48 | 30 | 3 | Calzado / Dama |
 
 ```bash
-cp .env.example .env     # then edit .env with your Odoo URL, database, user and API key
+odoo-sync catalog inventario.xlsx --dry-run -v   # preview: errors by line and every change
+odoo-sync catalog inventario.xlsx                # apply
 ```
 
-## Use
+What it does:
 
-CSV format (`examples/products.csv`):
+- One product template per model, with attributes Color, Material and Talla (created with Variant Creation = Instantly when missing). Every combination of the model's values becomes a variant; combinations without a row get stock 0.
+- Each variant gets a SKU such as `VALENTINA-NEG-CUE-36` and an internal EAN-13 barcode (prefix `2`, reserved for in-store use). Existing SKUs and barcodes are never changed, so printed labels stay valid.
+- Stock is set with an inventory adjustment at the main warehouse (or `--location-id`), only where the counted quantity differs, and read back to confirm it was applied.
+- Price and cost are per model; categories such as `Calzado / Dama` are created when missing; models are made available in the point of sale.
 
-```csv
-sku,name,price,qty
-SH-001,Leather Loafer,45.00,12
-```
+Safety rules:
+
+- Any error in the file (empty cell, text in a number, half a pair, two rows for the same variant, two prices for one model) stops the import before anything is written.
+- A model whose attributes are not exactly Color, Material and Talla is skipped with an error: adding or removing an attribute makes Odoo delete and recreate its variants.
+- An archived product with the same name is reported, never duplicated.
+- Running the same file twice changes nothing.
+
+## Labels from stock
 
 ```bash
-odoo-sync examples/products.csv --dry-run          # preview
-odoo-sync examples/products.csv                     # apply product changes
-odoo-sync examples/products.csv --stock-location-id 8   # also adjust stock in location 8
+odoo-sync labels --dry-run -v                                  # count labels per variant
+odoo-sync labels --profile a4-21 --brand "Calzado Josheps"     # PDF for an A4 sheet of 21 labels
+odoo-sync labels --model Valentina --start-at 8                # one model, from position 8 of a used sheet
 ```
 
-Exit codes: `0` success, `1` some rows failed, `2` bad configuration or CSV.
+| Profile | Use |
+|---|---|
+| `a4-21` | A4 sheet, 3 × 7 labels of 63.5 × 38.1 mm |
+| `letter-30` | Letter sheet, 3 × 10 labels of 66.7 × 25.4 mm (Avery 5160 type) |
+| `roll-50x30` | Thermal roll, one 50 × 30 mm label per page |
+
+Each label shows the model, color and material, the SKU, a large size and price, and the EAN-13 barcode. Zero or negative stock prints nothing; variants without a barcode are skipped with a warning. Print at 100 % (actual size); test first on plain paper with `--outlines`.
+
+## POS stock guard (Odoo module)
+
+`addons/pos_stock_guard` depends on `point_of_sale` and `pos_hr`. When a cashier adds a variant, or presses Payment, it compares the quantity on the order with the stock at the point of sale's location (minus sales of open sessions that have not moved stock yet). If stock is short, the sale is blocked until a manager enters their employee PIN:
+
+- Managers are the employees in **Advanced rights** of that point of sale, plus point of sale administrators, with a PIN set.
+- The PIN is checked on the server, never in the browser. Five wrong PINs in 10 minutes lock authorizations for that point of sale.
+- Every authorization and failed attempt is listed in **Point of Sale > Reporting > Out-of-stock authorizations**.
+- Offline, stock and PINs cannot be checked, so the product cannot be sold until the connection is back.
+
+Install: copy the folder to the Odoo addons path, restart Odoo, then install **POS Stock Guard** from Apps. Its tests run inside Odoo:
+
+```bash
+odoo -d <test_db> -i pos_stock_guard --test-enable --test-tags /pos_stock_guard --stop-after-init
+```
+
+## Simple product sync
+
+```bash
+odoo-sync examples/products.csv --dry-run                  # columns: sku,name,price,qty
+odoo-sync examples/products.csv --stock-location-id 8
+```
+
+Exit codes for every command: `0` success, `1` some rows or models failed, `2` bad configuration or file.
 
 ## Test
 
@@ -53,29 +97,24 @@ Exit codes: `0` success, `1` some rows failed, `2` bad configuration or CSV.
 pytest -q
 ```
 
-Tests use an in-memory fake instead of a real Odoo server, so they run anywhere. Stock adjustment follows Odoo's inventory flow (`stock.quant` with `inventory_quantity`, then `action_apply_inventory`); verify it against your Odoo version before using it on production data.
+The Python tests use in-memory fakes of Odoo, so they run anywhere. The label tests render each profile and scan the printed barcode back with a software reader at 203 dpi. Everything was also run against a staging Odoo 19 before production.
 
 ## Project layout
 
 ```
 src/odoo_inventory_sync/
-  client.py   XML-RPC wrapper with retries
-  sync.py     CSV parsing and create/update logic
-  cli.py      command line interface
-tests/        pytest suite
-docs/         project plan
-deploy/       Odoo 19 + PostgreSQL with Docker Compose, behind Caddy
+  client.py        XML-RPC wrapper with retries
+  catalog.py       spreadsheet parsing, validation, SKU and EAN-13 codes
+  catalog_sync.py  applies the catalog to Odoo (variants, codes, stock)
+  labels.py        stock to labels, label profiles, PDF rendering
+  sync.py          simple product CSV sync
+  cli.py           command line interface
+addons/pos_stock_guard/   Odoo module for the point of sale
+tests/             pytest suite
+examples/          sample files
+docs/              project plan
+deploy/            Docker Compose, backups, staging
 ```
-
-## Roadmap
-
-The project is growing into a toolkit for a footwear business on Odoo. See the full [project plan](docs/project-plan.md).
-
-- **M0** Development environment: Odoo Community in Docker with sample shoes.
-- **M1** Matrix catalog import: one model with color and size variants, generated SKU and EAN-13 barcode.
-- **M2** Stock-based labels: one label per pair in stock, printer profiles for thermal rolls and A4/Letter sheets (PDF, then ZPL and TSPL).
-- **M3** POS stock lookup: type a model code in the point of sale and see a size × color stock grid.
-- **M4** Channels and reports: store, wholesale and warehouse 2.
 
 ## License
 
