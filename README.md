@@ -26,6 +26,8 @@ cp .env.example .env     # then set the Odoo URL, database, user and API key
 
 Use an API key, not a password, and a dedicated Odoo user with Inventory administrator rights only. `.env` is ignored by git.
 
+The tools talk to Odoo through its JSON-2 API (`/json/2`, Odoo 19 and later, needs the API key) and fall back to XML-RPC on older servers or when given a password. XML-RPC is deprecated in Odoo 19 and removed in Odoo 22. Set `ODOO_PROTOCOL=json2` or `xmlrpc` to force one.
+
 ## Catalog import
 
 One row per model × color × material × size. Spanish or English headers are accepted, case and extra spaces in values do not matter, and `.xlsx` is read directly (CSV with `,` or `;` and decimal commas also works). See `examples/catalogo-prueba.xlsx`.

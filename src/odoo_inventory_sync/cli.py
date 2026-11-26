@@ -64,13 +64,18 @@ def build_parser() -> argparse.ArgumentParser:
 ENV_KEYS = ("ODOO_URL", "ODOO_DB", "ODOO_USER", "ODOO_PASSWORD")
 
 
+def _protocol() -> str:
+    """ODOO_PROTOCOL: auto (default), json2 or xmlrpc."""
+    return os.environ.get("ODOO_PROTOCOL", "auto").strip().lower() or "auto"
+
+
 def _client_from_env() -> OdooClient | None:
     load_dotenv()
     missing = [k for k in ENV_KEYS if not os.environ.get(k)]
     if missing:
         print(f"Faltan variables de entorno: {', '.join(missing)}", file=sys.stderr)
         return None
-    return OdooClient(*(os.environ[k] for k in ENV_KEYS))
+    return OdooClient(*(os.environ[k] for k in ENV_KEYS), protocol=_protocol())
 
 
 def build_catalog_parser() -> argparse.ArgumentParser:
@@ -270,6 +275,7 @@ def main(argv: list[str] | None = None) -> int:
         os.environ["ODOO_DB"],
         os.environ["ODOO_USER"],
         os.environ["ODOO_PASSWORD"],
+        protocol=_protocol(),
     )
     try:
         client.authenticate()  # fail fast on bad credentials instead of once per row
