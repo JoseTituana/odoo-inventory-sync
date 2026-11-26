@@ -7,8 +7,9 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
-from .catalog import CatalogError, build_plans, load_catalog
-from .catalog_sync import CatalogSyncError, OdooCatalogGateway, import_catalog
+from .catalog import CatalogError, build_plans, file_saved_at, load_catalog
+from .catalog_sync import (CatalogSyncError, OdooCatalogGateway, changes_since_count,
+                           import_catalog)
 from .client import OdooClient, OdooError
 from .labels import PROFILES, expand, pages_needed, read_stock_labels, render_pdf
 from .sync import load_rows, sync_products
@@ -65,7 +66,30 @@ def build_catalog_parser() -> argparse.ArgumentParser:
     parser.add_argument("--location-id", type=int,
                         help="stock.location id for quantities (default: main warehouse stock)")
     parser.add_argument("-v", "--verbose", action="store_true", help="list every stock change")
+    parser.add_argument("--counted-at", metavar="'YYYY-MM-DD HH:MM'",
+                        help="when the count was done, in local time (default: when the file "
+                        "was last saved); stock moves after it are reported")
+    parser.add_argument("-y", "--yes", action="store_true",
+                        help="apply even if stock moved after the count, without asking")
     return parser
+
+
+def _parse_counted_at(text: str) -> datetime:
+    for fmt in ("%Y-%m-%d %H:%M", "%Y-%m-%d"):
+        try:
+            return datetime.strptime(text.strip(), fmt).astimezone()  # local time
+        except ValueError:
+            continue
+    raise ValueError(f"--counted-at must look like '2026-11-27 21:30', not {text!r}")
+
+
+def _confirm(question: str) -> bool:
+    if not sys.stdin.isatty():
+        return False
+    try:
+        return input(f"{question} [y/N] ").strip().lower() in ("y", "yes", "s", "si", "sí")
+    except EOFError:
+        return False
 
 
 def catalog_main(argv: list[str]) -> int:
@@ -73,7 +97,9 @@ def catalog_main(argv: list[str]) -> int:
     try:
         rows, errors = load_catalog(args.path)
         plans, plan_errors = build_plans(rows)
-    except (OSError, CatalogError) as error:
+        counted_at = (_parse_counted_at(args.counted_at) if args.counted_at
+                      else file_saved_at(args.path))
+    except (OSError, CatalogError, ValueError) as error:
         print(f"Cannot read catalog: {error}", file=sys.stderr)
         return 2
     errors += plan_errors
@@ -92,7 +118,20 @@ def catalog_main(argv: list[str]) -> int:
         return 2
     try:
         client.authenticate()
-        result = import_catalog(OdooCatalogGateway(client), plans, dry_run=args.dry_run,
+        gateway = OdooCatalogGateway(client)
+        moved = changes_since_count(gateway, plans, counted_at, args.location_id)
+        if moved:
+            local = counted_at.astimezone().strftime("%Y-%m-%d %H:%M")
+            print(f"warning: stock moved after the count ({local}, "
+                  f"{'--counted-at' if args.counted_at else 'when the file was saved'}); "
+                  "importing would undo these movements:", file=sys.stderr)
+            for line in moved:
+                print(f"  {line}", file=sys.stderr)
+            if not args.dry_run and not args.yes and not _confirm("Apply the count anyway?"):
+                print("Nothing was imported. Recount, or use --counted-at / --yes.",
+                      file=sys.stderr)
+                return 1
+        result = import_catalog(gateway, plans, dry_run=args.dry_run,
                                 location_id=args.location_id)
     except (OdooError, CatalogSyncError) as error:
         print(f"Odoo error: {error}", file=sys.stderr)

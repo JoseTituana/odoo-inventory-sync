@@ -17,3 +17,8 @@ class PosStockOverride(models.Model):
     qty_requested = fields.Float(string="Quantity on order")
     qty_available = fields.Float(string="Quantity in stock")
     success = fields.Boolean(string="Authorized", index=True)
+    offline = fields.Boolean(
+        string="Sold offline", index=True,
+        help="Sold while the point of sale had no connection: checked only against the last "
+             "stock the till had downloaded, without a manager PIN. Review and recount.")
+    offline_ref = fields.Char(string="Offline reference", index=True, copy=False)

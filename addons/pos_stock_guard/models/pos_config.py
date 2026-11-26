@@ -65,6 +65,54 @@ class PosConfig(models.Model):
         return result
 
     @api.model
+    def stock_guard_snapshot(self, config_id):
+        """Sellable quantity of every storable product of the point of sale.
+
+        The till keeps it to check sales while it is offline.
+        """
+        config = self.browse(config_id).exists()
+        config.check_access("read")
+        products = self.env["product.product"].search([
+            ("available_in_pos", "=", True), ("is_storable", "=", True),
+            ("company_id", "in", [False, config.company_id.id])])
+        return self.stock_guard_available(config.id, products.ids)
+
+    @api.model
+    def stock_guard_log_offline(self, config_id, entries):
+        """Record sales the till let through while offline, once it is back online.
+
+        ``entries``: dicts with ref, product_id, qty_requested, qty_available and
+        cashier. A ref already logged is skipped, so the till can safely resend.
+        """
+        config = self.browse(config_id).exists()
+        config.check_access("read")
+        log = self.env["pos.stock.override"].sudo()
+        refs = [str(e.get("ref") or "")[:128] for e in entries]
+        done = set(log.search([("config_id", "=", config.id),
+                               ("offline_ref", "in", [r for r in refs if r])]).mapped("offline_ref"))
+        product_ids = set(self.env["product.product"].browse(
+            [int(e.get("product_id") or 0) for e in entries]).exists().ids)
+        values = []
+        for ref, entry in zip(refs, entries):
+            if not ref or ref in done:
+                continue
+            done.add(ref)
+            product_id = int(entry.get("product_id") or 0)
+            values.append({
+                "config_id": config.id,
+                "session_id": config.current_session_id.id or False,
+                "product_id": product_id if product_id in product_ids else False,
+                "cashier": str(entry.get("cashier") or "")[:128],
+                "qty_requested": float(entry.get("qty_requested") or 0),
+                "qty_available": float(entry.get("qty_available") or 0),
+                "success": False,
+                "offline": True,
+                "offline_ref": ref,
+            })
+        log.create(values)
+        return len(values)
+
+    @api.model
     def stock_guard_authorize(self, config_id, pin, product_id, qty_requested, qty_available,
                               cashier=""):
         """Check a manager PIN on the server (never in the browser) and log the attempt."""
@@ -73,7 +121,7 @@ class PosConfig(models.Model):
         log = self.env["pos.stock.override"].sudo()
         since = fields.Datetime.now() - FAILED_WINDOW
         failures = log.search_count([("config_id", "=", config.id), ("success", "=", False),
-                                     ("create_date", ">=", since)])
+                                     ("offline", "=", False), ("create_date", ">=", since)])
         if failures >= MAX_FAILED_ATTEMPTS:
             return {"ok": False,
                     "error": _("Too many wrong PINs. Wait 10 minutes and try again.")}

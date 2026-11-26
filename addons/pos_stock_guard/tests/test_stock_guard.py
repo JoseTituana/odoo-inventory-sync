@@ -64,3 +64,26 @@ class TestStockGuard(TransactionCase):
         result = self.authorize("4321")
         self.assertFalse(result["ok"])
         self.assertIn("No manager", result["error"])
+
+    def test_snapshot_lists_every_storable_pos_product(self):
+        snapshot = self.env["pos.config"].stock_guard_snapshot(self.config.id)
+        self.assertEqual(snapshot[str(self.shoe.id)], 3.0)
+        self.assertNotIn(str(self.service.id), snapshot)
+
+    def test_offline_sales_are_logged_once(self):
+        entries = [{"ref": "order-1:%s" % self.shoe.id, "product_id": self.shoe.id,
+                    "qty_requested": 2, "qty_available": 3, "cashier": "Guard cashier"}]
+        config = self.env["pos.config"]
+        self.assertEqual(config.stock_guard_log_offline(self.config.id, entries), 1)
+        self.assertEqual(config.stock_guard_log_offline(self.config.id, entries), 0)  # resent
+        log = self.logs()
+        self.assertEqual(len(log), 1)
+        self.assertTrue(log.offline)
+        self.assertFalse(log.success)
+        self.assertEqual((log.product_id, log.qty_requested), (self.shoe, 2))
+
+    def test_offline_sales_do_not_count_as_wrong_pins(self):
+        entries = [{"ref": "order-%s" % i, "product_id": self.shoe.id, "qty_requested": 1,
+                    "qty_available": 3} for i in range(6)]
+        self.env["pos.config"].stock_guard_log_offline(self.config.id, entries)
+        self.assertTrue(self.authorize("4321")["ok"])
