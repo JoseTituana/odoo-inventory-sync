@@ -72,7 +72,16 @@ function Invoke-Sftp([string[]]$Commands) {
             "-o", "StrictHostKeyChecking=yes", "-o", "UserKnownHostsFile=$KnownHosts",
             "-o", "ConnectTimeout=30", "$User@$HostName"
         )
-        $output = & sftp.exe @sftpArgs 2>&1
+        # Windows PowerShell 5.1 turns any stderr line of a native command into
+        # a terminating error under "Stop", so a mere warning from sftp would
+        # abort the run. Judge sftp by its exit code instead.
+        $previous = $ErrorActionPreference
+        $ErrorActionPreference = "Continue"
+        try {
+            $output = & sftp.exe @sftpArgs 2>&1 | ForEach-Object { "$_" }
+        } finally {
+            $ErrorActionPreference = $previous
+        }
         if ($LASTEXITCODE -ne 0) {
             throw "sftp failed (exit $LASTEXITCODE): $($output -join ' | ')"
         }

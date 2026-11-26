@@ -37,8 +37,10 @@ jobs:
           & powershell -NoProfile -ExecutionPolicy Bypass -File .\deploy\backup\pull-backups.ps1 `
               -HostName 127.0.0.1 -Port 9 -Destination $dest -AlertUrl "http://127.0.0.1:$port/alert"
           $code = $LASTEXITCODE
-          $body = Receive-Job $listener -Wait -Timeout 30
+          $body = Wait-Job $listener -Timeout 30 | Receive-Job
           Write-Host "exit $code, alert: $body"
           if ($code -ne 1) { throw "expected exit code 1" }
           $alert = $body | ConvertFrom-Json
           if ($alert.text -notmatch "ERROR" -or -not $alert.host) { throw "alert missing or incomplete" }
+          # The reason must be sftp's failure, not the warning about the missing key file.
+          if ($alert.text -notmatch "sftp failed") { throw "alert does not give the real reason" }
