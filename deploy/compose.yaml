@@ -10,7 +10,8 @@ services:
       -c max_connections=30
     volumes:
       - db-data:/var/lib/postgresql/data
-    mem_limit: 256m
+    # Production, staging and the point of sale share it; 256m ran at 84 %.
+    mem_limit: 384m
     restart: unless-stopped
 
   odoo:
