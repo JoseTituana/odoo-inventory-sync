@@ -181,7 +181,7 @@ def build_labels_parser() -> argparse.ArgumentParser:
         prog="odoo-sync labels",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         description="Imprime una etiqueta por cada par en stock, en un PDF.",
-        epilog=f"perfiles:\n{profiles}\n\nImprime el PDF al 100 %% (tamaño real), no 'ajustar a la "
+        epilog=f"perfiles:\n{profiles}\n\nImprime el PDF al 100 % (tamaño real), no 'ajustar a la "
                "página'.",
     )
     parser.add_argument("--profile", default="a4-21", choices=sorted(PROFILES))
@@ -229,6 +229,12 @@ def labels_main(argv: list[str]) -> int:
             print(f"  {count:>3} x {name}")
     for message in plan.skipped:
         print(f"aviso {message}", file=sys.stderr)
+    if not plan.labels:
+        filters = [f"{flag} {value!r}" for flag, value in
+                   (("--model", args.model), ("--category", args.category)) if value]
+        reason = (f"ninguna variante con stock coincide con {' y '.join(filters)}"
+                  if filters else "no hay variantes con stock en esa ubicación")
+        print(f"No hay etiquetas que imprimir: {reason}.", file=sys.stderr)
     if args.dry_run or not plan.labels:
         return 0
     output = args.output or f"labels-{profile.name}-{datetime.now():%Y%m%d-%H%M}.pdf"
