@@ -7,6 +7,7 @@ from odoo.exceptions import UserError
 from odoo.tests import tagged
 from odoo.tools.safe_eval import safe_eval
 
+from odoo.addons.l10n_ec_account_edi.tests.sri_response import patch_service_sri
 from odoo.addons.l10n_ec_account_edi.tests.test_edi_common import TestL10nECEdiCommon
 
 
@@ -51,28 +52,47 @@ class TestPosSri(TestL10nECEdiCommon):
         self.pos_config.open_ui()
         self.session = self.pos_config.current_session_id
 
-    def _sync_order(self, partner=None, to_invoice=True, method=None, price=40.0):
+    def _sync_order(self, partner=None, to_invoice=True, method=None, price=40.0, lines=None):
+        """Send an order the way the till does.
+
+        ``lines`` is a list of dicts with ``product``, ``price`` and the
+        optional ``qty``, ``discount`` and ``refunded_line``; by default one
+        shoe at ``price``.
+        """
         method = method or self.cash_method
-        taxes = self.shoe.taxes_id.compute_all(price, self.session.currency_id, 1)
-        total = taxes["total_included"]
+        lines = lines or [{"product": self.shoe, "price": price}]
+        currency = self.session.currency_id
+        line_vals, total, untaxed = [], 0.0, 0.0
+        for line in lines:
+            qty = line.get("qty", 1)
+            discount = line.get("discount", 0.0)
+            product = line["product"]
+            unit = line["price"] * (1 - discount / 100.0)
+            taxes = product.taxes_id.compute_all(unit, currency, qty, product=product)
+            total += taxes["total_included"]
+            untaxed += taxes["total_excluded"]
+            line_vals.append((0, 0, {
+                "product_id": product.id,
+                "price_unit": line["price"],
+                "qty": qty,
+                "discount": discount,
+                "price_subtotal": taxes["total_excluded"],
+                "price_subtotal_incl": taxes["total_included"],
+                "tax_ids": [(6, 0, product.taxes_id.ids)],
+                "refunded_orderline_id": line["refunded_line"].id if line.get("refunded_line") else False,
+            }))
+        total = currency.round(total)
         uuid = str(uuid4())
         data = {
             "amount_paid": total,
             "amount_return": 0,
-            "amount_tax": total - taxes["total_excluded"],
+            "amount_tax": total - currency.round(untaxed),
             "amount_total": total,
             "date_order": fields.Datetime.to_string(fields.Datetime.now()),
             "pricelist_id": self.pos_config.pricelist_id.id,
             "name": "Order %s" % uuid,
             "last_order_preparation_change": "{}",
-            "lines": [(0, 0, {
-                "product_id": self.shoe.id,
-                "price_unit": price,
-                "qty": 1,
-                "price_subtotal": taxes["total_excluded"],
-                "price_subtotal_incl": total,
-                "tax_ids": [(6, 0, self.shoe.taxes_id.ids)],
-            })],
+            "lines": line_vals,
             "partner_id": partner.id if partner else False,
             "session_id": self.session.id,
             "payment_ids": [(0, 0, {
@@ -85,8 +105,37 @@ class TestPosSri(TestL10nECEdiCommon):
             "to_invoice": to_invoice,
             "state": "paid",
         }
-        result = self.env["pos.order"].sync_from_ui([data])
-        return self.env["pos.order"].browse(result["pos.order"][0]["id"])
+        self.env["pos.order"].sync_from_ui([data])
+        # The answer also lists the refunded order, so look the order up.
+        return self.env["pos.order"].search([("uuid", "=", uuid)])
+
+    def _sri_doc(self, move):
+        return move.edi_document_ids.filtered(
+            lambda d: d.edi_format_id.code == "l10n_ec_format_sri")
+
+    def _store_taxes(self):
+        """IVA 15 % and 0 % as the store uses them: prices include IVA."""
+        chart = self.env["account.chart.template"].with_company(self.company)
+        iva15 = chart.ref("tax_vat_15_411_goods")
+        iva15.write({
+            "price_include_override": "tax_included",
+            "l10n_ec_xml_fe_code": "4",
+            "tax_group_id": self.TaxGroup.search([("l10n_ec_type", "=", "vat15")], limit=1).id,
+        })
+        iva0 = self.env["account.tax"].search([
+            ("company_id", "=", self.company.id),
+            ("type_tax_use", "=", "sale"),
+            ("tax_group_id.l10n_ec_type", "=", "zero_vat"),
+            ("amount", "=", 0),
+        ], limit=1)
+        self.assertTrue(iva0, "the Ecuadorian chart has a 0 % sale tax")
+        iva0.l10n_ec_xml_fe_code = "0"
+        return iva15, iva0
+
+    def _xml(self, edi_doc):
+        xml_string = edi_doc._l10n_ec_render_xml_edi()
+        self.assertTrue(edi_doc._l10n_ec_action_check_xsd(xml_string))  # SRI schema
+        return etree.fromstring(xml_string.encode() if isinstance(xml_string, str) else xml_string)
 
     def test_default_sri_payment_methods(self):
         self.assertEqual(self.cash_method.l10n_ec_sri_payment_id, self.env.ref("l10n_ec.P1"))
@@ -183,3 +232,90 @@ class TestPosSri(TestL10nECEdiCommon):
         self.assertAlmostEqual(float(xml.findtext(".//infoFactura/totalSinImpuestos")), 27.83)
         self.assertAlmostEqual(float(xml.findtext(".//totalConImpuestos/totalImpuesto/valor")), 4.17)
         self.assertEqual(xml.findtext(".//totalConImpuestos/totalImpuesto/codigoPorcentaje"), "4")
+        self.assertAlmostEqual(float(xml.findtext(".//detalle/precioUnitario")), 27.83, places=2)
+
+    @patch_service_sri
+    def test_invoice_authorized_by_sri(self):
+        """The scheduled job sends the invoice and stores the authorization."""
+        self._setup_edi_company_ec()
+        order = self._sync_order(partner=self.partner_ruc, method=self.credit_card_method)
+        invoice = order.account_move
+        self.assertTrue(invoice, order.message_ids.mapped("body"))
+        edi_doc = self._sri_doc(invoice)
+        edi_doc._process_documents_web_services(with_commit=False)
+        self.assertEqual(edi_doc.state, "sent", edi_doc.error)
+        self.assertTrue(invoice.l10n_ec_xml_access_key)
+        self.assertTrue(invoice.l10n_ec_authorization_date)
+
+    @patch_service_sri
+    def test_refund_of_invoiced_sale_is_a_credit_note(self):
+        self._setup_edi_company_ec()
+        order = self._sync_order(partner=self.partner_dni)
+        invoice = order.account_move
+        self._sri_doc(invoice)._process_documents_web_services(with_commit=False)
+        refund = self._sync_order(partner=self.partner_dni, lines=[{
+            "product": self.shoe, "price": 40.0, "qty": -1,
+            "refunded_line": order.lines[0],
+        }])
+        credit_note = refund.account_move
+        self.assertTrue(credit_note, refund.message_ids.mapped("body"))
+        self.assertEqual(credit_note.move_type, "out_refund")
+        self.assertEqual(credit_note.reversed_entry_id, invoice)
+        self.assertEqual(credit_note.l10n_latam_document_type_id.code, "04")
+        edi_doc = self._sri_doc(credit_note)
+        xml = self._xml(edi_doc)
+        self.assertEqual(xml.tag, "notaCredito")
+        self.assertEqual(xml.findtext(".//numDocModificado"), invoice.l10n_latam_document_number)
+        self.assertEqual(xml.findtext(".//codDocModificado"), "01")
+        self.assertTrue(xml.findtext(".//motivo"))
+        edi_doc._process_documents_web_services(with_commit=False)
+        self.assertEqual(edi_doc.state, "sent", edi_doc.error)
+
+    def test_refund_of_receipt_keeps_the_return(self):
+        """A return of a sale that was never invoiced cannot be a credit note."""
+        self._setup_edi_company_ec()
+        order = self._sync_order(partner=self.partner_dni, to_invoice=False)
+        refund = self._sync_order(partner=self.partner_dni, lines=[{
+            "product": self.shoe, "price": 40.0, "qty": -1,
+            "refunded_line": order.lines[0],
+        }])
+        self.assertEqual(refund.state, "paid")
+        self.assertFalse(refund.account_move)
+        self.assertIn("Only a return of an invoiced sale", " ".join(refund.message_ids.mapped("body")))
+
+    def test_invoice_with_discount_and_mixed_iva(self):
+        """A discounted IVA 15 % shoe and an IVA 0 % craft item on one invoice."""
+        self._setup_edi_company_ec()
+        iva15, iva0 = self._store_taxes()
+        self.shoe.taxes_id = iva15
+        craft = self.env["product.product"].create({
+            "name": "Artesania",
+            "available_in_pos": True,
+            "list_price": 10.0,
+            "taxes_id": [(6, 0, iva0.ids)],
+        })
+        order = self._sync_order(partner=self.partner_dni, lines=[
+            {"product": self.shoe, "price": 46.0, "discount": 10.0},  # 41.40 with IVA
+            {"product": craft, "price": 10.0, "qty": 2},              # 20.00, no IVA
+        ])
+        invoice = order.account_move
+        self.assertTrue(invoice, order.message_ids.mapped("body"))
+        self.assertAlmostEqual(invoice.amount_total, 61.40)
+        xml = self._xml(self._sri_doc(invoice))
+        self.assertAlmostEqual(float(xml.findtext(".//infoFactura/importeTotal")), 61.40)
+        rates = {
+            t.findtext("codigoPorcentaje"): float(t.findtext("valor"))
+            for t in xml.iterfind(".//infoFactura/totalConImpuestos/totalImpuesto")
+        }
+        self.assertAlmostEqual(rates["4"], invoice.amount_tax)
+        self.assertAlmostEqual(rates["0"], 0.0)
+        self.assertAlmostEqual(float(xml.findtext(".//totalDescuento")), 4.0)
+        # Every line adds up the way the SRI checks it, without IVA.
+        for detail in xml.iterfind(".//detalles/detalle"):
+            qty, unit, discount, subtotal = (float(detail.findtext(tag)) for tag in (
+                "cantidad", "precioUnitario", "descuento", "precioTotalSinImpuesto"))
+            self.assertAlmostEqual(qty * unit - discount, subtotal, places=2)
+            self.assertAlmostEqual(subtotal, float(detail.findtext(".//impuesto/baseImponible")), places=2)
+        shoe_line = next(d for d in xml.iterfind(".//detalles/detalle") if float(d.findtext("descuento")))
+        self.assertAlmostEqual(float(shoe_line.findtext("precioUnitario")), 40.0)  # 46.00 / 1.15
+        self.assertAlmostEqual(float(shoe_line.findtext("precioTotalSinImpuesto")), 36.0)
