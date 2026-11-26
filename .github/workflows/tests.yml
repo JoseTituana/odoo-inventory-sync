@@ -14,6 +14,46 @@ jobs:
       - run: pip install -e ".[dev]"
       - run: pytest -q
 
+  # The store PCs run Windows 10 and 11: run the tests there too and try the
+  # PC setup scripts in Windows PowerShell 5.1, the version those PCs ship with.
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e ".[dev]"
+      - run: pytest -q
+      - name: install-importer.ps1
+        shell: powershell
+        run: |
+          $ErrorActionPreference = "Stop"
+          $t = Join-Path $env:RUNNER_TEMP "importer"
+          .\deploy\pos-pc\install-importer.ps1 -InstallDir "$t\app" -SettingsDir "$t\settings" -NoEditor -NoPath
+          if (-not (Test-Path "$t\settings\.env")) { throw "settings file missing" }
+          $env:APPDATA = "$t\appdata"
+          Copy-Item -Recurse "$t\settings" "$env:APPDATA\odoo-sync"
+          # PowerShell 5.1 turns redirected stderr into errors; this call is expected to fail.
+          $ErrorActionPreference = "Continue"
+          $out = & "$t\app\venv\Scripts\odoo-sync.exe" labels --dry-run 2>&1 | Out-String
+          $ErrorActionPreference = "Stop"
+          Write-Host $out
+          if ($out -notmatch "Faltan datos de conexi") { throw "expected the missing-settings message" }
+          # Running it again must keep the settings and succeed.
+          .\deploy\pos-pc\install-importer.ps1 -InstallDir "$t\app" -SettingsDir "$t\settings" -NoEditor -NoPath
+      - name: create-pos-shortcut.ps1
+        shell: powershell
+        run: |
+          $ErrorActionPreference = "Stop"
+          $t = Join-Path $env:RUNNER_TEMP "shortcut"
+          .\deploy\pos-pc\create-pos-shortcut.ps1 -ShortcutDir $t -ProfileDir "$t\profile"
+          $lnk = (New-Object -ComObject WScript.Shell).CreateShortcut("$t\Caja Josheps.lnk")
+          Write-Host $lnk.TargetPath $lnk.Arguments
+          if ($lnk.TargetPath -notmatch "chrome.exe$") { throw "shortcut does not open Chrome" }
+          if ($lnk.Arguments -notmatch "--app=https://odoo.jatssolutions.com/pos/ui") { throw "wrong URL" }
+          if ($lnk.Arguments -notmatch "user-data-dir") { throw "no separate profile" }
+
   # The till in a real browser: Odoo 19 + pos_stock_guard in Docker, the example
   # catalog imported with odoo-sync, then e2e/pos.spec.js with Playwright.
   pos-e2e:

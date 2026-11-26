@@ -69,6 +69,34 @@ readable only by SYSTEM and Administrators. The key can only read `/opt/backups`
 over SFTP: no shell, no forwarding, no writes. To revoke a PC, delete its line from
 `/var/lib/bkpull/.ssh/authorized_keys` on the server.
 
+## Alerts
+
+A failed backup should not wait for someone to read a log. Both sides can send
+an alert as a JSON POST `{"text": "...", "host": "..."}` to a webhook, for example
+an n8n workflow (already on the server) that forwards it to Telegram, WhatsApp
+or email.
+
+**Server** (`/etc/default/odoo-backup`, owner root, mode 600):
+
+```bash
+ALERT_URL=https://n8n.example.com/webhook/backup-alert   # POST when a backup fails
+HEARTBEAT_URL=https://hc-ping.com/<uuid>                 # optional, see below
+```
+
+The alert names the reason (`database dump is not readable`, or the failing line
+for an unexpected error). `HEARTBEAT_URL` is pinged after every good backup and at
+`HEARTBEAT_URL/fail` after a bad one. A Healthchecks.io-style service then also
+alerts when **no** backup ran at all (server off, cron broken), which the script
+itself cannot notice. Without these settings nothing is sent.
+
+**POS PC**: put the same webhook URL on the first line of
+`C:\OdooBackup\alert-url.txt` (or pass `-AlertUrl`). `pull-backups.ps1` posts
+when a download fails verification, the server cannot be reached, or the newest
+backup on the PC is older than `-MaxAgeHours` (48 by default).
+
+Test the server side with `ALERT_URL=... DB_NAME=does-not-exist odoo-backup`: the
+dump fails and the alert arrives.
+
 ## Restore
 
 **Test a backup** (safe: restores into a separate database, never `jats`):

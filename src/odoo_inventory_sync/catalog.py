@@ -96,6 +96,25 @@ def key(text: str) -> str:
     return " ".join(str(text).split()).casefold()
 
 
+def loose_key(text: str) -> str:
+    """Like key(), but accents do not matter either: 'Café' and 'cafe' match."""
+    return strip_accents(key(text))
+
+
+def accent_clashes(names) -> list[tuple[str, ...]]:
+    """Groups of names that differ only by accents, e.g. ('Cafe', 'Café').
+
+    Such names would become two models or two values in Odoo with the same
+    code (SKU), so they are refused instead of guessing which one is meant.
+    """
+    groups: dict[str, list[str]] = {}
+    for name in names:
+        spellings = groups.setdefault(loose_key(name), [])
+        if key(name) not in {key(n) for n in spellings}:
+            spellings.append(name)
+    return [tuple(g) for g in groups.values() if len(g) > 1]
+
+
 def clean(text) -> str:
     return " ".join(str(text).split()) if text is not None else ""
 
@@ -208,7 +227,12 @@ def _read_xlsx(path: Path) -> list[list]:
 
 
 def _read_csv(path: Path) -> list[list]:
-    text = path.read_text(encoding="utf-8-sig")
+    raw = path.read_bytes()
+    try:
+        text = raw.decode("utf-8-sig")
+    except UnicodeDecodeError:
+        # Excel on Spanish Windows saves "CSV (delimitado por comas)" as cp1252.
+        text = raw.decode("cp1252")
     try:
         dialect = csv.Sniffer().sniff(text.splitlines()[0] if text else ",", delimiters=",;\t")
     except csv.Error:
@@ -329,4 +353,14 @@ def build_plans(rows: list[CatalogRow]) -> tuple[list[ModelPlan], list[str]]:
         plan.quantities[(key(row.color), key(row.material), key(row.size))] = row.qty
     for plan in plans.values():
         plan.values["size"].sort(key=size_sort_key)
+    for group in accent_clashes(plan.name for plan in plans.values()):
+        errors.append(f"los modelos {_quoted(group)} solo se diferencian por tildes; escríbelos igual")
+    for role, label in (("color", "colores"), ("material", "materiales"), ("size", "tallas")):
+        names = [v for plan in plans.values() for v in plan.values[role]]
+        for group in accent_clashes(names):
+            errors.append(f"los {label} {_quoted(group)} solo se diferencian por tildes; escríbelos igual")
     return list(plans.values()), errors
+
+
+def _quoted(names) -> str:
+    return " y ".join(repr(n) for n in names)
