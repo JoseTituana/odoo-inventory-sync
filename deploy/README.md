@@ -34,6 +34,14 @@ To create the first database, set `list_db = True`, restart Odoo, create the dat
 docker compose restart odoo
 ```
 
+## Restarting the database
+
+With `workers = 0`, Odoo's scheduled-job threads stop for good when PostgreSQL goes away and do not come back by themselves; the website keeps working, which hides it. After restarting or recreating the `db` service, restart Odoo as well:
+
+```bash
+docker compose up -d db && docker compose restart odoo odoo-staging
+```
+
 ## HTTPS with Caddy
 
 Point a DNS `A` record at the server, then add a site to `/etc/caddy/Caddyfile`:
