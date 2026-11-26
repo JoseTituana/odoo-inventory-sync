@@ -129,6 +129,30 @@ test("sin stock: un PIN equivocado no autoriza y el del encargado sí", async ()
     await expect.poll(() => stock(fx.no_stock)).toBe(-1);
 });
 
+test("una cantidad escrita en el teclado se revisa al pulsar Pago", async () => {
+    await scan(fx.in_stock); // 4 left after the first sale
+    await expect(lines()).toHaveCount(1);
+    // Odoo groups keys that arrive within ~100 ms as one barcode scan; a numpad
+    // press that fast after a scan joins it. A cashier is never that fast.
+    await page.waitForTimeout(500);
+    await page.locator(".numpad button", { hasText: /^Cant\.$/ }).click();
+    await page.locator(".numpad button", { hasText: /^9$/ }).click();
+    await expect.poll(() => page.evaluate(() => posmodel.getOrder().lines[0].getQuantity())).toBe(9);
+
+    await page.getByRole("button", { name: "Pago", exact: true }).click();
+    await expect(dialog()).toContainText("No hay stock suficiente");
+    await expect(dialog()).toContainText("necesita 9");
+    await dialog().getByRole("button", { name: "Cancelar" }).click();
+    // Still on the order: nothing was charged.
+    await expect(page.getByRole("button", { name: "Pago", exact: true })).toBeVisible();
+
+    // Clear the line before the next test.
+    const backspace = page.locator(".numpad button", { hasText: /^⌫$/ });
+    await backspace.click();
+    await backspace.click();
+    await expect(lines()).toHaveCount(0);
+});
+
 test("sin conexión: vende dentro del último stock y bloquea lo que pasa de él", async () => {
     await context.setOffline(true);
     await scan(fx.one_left);
