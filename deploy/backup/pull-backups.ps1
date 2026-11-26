@@ -9,6 +9,10 @@
     verifies the checksum, and deletes local bundles older than -KeepDays.
 
     Exit codes: 0 = ok, 1 = error, 2 = ok but the newest backup is too old.
+
+    On 1 or 2 it also sends a JSON POST {"text": ..., "host": ...} to
+    -AlertUrl, read by default from alert-url.txt next to this script (the
+    same webhook the server uses, for example an n8n workflow).
 #>
 param(
     [string]$HostName = "odoo.jatssolutions.com",
@@ -19,7 +23,8 @@ param(
     [string]$Destination = "D:\Respaldos\droplet",
     [int]$KeepDays = 60,
     [int]$KeepAtLeast = 7,
-    [int]$MaxAgeHours = 48
+    [int]$MaxAgeHours = 48,
+    [string]$AlertUrl = ""
 )
 
 $ErrorActionPreference = "Stop"
@@ -30,6 +35,31 @@ function Write-Log([string]$Message) {
     $line = "{0} {1}" -f (Get-Date -Format "yyyy-MM-dd HH:mm:ss"), $Message
     Add-Content -Path $LogFile -Value $line -Encoding utf8
     Write-Output $line
+}
+
+$AlertFile = Join-Path $PSScriptRoot "alert-url.txt"
+if (-not $AlertUrl -and (Test-Path $AlertFile)) {
+    $AlertUrl = (Get-Content $AlertFile -TotalCount 1).Trim()
+}
+
+function Send-Alert([string]$Text) {
+    if (-not $AlertUrl) { return }
+    try {
+        $body = @{ text = $Text; host = $env:COMPUTERNAME } | ConvertTo-Json -Compress
+        $bytes = [Text.Encoding]::UTF8.GetBytes($body)
+        Invoke-RestMethod -Uri $AlertUrl -Method Post -Body $bytes `
+            -ContentType "application/json; charset=utf-8" -TimeoutSec 20 | Out-Null
+    } catch {
+        Write-Log "WARNING: could not send the alert: $($_.Exception.Message)"
+    }
+}
+
+function Stop-Run([int]$Code, [string]$Message) {
+    Write-Log $Message
+    if ($Code -ne 0) {
+        Send-Alert "Copia de respaldos en $($env:COMPUTERNAME): $Message. Revisa $LogFile"
+    }
+    exit $Code
 }
 
 function Invoke-Sftp([string[]]$Commands) {
@@ -116,22 +146,17 @@ try {
     $newest = Get-ChildItem $Destination -File | Where-Object { $_.Name -match $NamePattern } |
         Sort-Object { Get-BundleDate $_.Name } -Descending | Select-Object -First 1
     if ($failed -gt 0) {
-        Write-Log "ERROR: $failed bundle(s) failed verification"
-        exit 1
+        Stop-Run 1 "ERROR: $failed bundle(s) failed verification"
     }
     if (-not $newest) {
-        Write-Log "WARNING: no backups on this PC yet"
-        exit 2
+        Stop-Run 2 "WARNING: no backups on this PC yet"
     }
     # Bundle names use server time (UTC).
     $ageHours = [math]::Round(((Get-Date).ToUniversalTime() - (Get-BundleDate $newest.Name)).TotalHours)
     if ($ageHours -gt $MaxAgeHours) {
-        Write-Log "WARNING: newest backup $($newest.Name) is $ageHours hours old"
-        exit 2
+        Stop-Run 2 "WARNING: newest backup $($newest.Name) is $ageHours hours old"
     }
-    Write-Log "ok: newest backup $($newest.Name) ($ageHours h old)"
-    exit 0
+    Stop-Run 0 "ok: newest backup $($newest.Name) ($ageHours h old)"
 } catch {
-    Write-Log "ERROR: $($_.Exception.Message)"
-    exit 1
+    Stop-Run 1 "ERROR: $($_.Exception.Message)"
 }
