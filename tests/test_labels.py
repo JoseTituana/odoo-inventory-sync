@@ -88,3 +88,26 @@ def test_printed_barcode_scans_back_to_the_same_number(tmp_path, name):
     image = Image.frombytes("RGB", (pixmap.width, pixmap.height), pixmap.samples)
     found = [r.text for r in zxingcpp.read_barcodes(image)]
     assert code in found
+
+
+def test_labels_cli_says_why_nothing_is_printed(monkeypatch, capsys):
+    from odoo_inventory_sync import cli
+
+    class Client:
+        def authenticate(self):
+            return 1
+
+    monkeypatch.setattr(cli, "_client_from_env", lambda: Client())
+    monkeypatch.setattr(cli, "read_stock_labels", lambda *args: [])
+    assert cli.main(["labels", "--category", "Nada", "--dry-run"]) == 0
+    err = capsys.readouterr().err
+    assert "ninguna variante con stock coincide con --category 'Nada'" in err
+
+
+def test_labels_help_shows_a_single_percent_sign(capsys):
+    from odoo_inventory_sync import cli
+
+    with pytest.raises(SystemExit):
+        cli.main(["labels", "--help"])
+    out = capsys.readouterr().out
+    assert "100 % (tamaño real)" in out and "%%" not in out
