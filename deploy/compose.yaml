@@ -10,7 +10,8 @@ services:
       -c max_connections=30
     volumes:
       - db-data:/var/lib/postgresql/data
-    mem_limit: 256m
+    # Production, staging and the point of sale share it; 256m ran at 84 %.
+    mem_limit: 384m
     restart: unless-stopped
 
   odoo:
@@ -24,6 +25,22 @@ services:
       - ./config:/etc/odoo
       - ./addons:/mnt/extra-addons
     mem_limit: 900m
+    restart: unless-stopped
+
+  # Staging copy for training and tests. Not published by the reverse proxy:
+  # reach it through an SSH tunnel (ssh -N -L 8070:127.0.0.1:8070 server).
+  # Its database user can only connect to jats_staging.
+  odoo-staging:
+    image: odoo:19
+    depends_on:
+      - db
+    ports:
+      - "127.0.0.1:8070:8069"
+    volumes:
+      - ./staging-data:/var/lib/odoo
+      - ./config-staging:/etc/odoo
+      - ./addons:/mnt/extra-addons
+    mem_limit: 600m
     restart: unless-stopped
 
 volumes:
