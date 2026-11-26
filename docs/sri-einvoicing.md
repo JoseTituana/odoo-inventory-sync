@@ -44,6 +44,16 @@ In `jats_staging` (SSH tunnel, `http://localhost:8070`), Apps, remove the "Apps"
 6. Point of Sale > Configuration > Payment Methods: check the **SRI Payment Method** column (Cash `01`, Card `19` or `16`, Transfer `20`).
 7. Taxes: each product carries IVA 15 % or 0 % as the accountant decides; each tax needs its *Tax Code for Electronic Documents*.
 
+### Shortcut: `sri-configure.py`
+
+`deploy/sri-configure.py` does steps 3 (environment and XML versions), 4, 5 and 6 below in one go, and lists what is still missing (RUC, street, the `.p12`, tax codes). It only fills empty values, can run again safely, and refuses any database other than `jats_staging`. Copy it to `/opt/odoo` and run:
+
+```
+docker compose run --rm --no-deps -T odoo-staging odoo shell -c /etc/odoo/odoo.conf -d jats_staging --no-http < sri-configure.py
+```
+
+Add `-e SRI_DRY_RUN=1` after `run` to only see the report, and `-e SRI_ENTITY=002 -e SRI_EMISSION=003` if the SRI authorized other numbers than 001-001. Card payment methods get code 20; change them to 19 (credit) or 16 (debit) by hand.
+
 ## 3. Staging: test against the SRI test servers
 
 Each case: make the sale in the POS, open the invoice, wait for (or run) the EDI job, and check the state is *Sent* with an authorization number.

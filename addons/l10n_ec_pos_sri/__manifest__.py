@@ -21,6 +21,7 @@ rest stay normal receipts.
 """,
     "version": "19.0.1.0.0",
     "category": "Accounting/Localizations/Point of Sale",
+    "author": "JATS Solution",
     "license": "AGPL-3",
     "depends": ["point_of_sale", "l10n_ec_account_edi"],
     "data": [
