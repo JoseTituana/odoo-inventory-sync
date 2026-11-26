@@ -53,3 +53,31 @@ jobs:
           if ($lnk.TargetPath -notmatch "chrome.exe$") { throw "shortcut does not open Chrome" }
           if ($lnk.Arguments -notmatch "--app=https://odoo.jatssolutions.com/pos/ui") { throw "wrong URL" }
           if ($lnk.Arguments -notmatch "user-data-dir") { throw "no separate profile" }
+
+  # The till in a real browser: Odoo 19 + pos_stock_guard in Docker, the example
+  # catalog imported with odoo-sync, then e2e/pos.spec.js with Playwright.
+  pos-e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - run: pip install -e .
+      - run: npm ci --no-audit --no-fund
+        working-directory: e2e
+      - run: npx playwright install --with-deps chromium
+        working-directory: e2e
+      - run: e2e/run.sh
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: pos-e2e
+          path: |
+            e2e/test-results/
+            e2e/init.log
+            e2e/odoo.log
