@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Sales without invoice (receipts) and invoices that failed, next to the
+         standard "Invoiced" filter, so the accountant can filter by date and
+         export each group. -->
+    <record id="view_pos_order_filter_l10n_ec" model="ir.ui.view">
+        <field name="name">pos.order.search.l10n_ec_pos_sri</field>
+        <field name="model">pos.order</field>
+        <field name="inherit_id" ref="point_of_sale.view_pos_order_filter"/>
+        <field name="arch" type="xml">
+            <filter name="invoiced" position="after">
+                <filter string="Not Invoiced" name="not_invoiced"
+                        domain="[('account_move', '=', False), ('state', 'in', ('paid', 'done'))]"/>
+                <filter string="Invoice Failed" name="invoice_failed"
+                        domain="[('to_invoice', '=', True), ('account_move', '=', False), ('state', 'in', ('paid', 'done'))]"/>
+            </filter>
+        </field>
+    </record>
+</odoo>

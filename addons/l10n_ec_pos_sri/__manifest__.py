@@ -15,6 +15,7 @@ rest stay normal receipts.
   error is written on the order, the POS shows its usual "invoice error"
   message, and the order stays "to invoice" until someone invoices it from
   the back office.
+* Order filters "Not Invoiced" and "Invoice Failed" next to "Invoiced".
 * Sending to the SRI is done afterwards by the account_edi scheduled job, so a
   slow or unavailable SRI never stops the cashier.
 """,
@@ -23,6 +24,7 @@ rest stay normal receipts.
     "license": "AGPL-3",
     "depends": ["point_of_sale", "l10n_ec_account_edi"],
     "data": [
+        "views/pos_order_views.xml",
         "views/pos_payment_method_views.xml",
     ],
     "assets": {

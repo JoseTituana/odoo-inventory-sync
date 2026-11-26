@@ -1,6 +1,11 @@
+from uuid import uuid4
+
+from lxml import etree
+
 from odoo import fields
 from odoo.exceptions import UserError
 from odoo.tests import tagged
+from odoo.tools.safe_eval import safe_eval
 
 from odoo.addons.l10n_ec_account_edi.tests.test_edi_common import TestL10nECEdiCommon
 
@@ -50,7 +55,7 @@ class TestPosSri(TestL10nECEdiCommon):
         method = method or self.cash_method
         taxes = self.shoe.taxes_id.compute_all(price, self.session.currency_id, 1)
         total = taxes["total_included"]
-        uuid = "%s-%s" % (self.id(), fields.Datetime.now().timestamp())
+        uuid = str(uuid4())
         data = {
             "amount_paid": total,
             "amount_return": 0,
@@ -132,3 +137,20 @@ class TestPosSri(TestL10nECEdiCommon):
         data = self.env["pos.config"]._load_pos_data_read(self.pos_config, self.pos_config)
         self.assertEqual(data[0]["_l10n_ec_final_consumer_id"], final_consumer.id)
         self.assertEqual(data[0]["_l10n_ec_final_consumer_limit"], 50.0)
+
+    def _filter_domain(self, name):
+        arch = self.env["pos.order"].get_view(
+            self.env.ref("point_of_sale.view_pos_order_filter").id, "search")["arch"]
+        node = etree.fromstring(arch).xpath("//filter[@name='%s']" % name)[0]
+        return safe_eval(node.get("domain"))
+
+    def test_order_filters(self):
+        receipt = self._sync_order(partner=None, to_invoice=False)
+        failed = self._sync_order(partner=self.partner_dni)  # not configured: fails
+        orders = self.env["pos.order"]
+        not_invoiced = orders.search(self._filter_domain("not_invoiced"))
+        self.assertIn(receipt, not_invoiced)
+        self.assertIn(failed, not_invoiced)
+        invoice_failed = orders.search(self._filter_domain("invoice_failed"))
+        self.assertIn(failed, invoice_failed)
+        self.assertNotIn(receipt, invoice_failed)

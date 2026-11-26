@@ -10,7 +10,7 @@ How the point of sale issues Ecuadorian electronic invoices without a paid provi
 | `l10n_ec_base`, `l10n_ec_account_edi` | [OCA l10n-ecuador](https://github.com/OCA/l10n-ecuador), AGPL-3, pinned in `deploy/Dockerfile` | Build the XML, sign it (XAdES-BES with the company's `.p12`), send it to the SRI web services (test: `celcer.sri.gob.ec`, production: `cel.sri.gob.ec`), store the authorization, email the RIDE. Invoices, credit notes, debit notes and purchase liquidations. |
 | `l10n_ec_pos_sri` | `addons/` in this repository | Connects the point of sale: SRI payment method per POS payment method, checks at the till, and a sale that is never lost if the invoice fails. |
 
-Only orders the cashier marks as **Invoice** become electronic invoices. The rest stay normal receipts: what is invoiced is the owner's decision, made with the accountant.
+Only orders the cashier marks as **Invoice** become electronic invoices, all under one RUC. The POS records every sale; the rest stay receipts that the accountant handles separately. Point of Sale > Orders has the filters **Invoiced**, **Not Invoiced** and **Invoice Failed** for that: filter by date, then export.
 
 Sending to the SRI happens after the invoice is posted, in the `account_edi` scheduled job ("EDI: Perform web services operations"). If the SRI is down, the job retries; the cashier never waits for it.
 
@@ -56,6 +56,7 @@ Each case: make the sale in the POS, open the invoice, wait for (or run) the EDI
 - [ ] Customer without identification number: the till asks for it.
 - [ ] Return of an invoiced sale: credit note authorized (not allowed for Consumidor Final).
 - [ ] Break the configuration on purpose (remove the certificate): the sale is saved, the POS shows the invoice error, the order says why; restore it and invoice from the order.
+- [ ] Point of Sale > Orders: the receipt shows under **Not Invoiced**, the invoice under **Invoiced**, the broken one under **Invoice Failed**.
 - [ ] RIDE received by email by a customer with an email address.
 
 ## 4. Production

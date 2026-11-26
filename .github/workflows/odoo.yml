@@ -19,9 +19,10 @@ jobs:
       - run: docker build -t odoo-josheps:19 deploy
       - name: Odoo tests (our modules and the OCA modules they rely on)
         run: |
-          docker run --rm --network host -v "$PWD/addons:/mnt/extra-addons:ro" odoo-josheps:19 \
-            odoo --db_host=localhost --db_user=odoo --db_password=odoo \
-            --addons-path=/mnt/extra-addons,/mnt/oca-addons,/usr/lib/python3/dist-packages/odoo/addons \
+          # The image's entrypoint waits for PostgreSQL at $HOST (default "db").
+          docker run --rm --network host -e HOST=localhost -e USER=odoo -e PASSWORD=odoo \
+            -v "$PWD/addons:/mnt/extra-addons:ro" odoo-josheps:19 \
+            odoo --addons-path=/mnt/extra-addons,/mnt/oca-addons,/usr/lib/python3/dist-packages/odoo/addons \
             -d ci -i pos_stock_guard,l10n_ec_pos_sri \
             --test-tags /pos_stock_guard,/l10n_ec_pos_sri,/l10n_ec_account_edi \
             --stop-after-init --log-level=test 2>&1 | tee odoo-test.log

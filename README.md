@@ -92,6 +92,7 @@ Only the orders the cashier marks as **Invoice** become electronic invoices; eve
 - Each POS payment method has an SRI payment method (`formaPago`): cash `01`, bank `20` by default, credit card `19` if you choose it.
 - Before an order to invoice is validated, the customer must have an identification number, and Consumidor Final cannot exceed the limit enforced by the OCA module (USD 50 by default, parameter `l10n_ec_final_consumer_limit`).
 - If Odoo cannot create the invoice (for example, a missing certificate), the sale is still saved, the POS shows its usual invoice error, and the error is written on the order so it can be invoiced later from the back office.
+- Point of Sale > Orders gets the filters **Not Invoiced** and **Invoice Failed** next to the standard **Invoiced**, so receipts and invoices can be filtered by date and exported separately for the accountant.
 - The invoice is sent to the SRI by the `account_edi` scheduled job, so a slow or unavailable SRI never stops the cashier.
 
 The OCA modules and their Python libraries are part of the Docker image (`deploy/Dockerfile`). Setup and testing in staging: [docs/sri-einvoicing.md](docs/sri-einvoicing.md).
