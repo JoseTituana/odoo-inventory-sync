@@ -44,3 +44,4 @@ jobs:
           if ($alert.text -notmatch "ERROR" -or -not $alert.host) { throw "alert missing or incomplete" }
           # The reason must be sftp's failure, not the warning about the missing key file.
           if ($alert.text -notmatch "sftp failed") { throw "alert does not give the real reason" }
+          exit 0  # the script's expected exit code 1 must not fail the step
