@@ -53,7 +53,7 @@ class OdooClient:
                 last_error = error
                 if attempt < self.retries - 1:
                     self._sleep(self.backoff * (2**attempt))
-        raise OdooError(f"Connection failed after {self.retries} attempts: {last_error}")
+        raise OdooError(f"No se pudo conectar después de {self.retries} intentos: {last_error}")
 
     def authenticate(self) -> int:
         common = self._proxy_factory("common")
@@ -61,7 +61,7 @@ class OdooClient:
             lambda: common.authenticate(self.db, self.username, self._password, {})
         )
         if not uid:
-            raise OdooError("Authentication failed: check database, user and password.")
+            raise OdooError("No se pudo iniciar sesión: revisa la base de datos, el usuario y la clave de API.")
         self._uid = uid
         return uid
 

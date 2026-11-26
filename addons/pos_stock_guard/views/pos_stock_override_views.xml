@@ -4,7 +4,7 @@
         <field name="name">pos.stock.override.list</field>
         <field name="model">pos.stock.override</field>
         <field name="arch" type="xml">
-            <list create="false" edit="false" delete="false" decoration-danger="not success">
+            <list create="false" edit="false" delete="false" decoration-danger="not success and not offline" decoration-warning="offline">
                 <field name="create_date" string="Date"/>
                 <field name="config_id"/>
                 <field name="session_id" optional="hide"/>
@@ -14,6 +14,7 @@
                 <field name="cashier"/>
                 <field name="employee_id"/>
                 <field name="success"/>
+                <field name="offline"/>
             </list>
         </field>
     </record>
@@ -26,7 +27,9 @@
                 <field name="product_id"/>
                 <field name="employee_id"/>
                 <filter name="authorized" string="Authorized" domain="[('success', '=', True)]"/>
-                <filter name="failed" string="Failed PIN" domain="[('success', '=', False)]"/>
+                <filter name="failed" string="Failed PIN"
+                        domain="[('success', '=', False), ('offline', '=', False)]"/>
+                <filter name="offline" string="Sold offline" domain="[('offline', '=', True)]"/>
             </search>
         </field>
     </record>

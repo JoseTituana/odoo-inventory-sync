@@ -15,11 +15,15 @@ import math
 import re
 import unicodedata
 from dataclasses import dataclass, field
+from datetime import datetime, timezone
 from pathlib import Path
 
 ROLES = ("color", "material", "size")
 REQUIRED_COLUMNS = ("model", "color", "material", "size", "price", "cost", "qty")
 OPTIONAL_COLUMNS = ("category",)
+# Column names as the spreadsheet template shows them, for messages.
+COLUMN_NAMES = {"model": "Modelo", "color": "Color", "material": "Material", "size": "Talla",
+                "price": "Precio", "cost": "Costo", "qty": "Cantidad", "category": "Categoria"}
 
 # Accepted header spellings, compared after normalize_header().
 HEADER_ALIASES = {
@@ -124,7 +128,7 @@ def build_sku(model: str, color_code: str, material_code: str, size: str) -> str
 
 def ean13_check_digit(first12: str) -> int:
     if len(first12) != 12 or not first12.isdigit():
-        raise ValueError("EAN-13 needs exactly 12 digits before the check digit")
+        raise ValueError("un EAN-13 necesita exactamente 12 dígitos antes del dígito de control")
     total = sum(int(d) * (3 if i % 2 else 1) for i, d in enumerate(first12))
     return (10 - total % 10) % 10
 
@@ -132,7 +136,7 @@ def ean13_check_digit(first12: str) -> int:
 def internal_ean13(counter: int) -> str:
     """In-store EAN-13: prefix 2 (reserved for internal use) + 11-digit counter."""
     if not 0 < counter < 10**11:
-        raise ValueError("internal barcode counter out of range")
+        raise ValueError("contador de códigos de barras internos fuera de rango")
     first12 = f"2{counter:011d}"
     return first12 + str(ean13_check_digit(first12))
 
@@ -156,9 +160,9 @@ def size_sort_key(size: str) -> tuple:
 
 def parse_number(value, what: str) -> float:
     if value is None or (isinstance(value, str) and not value.strip()):
-        raise ValueError(f"{what} is empty")
+        raise ValueError(f"{what} está vacío")
     if isinstance(value, bool):
-        raise ValueError(f"{what} is not a number")
+        raise ValueError(f"{what} no es un número")
     if isinstance(value, (int, float)):
         number = float(value)
     else:
@@ -170,11 +174,11 @@ def parse_number(value, what: str) -> float:
         try:
             number = float(text)
         except ValueError:
-            raise ValueError(f"{what} is not a number: {value!r}") from None
+            raise ValueError(f"{what} no es un número: {value!r}") from None
     if not math.isfinite(number):
-        raise ValueError(f"{what} must be a finite number")
+        raise ValueError(f"{what} debe ser un número finito")
     if number < 0:
-        raise ValueError(f"{what} must not be negative")
+        raise ValueError(f"{what} no puede ser negativo")
     return number
 
 
@@ -194,7 +198,7 @@ def _read_xlsx(path: Path) -> list[list]:
     try:
         from openpyxl import load_workbook
     except ImportError:  # pragma: no cover - depends on the environment
-        raise CatalogError("reading .xlsx needs openpyxl: pip install openpyxl") from None
+        raise CatalogError("para leer .xlsx hace falta openpyxl: pip install openpyxl") from None
     workbook = load_workbook(path, read_only=True, data_only=True)
     try:
         sheet = workbook.worksheets[0]
@@ -218,7 +222,26 @@ def read_table(path: str | Path) -> list[list]:
         return _read_xlsx(path)
     if path.suffix.lower() in (".csv", ".txt"):
         return _read_csv(path)
-    raise CatalogError(f"unsupported file type {path.suffix!r}: use .xlsx or .csv")
+    raise CatalogError(f"tipo de archivo no admitido {path.suffix!r}: usa .xlsx o .csv")
+
+
+def file_saved_at(path: str | Path) -> datetime:
+    """When the count was written down: the workbook's own "modified" date
+    (kept when the file is copied), else the file's modification time. UTC."""
+    path = Path(path)
+    if path.suffix.lower() in (".xlsx", ".xlsm"):
+        import openpyxl
+
+        workbook = openpyxl.load_workbook(path, read_only=True)
+        try:
+            modified = workbook.properties.modified
+        finally:
+            workbook.close()
+        if modified:
+            # openpyxl returns the stored UTC time without a timezone.
+            return modified.replace(tzinfo=timezone.utc) if modified.tzinfo is None \
+                else modified.astimezone(timezone.utc)
+    return datetime.fromtimestamp(path.stat().st_mtime, tz=timezone.utc)
 
 
 def load_catalog(path: str | Path) -> tuple[list[CatalogRow], list[str]]:
@@ -228,7 +251,7 @@ def load_catalog(path: str | Path) -> tuple[list[CatalogRow], list[str]]:
     while table and not any(clean(c) for c in table[0]):
         table.pop(0)
     if not table:
-        raise CatalogError("the file is empty")
+        raise CatalogError("el archivo está vacío")
     header_row, data = table[0], table[1:]
     columns: dict[str, int] = {}
     for index, cell in enumerate(header_row):
@@ -237,7 +260,7 @@ def load_catalog(path: str | Path) -> tuple[list[CatalogRow], list[str]]:
             columns[name] = index
     missing = [c for c in REQUIRED_COLUMNS if c not in columns]
     if missing:
-        raise CatalogError(f"missing columns: {', '.join(missing)}")
+        raise CatalogError(f"faltan columnas: {', '.join(COLUMN_NAMES[c] for c in missing)}")
 
     rows: list[CatalogRow] = []
     errors: list[str] = []
@@ -253,17 +276,18 @@ def load_catalog(path: str | Path) -> tuple[list[CatalogRow], list[str]]:
             for what, value in (("model", model), ("color", color),
                                 ("material", material), ("size", size)):
                 if not value:
-                    raise ValueError(f"{what} is empty")
-            price = round(parse_number(cells["price"], "price"), 2)
-            cost = round(parse_number(cells["cost"], "cost"), 2)
-            qty_value = parse_number(cells["qty"], "qty")
+                    raise ValueError(f"{COLUMN_NAMES[what]} está vacío")
+            price = round(parse_number(cells["price"], COLUMN_NAMES["price"]), 2)
+            cost = round(parse_number(cells["cost"], COLUMN_NAMES["cost"]), 2)
+            qty_value = parse_number(cells["qty"], COLUMN_NAMES["qty"])
             if not qty_value.is_integer():
-                raise ValueError(f"qty must be a whole number of pairs: {cells['qty']!r}")
+                raise ValueError(f"Cantidad debe ser un número entero de pares: {cells['qty']!r}")
             identity = (key(model), key(color), key(material), key(size))
             if identity in seen:
-                raise ValueError(f"same model, color, material and size as line {seen[identity]}")
+                raise ValueError("mismo modelo, color, material y talla que la línea "
+                                 f"{seen[identity]}")
         except ValueError as error:
-            errors.append(f"line {line}: {error}")
+            errors.append(f"línea {line}: {error}")
             continue
         seen[identity] = line
         rows.append(CatalogRow(line, model, color, material, size, price, cost,
@@ -287,16 +311,16 @@ def build_plans(rows: list[CatalogRow]) -> tuple[list[ModelPlan], list[str]]:
             plans[model_key] = plan
             first_line[model_key] = row.line
         else:
-            where = f"line {row.line}: model {row.model}"
+            where = f"línea {row.line}: el modelo {row.model}"
             if row.price != plan.price:
-                errors.append(f"{where} has price {row.price}, but line "
-                              f"{first_line[model_key]} has {plan.price}")
+                errors.append(f"{where} tiene precio {row.price}, pero la línea "
+                              f"{first_line[model_key]} tiene {plan.price}")
             if row.cost != plan.cost:
-                errors.append(f"{where} has cost {row.cost}, but line "
-                              f"{first_line[model_key]} has {plan.cost}")
+                errors.append(f"{where} tiene costo {row.cost}, pero la línea "
+                              f"{first_line[model_key]} tiene {plan.cost}")
             if row.category and plan.category and key(row.category) != key(plan.category):
-                errors.append(f"{where} has category {row.category!r}, but line "
-                              f"{first_line[model_key]} has {plan.category!r}")
+                errors.append(f"{where} tiene categoría {row.category!r}, pero la línea "
+                              f"{first_line[model_key]} tiene {plan.category!r}")
             plan.category = plan.category or row.category
         for role in ROLES:
             value = getattr(row, role)

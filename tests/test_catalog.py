@@ -1,12 +1,15 @@
 import itertools
+from datetime import datetime, timezone
 
 import pytest
 from openpyxl import Workbook
 
 from odoo_inventory_sync.catalog import (CatalogError, abbreviations, build_plans, build_sku,
                                          ean13_check_digit, internal_counter, internal_ean13,
-                                         load_catalog, parse_number, parse_size)
-from odoo_inventory_sync.catalog_sync import CatalogSyncError, import_catalog
+                                         file_saved_at, load_catalog, parse_number,
+                                         parse_size)
+from odoo_inventory_sync.catalog_sync import (CatalogSyncError, changes_since_count,
+                                              import_catalog)
 
 HEADER = ["Modelo", "Color", "Material", "Talla", "Precio", "Costo", "Cantidad", "Categoria"]
 
@@ -91,12 +94,12 @@ def test_load_catalog_reports_row_errors(tmp_path):
     rows, errors = load_catalog(path)
     assert len(rows) == 1
     assert len(errors) == 3
-    assert "line 2" in errors[0] and "line 3" in errors[0]
+    assert "línea 2" in errors[0] and "línea 3" in errors[0]
 
 
 def test_load_catalog_requires_columns(tmp_path):
     path = write_xlsx(tmp_path, [["Marina"]], header=["Modelo"])
-    with pytest.raises(CatalogError, match="missing columns"):
+    with pytest.raises(CatalogError, match="faltan columnas"):
         load_catalog(path)
 
 
@@ -113,7 +116,7 @@ def test_build_plans_groups_case_insensitively_and_checks_price(tmp_path):
     assert plan.values["color"] == ["Negro", "miel"]
     assert plan.values["size"] == ["36", "38", "40"]
     assert plan.variant_count == 2 * 1 * 3 and plan.pairs == 8
-    assert len(errors) == 1 and "price" in errors[0]
+    assert len(errors) == 1 and "precio" in errors[0]
 
 
 # ------------------------------------------------------------- import with fake Odoo
@@ -131,6 +134,7 @@ class FakeGateway:
         self.products = {}     # id -> dict
         self.stock = {}        # (product, location) -> qty
         self.writes = []
+        self.moves = []        # dicts shaped like stock.move search_read rows
 
     # helpers for tests
     def add_attribute(self, name, mode="always"):
@@ -229,6 +233,10 @@ class FakeGateway:
     def on_hand(self, product_ids, location_id):
         return {p: self.stock[(p, location_id)] for p in product_ids if (p, location_id) in self.stock}
 
+    def moves_since(self, product_ids, location_id, since):
+        self.moves_query = (sorted(product_ids), location_id, since)
+        return [m for m in self.moves if m["product_id"][0] in product_ids]
+
     def set_quantities(self, quantities, location_id):
         self.writes.append(("stock", dict(quantities)))
         for product_id, qty in quantities.items():
@@ -324,7 +332,7 @@ def test_model_with_other_attributes_is_skipped_not_recreated(tmp_path):
         (0, 0, {"attribute_id": color, "value_ids": [(6, 0, [negro])]})]})
     variants_before = dict(gw.products)
     result = import_catalog(gw, plans_from(tmp_path, MARINA))
-    assert len(result.errors) == 1 and "attributes" in result.errors[0]
+    assert len(result.errors) == 1 and "atributos" in result.errors[0]
     assert gw.products == variants_before
 
 
@@ -333,7 +341,7 @@ def test_archived_product_with_same_name_is_reported(tmp_path):
     import_catalog(gw, plans_from(tmp_path, MARINA))
     next(iter(gw.templates.values()))["active"] = False
     result = import_catalog(gw, plans_from(tmp_path, MARINA))
-    assert len(result.errors) == 1 and "archived" in result.errors[0]
+    assert len(result.errors) == 1 and "archivado" in result.errors[0]
     assert len(gw.templates) == 1
 
 
@@ -364,3 +372,76 @@ def test_existing_model_is_made_available_in_pos(tmp_path):
     result = import_catalog(gw, plans_from(tmp_path, MARINA))
     assert result.models_updated == ["Marina"]
     assert template["available_in_pos"] is True
+
+
+def sku_id(gw, sku):
+    return next(i for i, v in gw.products.items() if v["default_code"] == sku)
+
+
+def test_variant_missing_from_a_recount_is_set_to_zero(tmp_path):
+    gw = FakeGateway()
+    import_catalog(gw, plans_from(tmp_path, MARINA))      # Negro 39 has 3 pairs
+    recount = [MARINA[0], MARINA[2]]                       # Negro 39 not written down
+    result = import_catalog(gw, plans_from(tmp_path, recount))
+    assert result.stock_changes == ["Marina Negro/Cuero/39: 3 -> 0 (no está en el archivo)"]
+    assert gw.stock[(sku_id(gw, "MARINA-NEG-CUE-39"), 8)] == 0
+
+
+def test_recount_leaves_models_not_in_the_file_alone(tmp_path):
+    gw = FakeGateway()
+    escolar = [["Escolar", "Negro", "Cuero", 30, 32, 19, 4, "Calzado / Nino"]]
+    import_catalog(gw, plans_from(tmp_path, MARINA + escolar))
+    result = import_catalog(gw, plans_from(tmp_path, MARINA))
+    assert result.stock_changes == []
+    assert gw.stock[(sku_id(gw, "ESCOLAR-NEG-CUE-30"), 8)] == 4
+
+
+def test_changes_since_count_reports_sales_after_the_count(tmp_path):
+    gw = FakeGateway()
+    import_catalog(gw, plans_from(tmp_path, MARINA))
+    shoe = sku_id(gw, "MARINA-NEG-CUE-38")
+    gw.moves = [
+        {"product_id": [shoe, "x"], "quantity": 2, "location_id": [8, "x"],
+         "location_dest_id": [9, "Customers"], "reference": "Shop/POS/0001"},
+        {"product_id": [shoe, "x"], "quantity": 1, "location_id": [9, "Customers"],
+         "location_dest_id": [8, "x"], "reference": "Shop/POS/0002"},
+    ]
+    since = datetime(2026, 11, 27, 2, 0, tzinfo=timezone.utc)
+    lines = changes_since_count(gw, plans_from(tmp_path, MARINA), since)
+    assert lines == ["MARINA-NEG-CUE-38: -1 desde el conteo (Shop/POS/0001, Shop/POS/0002)"]
+    assert gw.moves_query[1:] == (8, "2026-11-27 02:00:00")
+
+
+def test_changes_since_count_is_empty_for_new_models(tmp_path):
+    gw = FakeGateway()
+    since = datetime(2026, 11, 27, tzinfo=timezone.utc)
+    assert changes_since_count(gw, plans_from(tmp_path, MARINA), since) == []
+
+
+def test_file_saved_at_reads_the_workbook_date_not_the_file_time(tmp_path):
+    import os
+    from openpyxl import load_workbook
+
+    path = tmp_path / "conteo.xlsx"
+    Workbook().save(path)
+    os.utime(path, (0, 0))                       # a copy can change the file time
+    stored = load_workbook(path).properties.modified
+    assert file_saved_at(path) == stored.replace(tzinfo=timezone.utc)
+
+
+def test_file_saved_at_falls_back_to_the_file_time_for_csv(tmp_path):
+    import os
+
+    path = tmp_path / "conteo.csv"
+    path.write_text("x")
+    os.utime(path, (1795000000, 1795000000))
+    assert file_saved_at(path) == datetime.fromtimestamp(1795000000, tz=timezone.utc)
+
+
+def test_counted_at_option_accepts_date_and_time():
+    from odoo_inventory_sync.cli import _parse_counted_at
+
+    assert _parse_counted_at("2026-11-27 21:30").strftime("%Y-%m-%d %H:%M") == "2026-11-27 21:30"
+    assert _parse_counted_at("2026-11-27").tzinfo is not None
+    with pytest.raises(ValueError):
+        _parse_counted_at("27/11/2026")
