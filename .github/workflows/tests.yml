@@ -34,7 +34,10 @@ jobs:
           if (-not (Test-Path "$t\settings\.env")) { throw "settings file missing" }
           $env:APPDATA = "$t\appdata"
           Copy-Item -Recurse "$t\settings" "$env:APPDATA\odoo-sync"
+          # PowerShell 5.1 turns redirected stderr into errors; this call is expected to fail.
+          $ErrorActionPreference = "Continue"
           $out = & "$t\app\venv\Scripts\odoo-sync.exe" labels --dry-run 2>&1 | Out-String
+          $ErrorActionPreference = "Stop"
           Write-Host $out
           if ($out -notmatch "Faltan datos de conexi") { throw "expected the missing-settings message" }
           # Running it again must keep the settings and succeed.
