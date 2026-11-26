@@ -10,8 +10,20 @@
 # keep those passwords in the password manager.
 #
 # Run as root, normally from /etc/cron.d/odoo-backup.
+#
+# Alerts (optional), set in /etc/default/odoo-backup (root, 600):
+#   ALERT_URL=https://...      gets a JSON POST {"text": ..., "host": ...}
+#                              when a backup fails (an n8n webhook that
+#                              forwards to Telegram/WhatsApp/email, for example)
+#   HEARTBEAT_URL=https://...  pinged after every good backup, and at
+#                              HEARTBEAT_URL/fail after a bad one (Healthchecks.io
+#                              style), so a backup that never ran also alerts
 set -euo pipefail
 umask 027
+
+CONFIG_FILE="${CONFIG_FILE:-/etc/default/odoo-backup}"
+# shellcheck source=/dev/null
+[ -r "$CONFIG_FILE" ] && . "$CONFIG_FILE"
 
 BACKUP_DIR="${BACKUP_DIR:-/opt/backups}"
 KEEP_DAYS="${KEEP_DAYS:-7}"
@@ -23,12 +35,47 @@ N8N_DATA="${N8N_DATA:-/var/lib/docker/volumes/n8n_n8n_data/_data}"
 # Group allowed to read finished bundles (the read-only pull user).
 READ_GROUP="${READ_GROUP:-bkpull}"
 MIN_FREE_MB="${MIN_FREE_MB:-1024}"
+LOCK_FILE="${LOCK_FILE:-/run/lock/odoo-backup.lock}"
+ALERT_URL="${ALERT_URL:-}"
+HEARTBEAT_URL="${HEARTBEAT_URL:-}"
 
 log() { echo "$(date '+%F %T') $*"; }
-fail() { log "ERROR: $*"; exit 1; }
+error=""
+fail() { error="$*"; log "ERROR: $*"; exit 1; }
+# Any other failing command (set -e) is reported with its line.
+trap 'error="${error:-line $LINENO: $BASH_COMMAND}"' ERR
+
+alert() {
+    [ -n "$ALERT_URL" ] || return 0
+    local body
+    body=$(python3 -c 'import json, sys; print(json.dumps({"text": sys.argv[1], "host": sys.argv[2]}))' \
+        "$1" "$(hostname)")
+    curl -fsS -m 20 --retry 2 -H 'Content-Type: application/json' -d "$body" "$ALERT_URL" >/dev/null \
+        || log "WARNING: could not send the alert"
+}
+
+heartbeat() {
+    [ -n "$HEARTBEAT_URL" ] || return 0
+    curl -fsS -m 20 --retry 2 "$HEARTBEAT_URL$1" >/dev/null || log "WARNING: could not ping the heartbeat"
+}
+
+work=""
+partial=""
+finish() {
+    local status=$?
+    [ -z "$work" ] || rm -rf "$work"
+    [ -z "$partial" ] || rm -f "$partial"
+    if [ "$status" -ne 0 ]; then
+        alert "Respaldo de Odoo FALLÓ en $(hostname): ${error:-exit $status}. Revisa /var/log/odoo-backup.log"
+        heartbeat /fail
+    else
+        heartbeat ""
+    fi
+}
+trap finish EXIT
 
 # Only one backup at a time.
-exec 9>/run/lock/odoo-backup.lock
+exec 9>"$LOCK_FILE"
 flock -n 9 || fail "another backup is already running"
 
 mkdir -p "$BACKUP_DIR"
@@ -38,7 +85,7 @@ free_mb=$(df -Pm "$BACKUP_DIR" | awk 'NR==2 {print $4}')
 stamp=$(date '+%F_%H%M')
 name="backup-$stamp"
 work=$(mktemp -d "$BACKUP_DIR/.work-XXXXXX")
-trap 'rm -rf "$work" "$BACKUP_DIR/$name.tar.gz.partial"' EXIT
+partial="$BACKUP_DIR/$name.tar.gz.partial"
 
 log "starting $name"
 

@@ -1,0 +1,47 @@
+name: powershell
+on: [push, pull_request]
+jobs:
+  # The store PCs run Windows PowerShell 5.1: check every script there.
+  scripts:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Parse every .ps1
+        shell: powershell
+        run: |
+          $bad = 0
+          Get-ChildItem -Recurse -Filter *.ps1 | ForEach-Object {
+            $errors = $null
+            [System.Management.Automation.Language.Parser]::ParseFile($_.FullName, [ref]$null, [ref]$errors) | Out-Null
+            foreach ($e in $errors) { Write-Host "$($_.Name):$($e.Extent.StartLineNumber) $($e.Message)"; $bad++ }
+          }
+          if ($bad) { exit 1 }
+      - name: pull-backups.ps1 sends an alert when the server cannot be reached
+        shell: powershell
+        run: |
+          $port = 8765
+          $listener = Start-Job -ArgumentList $port -ScriptBlock {
+            param($port)
+            $l = New-Object System.Net.HttpListener
+            $l.Prefixes.Add("http://127.0.0.1:$port/")
+            $l.Start()
+            $ctx = $l.GetContext()
+            $body = (New-Object System.IO.StreamReader($ctx.Request.InputStream, [Text.Encoding]::UTF8)).ReadToEnd()
+            $ctx.Response.StatusCode = 200
+            $ctx.Response.Close()
+            $l.Stop()
+            $body
+          }
+          Start-Sleep -Seconds 2
+          $dest = Join-Path $env:RUNNER_TEMP "respaldos"
+          & powershell -NoProfile -ExecutionPolicy Bypass -File .\deploy\backup\pull-backups.ps1 `
+              -HostName 127.0.0.1 -Port 9 -Destination $dest -AlertUrl "http://127.0.0.1:$port/alert"
+          $code = $LASTEXITCODE
+          $body = Wait-Job $listener -Timeout 30 | Receive-Job
+          Write-Host "exit $code, alert: $body"
+          if ($code -ne 1) { throw "expected exit code 1" }
+          $alert = $body | ConvertFrom-Json
+          if ($alert.text -notmatch "ERROR" -or -not $alert.host) { throw "alert missing or incomplete" }
+          # The reason must be sftp's failure, not the warning about the missing key file.
+          if ($alert.text -notmatch "sftp failed") { throw "alert does not give the real reason" }
+          exit 0  # the script's expected exit code 1 must not fail the step
