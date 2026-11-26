@@ -12,6 +12,7 @@
      customer pays the shelf price (VAT inside) and the stock goes down;
    - out of stock: Cancel removes the pair; a wrong PIN is refused; the
      manager's PIN authorizes it, and both attempts are logged;
+   - a quantity typed on the numpad above the stock is caught at Payment;
    - offline: a pair within the last downloaded stock is sold, a second one is
      blocked; back online, the sale reaches Odoo marked "sold offline";
 4. fails if Odoo logs an error while the till is used.
