@@ -96,7 +96,11 @@ if (-not $NoEditor) {
     Start-Process notepad.exe $settings
 }
 
-& $exe catalog --help | Select-Object -First 1
+# Check that the command starts (piping into Select-Object -First would cut it
+# off and leave a failed exit code behind).
+$help = & $exe catalog --help
+if ($LASTEXITCODE -ne 0) { throw "odoo-sync no arranca" }
+Write-Host $help[0]
 Write-Host ""
 Write-Host "Listo. Después de llenar $settings prueba en una ventana nueva:"
 Write-Host "  odoo-sync labels --dry-run"
