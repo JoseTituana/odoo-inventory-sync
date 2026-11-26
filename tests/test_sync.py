@@ -54,14 +54,14 @@ def test_load_rows_reports_bad_lines_and_duplicates(tmp_path):
     rows, errors = load_rows(path)
     assert [r.sku for r in rows] == ["A1"]
     assert len(errors) == 4
-    assert any("duplicate" in e for e in errors)
+    assert any("repetido" in e for e in errors)
 
 
 def test_load_rows_reports_short_rows(tmp_path):
     path = write_csv(tmp_path, "sku,name,price,qty\nA1,Shoe,25,1\nB2,Short\n")
     rows, errors = load_rows(path)
     assert [r.sku for r in rows] == ["A1"]
-    assert errors == ["line 3: missing values for price, qty"]
+    assert errors == ["línea 3: faltan valores en price, qty"]
 
 
 @pytest.mark.parametrize(
@@ -71,7 +71,7 @@ def test_load_rows_rejects_non_finite_numbers(tmp_path, price, qty):
     path = write_csv(tmp_path, f"sku,name,price,qty\nA1,Shoe,{price},{qty}\n")
     rows, errors = load_rows(path)
     assert rows == []
-    assert errors == ["line 2: price and qty must be finite numbers"]
+    assert errors == ["línea 2: price y qty deben ser números finitos"]
 
 
 def test_load_rows_accepts_utf8_bom(tmp_path):
@@ -85,7 +85,7 @@ def test_load_rows_accepts_utf8_bom(tmp_path):
 
 def test_load_rows_missing_columns(tmp_path):
     path = write_csv(tmp_path, "sku,name\nA1,Shoe\n")
-    with pytest.raises(ValueError, match="missing columns"):
+    with pytest.raises(ValueError, match="faltan columnas"):
         load_rows(path)
 
 

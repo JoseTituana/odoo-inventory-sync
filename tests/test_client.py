@@ -36,7 +36,7 @@ def test_authenticate_success():
 
 
 def test_authenticate_rejected_credentials():
-    with pytest.raises(OdooError, match="Authentication failed"):
+    with pytest.raises(OdooError, match="No se pudo iniciar sesión"):
         make_client(FakeProxy(auth_result=False)).authenticate()
 
 
@@ -48,7 +48,7 @@ def test_network_errors_are_retried_then_succeed():
 
 def test_gives_up_after_retries():
     proxy = FakeProxy(fail_times=10)
-    with pytest.raises(OdooError, match="after 2 attempts"):
+    with pytest.raises(OdooError, match="después de 2 intentos"):
         make_client(proxy, retries=2).authenticate()
     assert proxy.attempts == 2
 

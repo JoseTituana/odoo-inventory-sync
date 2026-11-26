@@ -94,12 +94,12 @@ def test_load_catalog_reports_row_errors(tmp_path):
     rows, errors = load_catalog(path)
     assert len(rows) == 1
     assert len(errors) == 3
-    assert "line 2" in errors[0] and "line 3" in errors[0]
+    assert "línea 2" in errors[0] and "línea 3" in errors[0]
 
 
 def test_load_catalog_requires_columns(tmp_path):
     path = write_xlsx(tmp_path, [["Marina"]], header=["Modelo"])
-    with pytest.raises(CatalogError, match="missing columns"):
+    with pytest.raises(CatalogError, match="faltan columnas"):
         load_catalog(path)
 
 
@@ -116,7 +116,7 @@ def test_build_plans_groups_case_insensitively_and_checks_price(tmp_path):
     assert plan.values["color"] == ["Negro", "miel"]
     assert plan.values["size"] == ["36", "38", "40"]
     assert plan.variant_count == 2 * 1 * 3 and plan.pairs == 8
-    assert len(errors) == 1 and "price" in errors[0]
+    assert len(errors) == 1 and "precio" in errors[0]
 
 
 # ------------------------------------------------------------- import with fake Odoo
@@ -332,7 +332,7 @@ def test_model_with_other_attributes_is_skipped_not_recreated(tmp_path):
         (0, 0, {"attribute_id": color, "value_ids": [(6, 0, [negro])]})]})
     variants_before = dict(gw.products)
     result = import_catalog(gw, plans_from(tmp_path, MARINA))
-    assert len(result.errors) == 1 and "attributes" in result.errors[0]
+    assert len(result.errors) == 1 and "atributos" in result.errors[0]
     assert gw.products == variants_before
 
 
@@ -341,7 +341,7 @@ def test_archived_product_with_same_name_is_reported(tmp_path):
     import_catalog(gw, plans_from(tmp_path, MARINA))
     next(iter(gw.templates.values()))["active"] = False
     result = import_catalog(gw, plans_from(tmp_path, MARINA))
-    assert len(result.errors) == 1 and "archived" in result.errors[0]
+    assert len(result.errors) == 1 and "archivado" in result.errors[0]
     assert len(gw.templates) == 1
 
 
@@ -383,7 +383,7 @@ def test_variant_missing_from_a_recount_is_set_to_zero(tmp_path):
     import_catalog(gw, plans_from(tmp_path, MARINA))      # Negro 39 has 3 pairs
     recount = [MARINA[0], MARINA[2]]                       # Negro 39 not written down
     result = import_catalog(gw, plans_from(tmp_path, recount))
-    assert result.stock_changes == ["Marina Negro/Cuero/39: 3 -> 0 (not in the file)"]
+    assert result.stock_changes == ["Marina Negro/Cuero/39: 3 -> 0 (no está en el archivo)"]
     assert gw.stock[(sku_id(gw, "MARINA-NEG-CUE-39"), 8)] == 0
 
 
@@ -408,7 +408,7 @@ def test_changes_since_count_reports_sales_after_the_count(tmp_path):
     ]
     since = datetime(2026, 11, 27, 2, 0, tzinfo=timezone.utc)
     lines = changes_since_count(gw, plans_from(tmp_path, MARINA), since)
-    assert lines == ["MARINA-NEG-CUE-38: -1 since the count (Shop/POS/0001, Shop/POS/0002)"]
+    assert lines == ["MARINA-NEG-CUE-38: -1 desde el conteo (Shop/POS/0001, Shop/POS/0002)"]
     assert gw.moves_query[1:] == (8, "2026-11-27 02:00:00")
 
 

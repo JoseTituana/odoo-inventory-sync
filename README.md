@@ -12,6 +12,8 @@ Tools that run a footwear business on a self-hosted [Odoo 19](https://www.odoo.c
 
 It comes from a real use case: Calzado Josheps, a shoe factory with its own store.
 
+Everything users see is in Spanish: the command line messages and help, and the module's point of sale dialogs, report and menu (`i18n/es.po`, used when the Odoo user's language is any Spanish variant).
+
 ## Install
 
 ```bash
