@@ -64,6 +64,9 @@ for field, version in (
 ):
     if not company[field]:
         change(company, {field: version}, "Company")
+if company.point_of_sale_use_ticket_qr_code:
+    # The receipt QR lets customers invoice a receipt themselves.
+    change(company, {"point_of_sale_use_ticket_qr_code": False}, "Company (receipt QR for self-invoicing)")
 if not company.vat:
     todo.append("Company: RUC is empty (Settings > Companies).")
 if not company.partner_id.street:

@@ -137,6 +137,12 @@ class TestPosSri(TestL10nECEdiCommon):
         self.assertTrue(edi_doc._l10n_ec_action_check_xsd(xml_string))  # SRI schema
         return etree.fromstring(xml_string.encode() if isinstance(xml_string, str) else xml_string)
 
+    def test_post_init_turns_off_receipt_self_invoicing(self):
+        from odoo.addons.l10n_ec_pos_sri import _l10n_ec_pos_sri_post_init
+        self.company.point_of_sale_use_ticket_qr_code = True
+        _l10n_ec_pos_sri_post_init(self.env)
+        self.assertFalse(self.company.point_of_sale_use_ticket_qr_code)
+
     def test_default_sri_payment_methods(self):
         self.assertEqual(self.cash_method.l10n_ec_sri_payment_id, self.env.ref("l10n_ec.P1"))
         self.assertEqual(self.bank_method.l10n_ec_sri_payment_id, self.env.ref("l10n_ec.P20"))

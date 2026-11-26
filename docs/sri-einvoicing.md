@@ -14,6 +14,12 @@ Only orders the cashier marks as **Invoice** become electronic invoices, all und
 
 Sending to the SRI happens after the invoice is posted, in the `account_edi` scheduled job ("EDI: Perform web services operations"). If the SRI is down, the job retries; the cashier never waits for it.
 
+Other rules `l10n_ec_pos_sri` enforces:
+
+- Receipts do not print the "Need an invoice?" QR code, so customers cannot invoice a receipt themselves from the web.
+- A return of an invoiced sale, marked as Invoice, becomes a credit note of that invoice. A return of a receipt, or of an invoice to Consumidor Final, cannot become a credit note: the return is saved and the order says why.
+- Invoice lines are sent without IVA and after the discount, so they add up for the SRI when shelf prices include IVA (the OCA 19.0.1.0.0.2 module sends the IVA-included price and the amount before the discount).
+
 Not covered by the OCA 19.0 modules: issuing withholdings (`l10n_ec_withhold` only exists for 17.0) and delivery guides. Issue those with the SRI's online invoicer if needed.
 
 ## 1. Server: build the new image

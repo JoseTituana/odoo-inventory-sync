@@ -22,8 +22,9 @@ patch(OrderPaymentValidation.prototype, {
                 body: _t(
                     "An electronic invoice needs the customer's cédula, RUC or passport number."
                 ),
+                confirmLabel: _t("Add it"),
+                confirm: () => this.pos.editPartner(partner),
             });
-            this.pos.editPartner(partner);
             return false;
         }
         const finalConsumerId = this.pos.config._l10n_ec_final_consumer_id;
