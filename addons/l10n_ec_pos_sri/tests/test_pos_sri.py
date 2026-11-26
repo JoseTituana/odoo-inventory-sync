@@ -154,3 +154,32 @@ class TestPosSri(TestL10nECEdiCommon):
         invoice_failed = orders.search(self._filter_domain("invoice_failed"))
         self.assertIn(failed, invoice_failed)
         self.assertNotIn(receipt, invoice_failed)
+
+    def test_invoice_xml_with_tax_included_prices(self):
+        """Shelf prices include IVA: a 32.00 shoe is invoiced at 32.00."""
+        self._setup_edi_company_ec()
+        # The chart's own "IVA 15% goods" sale tax, as the store will use it.
+        iva15 = self.env["account.chart.template"].with_company(self.company).ref(
+            "tax_vat_15_411_goods")
+        # _setup_edi_company_ec() turns the default sale tax into a 12% one;
+        # put back what l10n_ec_base loads for IVA 15%.
+        iva15.write({
+            "price_include_override": "tax_included",
+            "l10n_ec_xml_fe_code": "4",
+            "tax_group_id": self.TaxGroup.search([("l10n_ec_type", "=", "vat15")], limit=1).id,
+        })
+        self.shoe.taxes_id = iva15
+        order = self._sync_order(partner=self.partner_dni, price=32.0)
+        invoice = order.account_move
+        self.assertTrue(invoice, order.message_ids.mapped("body"))
+        self.assertAlmostEqual(invoice.amount_total, 32.0)
+        self.assertAlmostEqual(invoice.amount_tax, 4.17)
+        edi_doc = invoice.edi_document_ids.filtered(
+            lambda d: d.edi_format_id.code == "l10n_ec_format_sri")
+        xml_string = edi_doc._l10n_ec_render_xml_edi()
+        self.assertTrue(edi_doc._l10n_ec_action_check_xsd(xml_string))  # SRI schema
+        xml = etree.fromstring(xml_string.encode() if isinstance(xml_string, str) else xml_string)
+        self.assertAlmostEqual(float(xml.findtext(".//infoFactura/importeTotal")), 32.0)
+        self.assertAlmostEqual(float(xml.findtext(".//infoFactura/totalSinImpuestos")), 27.83)
+        self.assertAlmostEqual(float(xml.findtext(".//totalConImpuestos/totalImpuesto/valor")), 4.17)
+        self.assertEqual(xml.findtext(".//totalConImpuestos/totalImpuesto/codigoPorcentaje"), "4")
