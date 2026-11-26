@@ -22,7 +22,7 @@ from typing import Any
 
 from .client import OdooError
 from .catalog import (ROLES, ModelPlan, abbreviations, build_sku, internal_counter,
-                      internal_ean13, key, size_sort_key)
+                      internal_ean13, key, loose_key, size_sort_key)
 
 ATTRIBUTE_NAMES = {"color": "Color", "material": "Material", "size": "Talla"}
 
@@ -115,6 +115,11 @@ class OdooCatalogGateway:
             fields.append("available_in_pos")
         return self._search_read("product.template", [["name", "=ilike", _escape_like(name)]],
                                  fields, archived=True)
+
+    def template_names(self) -> list[str]:
+        """Names of every product template, archived ones included."""
+        rows = self._search_read("product.template", [], ["name"], archived=True)
+        return [row["name"] for row in rows]
 
     def create_template(self, values):
         return self.client.create("product.template", values)
@@ -251,6 +256,17 @@ def import_catalog(gw, plans: list[ModelPlan], dry_run: bool = False,
                    location_id: int | None = None) -> CatalogResult:
     result = CatalogResult()
 
+    # 0. A model in the file that Odoo already has with other accents
+    #    ('Escolar Clasico' vs 'Escolar Clásico') would become a second
+    #    product with the same codes: stop before writing anything.
+    existing_models = {loose_key(n): n for n in gw.template_names()}
+    clashes = [
+        f"el modelo {plan.name!r} ya existe en Odoo como {existing_models[loose_key(plan.name)]!r}"
+        for plan in plans
+        if loose_key(plan.name) in existing_models
+        and key(plan.name) != key(existing_models[loose_key(plan.name)])
+    ]
+
     # 1. Attributes must create variants instantly, or stock cannot be tracked per size.
     attribute_ids: dict[str, int | None] = {}
     for role in ROLES:
@@ -265,22 +281,40 @@ def import_catalog(gw, plans: list[ModelPlan], dry_run: bool = False,
                     f"Atributos.")
             attribute_ids[role] = attribute_id
         else:
-            attribute_ids[role] = None if dry_run else gw.create_attribute(name)
+            attribute_ids[role] = None  # created below, once the file is known to be fine
             result.attributes_created.append(name)
 
     # 2. Attribute values: reuse case-insensitively, create the missing ones.
+    #    A value Odoo has with other accents ('Cafe' vs 'Café') is refused.
     value_ids: dict[str, dict[str, int | None]] = {}
     value_names: dict[int, str] = {}
+    wanted_by_role: dict[str, dict[str, str]] = {}
     for role in ROLES:
         existing = gw.attribute_values(attribute_ids[role]) if attribute_ids[role] else []
         value_ids[role] = {}
+        loose = {}
         for row in existing:
             value_ids[role].setdefault(key(row["name"]), row["id"])
             value_names[row["id"]] = row["name"]
+            loose.setdefault(loose_key(row["name"]), row["name"])
         wanted: dict[str, str] = {}
         for plan in plans:
             for name in plan.values[role]:
                 wanted.setdefault(key(name), name)
+        wanted_by_role[role] = wanted
+        for value_key, name in wanted.items():
+            if value_key not in value_ids[role] and loose_key(name) in loose:
+                clashes.append(f"{ATTRIBUTE_NAMES[role]} {name!r} ya existe en Odoo como "
+                               f"{loose[loose_key(name)]!r}")
+    if clashes:
+        raise CatalogSyncError(
+            "; ".join(clashes) + ". Escribe el nombre tal como está en Odoo (con o sin tildes).")
+    if not dry_run:
+        for role in ROLES:
+            if attribute_ids[role] is None:
+                attribute_ids[role] = gw.create_attribute(ATTRIBUTE_NAMES[role])
+    for role in ROLES:
+        wanted = wanted_by_role[role]
         for value_key, name in sorted(wanted.items(), key=lambda kv: size_sort_key(kv[1])):
             if value_key in value_ids[role]:
                 continue
