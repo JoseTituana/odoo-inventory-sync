@@ -1,4 +1,5 @@
-# Odoo 19 Community + PostgreSQL 16, sized for a small shared server.
+# Odoo 19 Community (plus the Ecuadorian e-invoicing modules, see Dockerfile)
+# + PostgreSQL 16, sized for a small shared server.
 # Odoo listens on localhost only; a reverse proxy (Caddy) provides HTTPS.
 services:
   db:
@@ -15,7 +16,8 @@ services:
     restart: unless-stopped
 
   odoo:
-    image: odoo:19
+    build: .
+    image: odoo-josheps:19
     depends_on:
       - db
     ports:
@@ -31,7 +33,8 @@ services:
   # reach it through an SSH tunnel (ssh -N -L 8070:127.0.0.1:8070 server).
   # Its database user can only connect to jats_staging.
   odoo-staging:
-    image: odoo:19
+    build: .
+    image: odoo-josheps:19
     depends_on:
       - db
     ports:

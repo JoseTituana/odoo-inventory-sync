@@ -1,0 +1,28 @@
+name: odoo-modules
+on: [push, pull_request]
+jobs:
+  odoo-tests:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: odoo
+          POSTGRES_PASSWORD: odoo
+          POSTGRES_DB: postgres
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd pg_isready --health-interval 5s --health-timeout 5s --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      # The same image the server runs: Odoo 19 + OCA Ecuador e-invoicing.
+      - run: docker build -t odoo-josheps:19 deploy
+      - name: Odoo tests (our modules and the OCA modules they rely on)
+        run: |
+          docker run --rm --network host -v "$PWD/addons:/mnt/extra-addons:ro" odoo-josheps:19 \
+            odoo --db_host=localhost --db_user=odoo --db_password=odoo \
+            --addons-path=/mnt/extra-addons,/mnt/oca-addons,/usr/lib/python3/dist-packages/odoo/addons \
+            -d ci -i pos_stock_guard,l10n_ec_pos_sri \
+            --test-tags /pos_stock_guard,/l10n_ec_pos_sri,/l10n_ec_account_edi \
+            --stop-after-init --log-level=test 2>&1 | tee odoo-test.log
+          grep -q "odoo.tests.result: 0 failed, 0 error(s)" odoo-test.log

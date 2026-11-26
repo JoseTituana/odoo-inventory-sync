@@ -7,6 +7,7 @@ Tools that run a footwear business on a self-hosted [Odoo 19](https://www.odoo.c
 - **Catalog import:** a spreadsheet of models, colors, materials and sizes becomes Odoo product variants with SKUs, internal EAN-13 barcodes and counted stock, in one run.
 - **Stock-based labels:** one label per pair actually in stock, as a PDF for adhesive A4/Letter sheets or a thermal roll. Odoo itself only prints labels per product or per received quantity.
 - **POS stock guard:** an Odoo module that blocks point of sale sales of out-of-stock variants unless a manager authorizes them with a PIN.
+- **Ecuadorian electronic invoices from the POS:** a bridge between the point of sale and the free OCA module `l10n_ec_account_edi`, which signs invoices and sends them to the SRI. No paid provider.
 - **Simple product sync:** the original CSV sync for products without variants.
 - **Deployment:** Odoo + PostgreSQL with Docker Compose behind Caddy, nightly backups with an off-server copy, and an isolated staging Odoo.
 
@@ -81,6 +82,19 @@ Install: copy the folder to the Odoo addons path, restart Odoo, then install **P
 ```bash
 odoo -d <test_db> -i pos_stock_guard --test-enable --test-tags /pos_stock_guard --stop-after-init
 ```
+
+Both Odoo modules are also tested on every push by the `odoo-modules` GitHub workflow, inside the same Docker image the server runs.
+
+## Electronic invoices (SRI, Ecuador)
+
+Only the orders the cashier marks as **Invoice** become electronic invoices; every other sale stays a normal receipt. The OCA module [`l10n_ec_account_edi`](https://github.com/OCA/l10n-ecuador) (AGPL-3) builds, signs and sends the XML to the SRI; `addons/l10n_ec_pos_sri` connects it to the point of sale:
+
+- Each POS payment method has an SRI payment method (`formaPago`): cash `01`, bank `20` by default, credit card `19` if you choose it.
+- Before an order to invoice is validated, the customer must have an identification number, and Consumidor Final cannot exceed the limit enforced by the OCA module (USD 50 by default, parameter `l10n_ec_final_consumer_limit`).
+- If Odoo cannot create the invoice (for example, a missing certificate), the sale is still saved, the POS shows its usual invoice error, and the error is written on the order so it can be invoiced later from the back office.
+- The invoice is sent to the SRI by the `account_edi` scheduled job, so a slow or unavailable SRI never stops the cashier.
+
+The OCA modules and their Python libraries are part of the Docker image (`deploy/Dockerfile`). Setup and testing in staging: [docs/sri-einvoicing.md](docs/sri-einvoicing.md).
 
 ## Simple product sync
 
