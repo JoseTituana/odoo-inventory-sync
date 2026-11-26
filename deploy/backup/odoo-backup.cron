@@ -1,0 +1,6 @@
+# Nightly Odoo + n8n backup. The server clock is UTC:
+# 07:00 UTC = 02:00 in Ecuador (UTC-5, no daylight saving time).
+# Install as /etc/cron.d/odoo-backup (owner root, mode 644).
+SHELL=/bin/bash
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+0 7 * * * root /usr/local/sbin/odoo-backup >> /var/log/odoo-backup.log 2>&1
