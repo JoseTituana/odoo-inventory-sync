@@ -79,3 +79,7 @@ cd /opt/odoo && ./setup-staging.sh --yes
 Logins are the same as in production at the time of the copy. Remove staging with
 `docker compose rm -sf odoo-staging`, `dropdb jats_staging`, and by deleting
 `staging-data/` and `config-staging/`.
+
+## Backups
+
+Nightly backups with an off-server copy on the POS PC: see [backup/README.md](backup/README.md).
