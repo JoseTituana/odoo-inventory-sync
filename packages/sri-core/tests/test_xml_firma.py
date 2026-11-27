@@ -91,9 +91,11 @@ def test_firma_valida_para_xmlsec1(factura, llave_y_cert, tmp_path):
     firmado = Firmador(llave, cert).firmar(factura_xml(factura))
     (tmp_path / "f.xml").write_bytes(firmado)
     (tmp_path / "c.pem").write_bytes(cert.public_bytes(serialization.Encoding.PEM))
+    # El certificado de prueba se marca como confiable: xmlsec1 1.3 no acepta la llave
+    # de un X509Certificate sin confianza (KEY-NOT-FOUND) aunque la firma sea correcta.
     r = subprocess.run(
         ["xmlsec1", "--verify", "--id-attr:id", "factura", "--id-attr:Id", "KeyInfo",
-         "--id-attr:Id", "SignedProperties", "--pubkey-cert-pem", str(tmp_path / "c.pem"), str(tmp_path / "f.xml")],
+         "--id-attr:Id", "SignedProperties", "--trusted-pem", str(tmp_path / "c.pem"), str(tmp_path / "f.xml")],
         capture_output=True, text=True,
     )
     assert r.returncode == 0, r.stderr
