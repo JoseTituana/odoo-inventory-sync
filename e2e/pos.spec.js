@@ -1,6 +1,6 @@
 // Browser test of the till with pos_stock_guard, in Spanish, as the store uses it.
 // Run through e2e/run.sh, which prepares the database and fixtures.json.
-const { test, expect } = require("@playwright/test");
+const { test, expect, request } = require("@playwright/test");
 const fx = require("./fixtures.json");
 
 test.describe.configure({ mode: "serial" });
@@ -8,10 +8,12 @@ test.describe.configure({ mode: "serial" });
 /** @type {import('@playwright/test').Page} */
 let page;
 let context;
+let admin;
 
-// JSON-RPC with the browser's own session (the admin user).
+// JSON-RPC as the administrator, to check what the till did. The till itself
+// runs as "caja", a user with only Point of Sale: User rights.
 async function rpc(model, method, args, kwargs = {}) {
-    const res = await page.request.post(`${fx.url}/web/dataset/call_kw/${model}/${method}`, {
+    const res = await admin.post(`${fx.url}/web/dataset/call_kw/${model}/${method}`, {
         data: { jsonrpc: "2.0", method: "call", params: { model, method, args, kwargs } },
     });
     const body = await res.json();
@@ -44,8 +46,8 @@ const dialog = (on = page) => on.locator(".modal-dialog").last();
 
 async function login(on) {
     await on.goto(`${fx.url}/web/login`);
-    await on.fill("input[name=login]", "admin");
-    await on.fill("input[name=password]", "admin");
+    await on.fill("input[name=login]", fx.till_login);
+    await on.fill("input[name=password]", fx.till_password);
     await on.click("button[type=submit]");
     await on.waitForURL(/\/odoo/);
 }
@@ -72,6 +74,11 @@ async function payCash({ offline = false, onPaymentScreen = false } = {}) {
 }
 
 test.beforeAll(async ({ browser }) => {
+    admin = await request.newContext();
+    const auth = await admin.post(`${fx.url}/web/session/authenticate`, {
+        data: { jsonrpc: "2.0", method: "call", params: { db: fx.db, login: "admin", password: "admin" } },
+    });
+    expect((await auth.json()).result).toBeTruthy();
     context = await browser.newContext();
     page = await context.newPage();
     await login(page);
@@ -79,6 +86,7 @@ test.beforeAll(async ({ browser }) => {
 
 test.afterAll(async () => {
     await context?.close();
+    await admin?.dispose();
 });
 
 test("el vendedor abre la caja con su PIN y vende un par con stock, IVA incluido", async () => {
@@ -244,7 +252,7 @@ test("cierre de caja: cuadra con las ventas del día, también las de sin conexi
     const menu = page.locator(".pos-topheader button:has(.fa-bars)").first();
     // A salesperson cannot close the till; the manager does (as in the manual).
     await menu.click();
-    await expect(page.getByText("Entrada/salida de efectivo")).toBeVisible();
+    await expect(page.getByText("Volver a cargar datos")).toBeVisible();
     await expect(page.getByText("Cerrar caja registradora")).toHaveCount(0);
     await page.keyboard.press("Escape");
     await page.locator(".pos-topheader .fa-unlock").first().click();
