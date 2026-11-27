@@ -48,7 +48,8 @@ def variant(code):
 in_stock = variant("VALENTINA-NEG-CUE-37")   # 5 pairs
 one_left = variant("VALENTINA-NEG-CUE-35")   # 1 pair
 no_stock = variant("VALENTINA-NEG-CUE-38")   # 0 pairs
-assert (in_stock["qty_available"], one_left["qty_available"], no_stock["qty_available"]) == (5, 1, 0)
+last_pair = variant("VALENTINA-MIE-CUE-37")  # 1 pair, for the two-tills test
+assert [v["qty_available"] for v in (in_stock, one_left, no_stock, last_pair)] == [5, 1, 0, 1]
 
 # Till: cash and bank payment methods, one salesperson and one manager.
 # (Search before creating, so the script can be run again on the same database.)
@@ -83,6 +84,7 @@ fixtures = {
     "in_stock": in_stock,
     "one_left": one_left,
     "no_stock": no_stock,
+    "last_pair": last_pair,
 }
 (ROOT / "e2e/fixtures.json").write_text(json.dumps(fixtures, indent=2))
 print(json.dumps(fixtures, indent=2))

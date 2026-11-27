@@ -24,7 +24,8 @@ class TestStockGuard(TransactionCase):
         return self.env["pos.config"].stock_guard_available(self.config.id, products.ids)
 
     def authorize(self, pin):
-        return self.env["pos.config"].stock_guard_authorize(
+        # English messages whatever the database language (staging is es_EC).
+        return self.env["pos.config"].with_context(lang="en_US").stock_guard_authorize(
             self.config.id, pin, self.shoe.id, 4, 3, "Guard cashier")
 
     def logs(self):
@@ -60,7 +61,9 @@ class TestStockGuard(TransactionCase):
         self.assertEqual(len(self.logs()), 5)  # the locked attempt is not logged again
 
     def test_no_manager_with_pin_gives_a_clear_error(self):
-        self.manager.pin = False
+        # POS administrators of the database also count as managers; clear
+        # every PIN (rolled back after the test) so real data does not matter.
+        self.config._stock_guard_managers().write({"pin": False})
         result = self.authorize("4321")
         self.assertFalse(result["ok"])
         self.assertIn("No manager", result["error"])

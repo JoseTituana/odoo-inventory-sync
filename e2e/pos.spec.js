@@ -34,13 +34,21 @@ async function overrides() {
 }
 
 // A USB barcode reader types the digits fast and presses Enter.
-async function scan(product) {
-    await page.keyboard.type(product.barcode, { delay: 5 });
-    await page.keyboard.press("Enter");
+async function scan(product, on = page) {
+    await on.keyboard.type(product.barcode, { delay: 5 });
+    await on.keyboard.press("Enter");
 }
 
-const lines = () => page.locator(".order-container .orderline");
-const dialog = () => page.locator(".modal-dialog").last();
+const lines = (on = page) => on.locator(".order-container .orderline");
+const dialog = (on = page) => on.locator(".modal-dialog").last();
+
+async function login(on) {
+    await on.goto(`${fx.url}/web/login`);
+    await on.fill("input[name=login]", "admin");
+    await on.fill("input[name=password]", "admin");
+    await on.click("button[type=submit]");
+    await on.waitForURL(/\/odoo/);
+}
 
 async function typePinOnPad(pin) {
     for (const digit of pin) {
@@ -49,8 +57,10 @@ async function typePinOnPad(pin) {
     await dialog().locator("button.btn-primary").last().click();
 }
 
-async function payCash({ offline = false } = {}) {
-    await page.getByRole("button", { name: "Pago", exact: true }).click();
+async function payCash({ offline = false, onPaymentScreen = false } = {}) {
+    if (!onPaymentScreen) {
+        await page.getByRole("button", { name: "Pago", exact: true }).click();
+    }
     await page.locator(".paymentmethod", { hasText: "Efectivo" }).first().click();
     await page.getByRole("button", { name: /Validar/ }).first().click();
     if (offline) {
@@ -64,11 +74,7 @@ async function payCash({ offline = false } = {}) {
 test.beforeAll(async ({ browser }) => {
     context = await browser.newContext();
     page = await context.newPage();
-    await page.goto(`${fx.url}/web/login`);
-    await page.fill("input[name=login]", "admin");
-    await page.fill("input[name=password]", "admin");
-    await page.click("button[type=submit]");
-    await page.waitForURL(/\/odoo/);
+    await login(page);
 });
 
 test.afterAll(async () => {
@@ -171,4 +177,102 @@ test("sin conexión: vende dentro del último stock y bloquea lo que pasa de él
         timeout: 60_000,
     }).toBe(1);
     await expect.poll(() => stock(fx.one_left), { timeout: 60_000 }).toBe(0);
+});
+
+test("devolución: no pide PIN y el par vuelve al stock", async () => {
+    const before = await stock(fx.in_stock);
+    await page.locator(".pos-topheader").getByText("Órdenes").click();
+    await page.getByText("Activo", { exact: true }).first().click();
+    await page.locator(".dropdown-item", { hasText: /^Pagado$/ }).click();
+    // The oldest paid order is the first test's sale of in_stock.
+    await page.locator(".order-row").last().click();
+    await expect(page.locator(".orderline").first()).toContainText("37");
+    await page.locator(".orderline").first().click();
+    await page.locator(".numpad button", { hasText: /^1$/ }).click();
+    await page.getByRole("button", { name: "Reembolso" }).click();
+
+    // Odoo goes straight to the payment screen with -48,00; no stock question.
+    await expect(page.locator(".paymentmethod").first()).toBeVisible();
+    await expect(page.locator(".payment-screen, .o_payment_screen, body").first()).toContainText("-48,00");
+    await expect(page.locator(".modal-dialog")).toHaveCount(0);
+    await payCash({ onPaymentScreen: true });
+    await expect.poll(() => stock(fx.in_stock)).toBe(before + 1);
+    await expect(page.locator(".modal-dialog")).toHaveCount(0);
+});
+
+test("dos cajas a la vez: el último par se cobra una sola vez", async ({ browser }) => {
+    const other = await browser.newContext();
+    const till2 = await other.newPage();
+    try {
+        await login(till2);
+        await till2.goto(`${fx.url}/pos/ui?config_id=${fx.config_id}`);
+        await till2.getByText(/Abrir caja|Desbloquear/).first().click();
+        await till2.locator("input.form-control").first().fill("1111");
+        await till2.keyboard.press("Enter");
+        // Odoo may ask the second screen for the opening cash again, although
+        // the session is already open; confirming it changes nothing.
+        const opening = till2.getByRole("button", { name: "Abrir caja registradora" });
+        await till2.waitForTimeout(1500);
+        if (await opening.isVisible()) {
+            await opening.click();
+        }
+        await expect(till2.locator(".modal-dialog")).toHaveCount(0);
+
+        // Both tills put the last pair in an order: each still sees 1 in stock.
+        await scan(fx.last_pair);
+        await expect(lines()).toHaveCount(1);
+        await scan(fx.last_pair, till2);
+        await expect(lines(till2)).toHaveCount(1);
+        await expect(till2.locator(".modal-dialog")).toHaveCount(0);
+
+        // The first till charges it.
+        await payCash();
+        await expect.poll(() => stock(fx.last_pair)).toBe(0);
+
+        // The second till is stopped at Payment: the server says it is gone.
+        await till2.getByRole("button", { name: "Pago", exact: true }).click();
+        await expect(dialog(till2)).toContainText("No hay stock suficiente");
+        await dialog(till2).getByRole("button", { name: "Cancelar" }).click();
+        await expect(till2.getByRole("button", { name: "Pago", exact: true })).toBeVisible();
+        expect(await stock(fx.last_pair)).toBe(0);
+    } finally {
+        await other.close();
+    }
+});
+
+test("cierre de caja: cuadra con las ventas del día, también las de sin conexión", async () => {
+    const menu = page.locator(".pos-topheader button:has(.fa-bars)").first();
+    // A salesperson cannot close the till; the manager does (as in the manual).
+    await menu.click();
+    await expect(page.getByText("Entrada/salida de efectivo")).toBeVisible();
+    await expect(page.getByText("Cerrar caja registradora")).toHaveCount(0);
+    await page.keyboard.press("Escape");
+    await page.locator(".pos-topheader .fa-unlock").first().click();
+    await page.getByText(/Desbloquear/).first().click();
+    await page.locator("input.form-control").first().fill("4321");
+    await page.keyboard.press("Enter");
+
+    await menu.click();
+    await page.getByText("Cerrar caja registradora").first().click();
+    const closing = dialog();
+    // Sale + authorized sale + offline sale - refund + last pair = 3 × 48.
+    await expect(closing).toContainText("5 órdenes: $ 144,00");
+    await closing.locator("input").first().fill("144");
+    await expect(closing).toContainText("Diferencia");
+    await closing.getByRole("button", { name: "Cerrar caja registradora" }).click();
+
+    // (After closing, Odoo reloads the till and starts the next session.)
+    const first = async () => (await rpc("pos.session", "search_read", [[]], {
+        fields: ["state", "cash_register_difference", "move_id", "order_count"], order: "id", limit: 1,
+    }))[0];
+    await expect.poll(async () => (await first()).state, { timeout: 60_000 }).toBe("closed");
+    const session = await first();
+    expect(session.order_count).toBe(5);
+    expect(session.cash_register_difference).toBeCloseTo(0, 2);
+    expect(session.move_id).toBeTruthy();
+    // Stock after closing is what the sales left.
+    expect([
+        await stock(fx.in_stock), await stock(fx.one_left),
+        await stock(fx.no_stock), await stock(fx.last_pair),
+    ]).toEqual([5, 0, -1, 0]);
 });
