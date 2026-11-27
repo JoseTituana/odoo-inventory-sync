@@ -87,3 +87,9 @@ def test_main_sin_conexion(archivo_p12, tmp_path, monkeypatch, capsys):
                    "--dir-matriz", "Quito", "--salida", str(tmp_path / "s")])
     assert codigo == 3
     assert "Sin conexión con el SRI" in capsys.readouterr().err
+
+
+def test_main_archivo_inexistente_no_pide_contrasena(tmp_path, monkeypatch, capsys):
+    monkeypatch.delenv("SRI_P12_CLAVE", raising=False)
+    assert main(["certificado", "--p12", str(tmp_path / "no-existe.p12")]) == 2
+    assert "No existe el archivo de firma" in capsys.readouterr().err

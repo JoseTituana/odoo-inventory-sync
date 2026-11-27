@@ -42,7 +42,10 @@ def _clave_p12(args) -> str:
 
 
 def _abrir_firma(args) -> Firmador:
-    return Firmador.desde_p12(Path(args.p12), _clave_p12(args))
+    ruta = Path(args.p12)
+    if not ruta.is_file():
+        raise FirmaError(f"No existe el archivo de firma: {ruta}")
+    return Firmador.desde_p12(ruta, _clave_p12(args))
 
 
 def _imprimir_respuesta(r: RespuestaAutorizacion, out) -> None:
@@ -184,6 +187,9 @@ def main(argv: list[str] | None = None) -> int:
     except (FirmaError, ValueError) as exc:
         print(f"Error: {exc}", file=sys.stderr)
         return 2
+    except (EOFError, KeyboardInterrupt):
+        print("\nCancelado.", file=sys.stderr)
+        return 130
     except SRIConexionError as exc:
         print(f"Sin conexión con el SRI: {exc}\nRevisa internet; el SRI a veces está caído, intenta en unos minutos.",
               file=sys.stderr)
