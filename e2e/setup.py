@@ -77,7 +77,22 @@ call("pos.config", "write", [config], {
     "basic_employee_ids": [(6, 0, [seller])],
 })
 
+# The till runs with an Odoo user that has only "Point of Sale: User" rights,
+# as at the store (never the administrator).
+def xmlid(ref):
+    module, name = ref.split(".")
+    return call("ir.model.data", "check_object_reference", module, name)[1]
+
+
+till_user = ensure("res.users", [["login", "=", "caja"]], {
+    "name": "Caja", "login": "caja", "password": "caja-e2e-only", "lang": "es_EC",
+    "tz": "America/Guayaquil",
+    "group_ids": [(6, 0, [xmlid("base.group_user"), xmlid("point_of_sale.group_pos_user")])],
+})
+
 fixtures = {
+    "till_login": "caja",
+    "till_password": "caja-e2e-only",
     "url": URL,
     "db": DB,
     "config_id": config,
