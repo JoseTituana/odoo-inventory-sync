@@ -2,6 +2,8 @@
 
 How the point of sale issues Ecuadorian electronic invoices without a paid provider, and how to roll it out: staging first, against the SRI test servers, then production.
 
+Owner's step-by-step guide in Spanish: [manual/guia-activar-facturacion-sri.html](manual/guia-activar-facturacion-sri.html) (printed as `Guia-activar-facturacion-SRI.pdf`).
+
 ## How it fits together
 
 | Piece | Where | What it does |
