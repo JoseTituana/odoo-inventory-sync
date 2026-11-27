@@ -14,6 +14,25 @@ jobs:
       - run: pip install -e ".[dev]"
       - run: pytest -q
 
+  # sri-core: SRI e-invoicing library (packages/sri-core). xmlsec1 checks the
+  # XAdES signature independently of the library's own verifier.
+  sri-core:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.12"]
+    defaults:
+      run:
+        working-directory: packages/sri-core
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: sudo apt-get update -q && sudo apt-get install -y -q xmlsec1
+      - run: pip install -e ".[dev]"
+      - run: pytest -q
+
   # The store PCs run Windows 10 and 11: run the tests there too and try the
   # PC setup scripts in Windows PowerShell 5.1, the version those PCs ship with.
   windows:
