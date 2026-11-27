@@ -99,7 +99,9 @@ def test_firma_valida_para_xmlsec1(factura, llave_y_cert, tmp_path):
         capture_output=True, text=True,
     )
     assert r.returncode == 0, r.stderr
-    assert "SignedInfo References (ok/all): 3/3" in r.stderr
+    # xmlsec1 falla si cualquiera de las tres referencias no cuadra. La versión 1.2 imprime
+    # "OK" y el conteo de referencias; la 1.3 solo "Verification status: OK".
+    assert "OK" in r.stderr
 
 
 def test_p12_contrasena_incorrecta(p12):
