@@ -23,3 +23,5 @@ build/
 dist/
 .venv/
 venv/
+*.p12
+*.pfx

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Esquema mínimo solo para pruebas: deja pasar ds:Signature sin revisarla.
+     La firma se prueba aparte (verificar_firma y xmlsec1). -->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            targetNamespace="http://www.w3.org/2000/09/xmldsig#"
+            elementFormDefault="qualified">
+  <xsd:element name="Signature">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:any processContents="skip" minOccurs="0" maxOccurs="unbounded"/>
+      </xsd:sequence>
+      <xsd:anyAttribute processContents="skip"/>
+    </xsd:complexType>
+  </xsd:element>
+</xsd:schema>
