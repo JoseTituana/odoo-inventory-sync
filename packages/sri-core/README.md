@@ -61,6 +61,22 @@ else:
         print(m)                         # p. ej. "[39] FIRMA INVALIDA"
 ```
 
+## Guías
+
+- [Cómo conectar sri-core a un sistema nuevo](docs/integracion.md), con un
+  [ejemplo de POS](ejemplos/pos_minimo.py) que también se prueba automáticamente.
+- [Prueba real con el SRI](docs/prueba-real-sri.md): los pasos para cuando tengas la clave del `.p12`.
+
+## Comando `sri-core`
+
+| Comando | Para qué |
+| --- | --- |
+| `sri-core certificado --p12 firma.p12` | Ver titular y vencimiento de la firma |
+| `sri-core prueba --p12 firma.p12 --ruc ... --razon-social ... --dir-matriz ...` | Factura y nota de crédito reales en el ambiente de **pruebas** del SRI |
+| `sri-core consultar CLAVE` | Consultar si una clave de acceso quedó autorizada |
+
+La contraseña se pide en pantalla o se toma de la variable `SRI_P12_CLAVE`.
+
 ## Lo que tu sistema tiene que guardar
 
 La librería no guarda nada; eso le toca al proyecto que la usa:
@@ -113,5 +129,5 @@ ambiente de pruebas con el `.p12` del negocio.
 ## Pendiente
 
 - Nota de débito, comprobante de retención, guía de remisión y liquidación de compra.
-- Probar contra el ambiente de pruebas del SRI con un `.p12` real.
+- Probar contra el ambiente de pruebas del SRI con un `.p12` real (ver [la guía](docs/prueba-real-sri.md)).
 - Envío del RIDE y el XML por correo (lo hace el proyecto que usa la librería).

@@ -5,63 +5,7 @@ import pytest
 from sri_core import ClienteSRI, Firmador, SRIConexionError, factura_xml, generar_ride
 from sri_core.sri_cliente import RespuestaAutorizacion
 
-
-def sobre(cuerpo):
-    return (
-        '<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body>'
-        f"{cuerpo}</soap:Body></soap:Envelope>"
-    ).encode()
-
-
-def recibida():
-    return sobre('<ns2:validarComprobanteResponse xmlns:ns2="http://ec.gob.sri.ws.recepcion">'
-                 "<RespuestaRecepcionComprobante><estado>RECIBIDA</estado><comprobantes/>"
-                 "</RespuestaRecepcionComprobante></ns2:validarComprobanteResponse>")
-
-
-def devuelta(ident, texto, extra=""):
-    return sobre('<ns2:validarComprobanteResponse xmlns:ns2="http://ec.gob.sri.ws.recepcion">'
-                 "<RespuestaRecepcionComprobante><estado>DEVUELTA</estado><comprobantes><comprobante>"
-                 "<claveAcceso>x</claveAcceso><mensajes><mensaje>"
-                 f"<identificador>{ident}</identificador><mensaje>{texto}</mensaje>"
-                 f"<informacionAdicional>{extra}</informacionAdicional><tipo>ERROR</tipo>"
-                 "</mensaje></mensajes></comprobante></comprobantes></RespuestaRecepcionComprobante>"
-                 "</ns2:validarComprobanteResponse>")
-
-
-def autorizacion(clave, estado="AUTORIZADO", mensajes=""):
-    return sobre('<ns2:autorizacionComprobanteResponse xmlns:ns2="http://ec.gob.sri.ws.autorizacion">'
-                 f"<RespuestaAutorizacionComprobante><claveAccesoConsultada>{clave}</claveAccesoConsultada>"
-                 "<numeroComprobantes>1</numeroComprobantes><autorizaciones><autorizacion>"
-                 f"<estado>{estado}</estado><numeroAutorizacion>{clave}</numeroAutorizacion>"
-                 "<fechaAutorizacion>2026-11-27T11:30:05-05:00</fechaAutorizacion><ambiente>PRUEBAS</ambiente>"
-                 "<comprobante><![CDATA[<factura id=\"comprobante\"/>]]></comprobante>"
-                 f"<mensajes>{mensajes}</mensajes></autorizacion></autorizaciones>"
-                 "</RespuestaAutorizacionComprobante></ns2:autorizacionComprobanteResponse>")
-
-
-def sin_autorizaciones(clave):
-    return sobre('<ns2:autorizacionComprobanteResponse xmlns:ns2="http://ec.gob.sri.ws.autorizacion">'
-                 f"<RespuestaAutorizacionComprobante><claveAccesoConsultada>{clave}</claveAccesoConsultada>"
-                 "<numeroComprobantes>0</numeroComprobantes><autorizaciones/>"
-                 "</RespuestaAutorizacionComprobante></ns2:autorizacionComprobanteResponse>")
-
-
-class SesionFalsa:
-    def __init__(self, respuestas):
-        self.respuestas = list(respuestas)
-        self.llamadas = []
-
-    def post(self, url, data, headers, timeout):
-        self.llamadas.append((url, data))
-        r = self.respuestas.pop(0)
-        if isinstance(r, Exception):
-            raise r
-
-        class R:
-            status_code = 200
-            content = r
-        return R()
+from sri_falso import SesionFalsa, autorizacion, devuelta, recibida, sin_autorizaciones
 
 
 @pytest.fixture
