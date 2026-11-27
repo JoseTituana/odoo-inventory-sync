@@ -30,8 +30,11 @@ done, todo = [], []
 
 def change(record, values, label):
     """Write only the values that differ, and remember what changed."""
-    values = {k: v for k, v in values.items() if record[k] != v and not (
-        hasattr(record[k], "id") and record[k].id == v)}
+    def same(name, value):
+        current = record[name]
+        return (current.id if record._fields[name].relational else current) == value
+
+    values = {k: v for k, v in values.items() if not same(k, v)}
     if not values:
         return
     if not DRY_RUN:

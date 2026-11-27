@@ -22,19 +22,22 @@ Other rules `l10n_ec_pos_sri` enforces:
 
 Not covered by the OCA 19.0 modules: issuing withholdings (`l10n_ec_withhold` only exists for 17.0) and delivery guides. Issue those with the SRI's online invoicer if needed.
 
-## 1. Server: build the new image
+## 1. Server: add invoicing with one command
 
-The image adds the OCA modules under `/mnt/oca-addons` and the Python libraries they need (`cryptography>=42`, `pyopenssl>=24.1`, `xmlsig`, `xades`, `packaging`). On the server, from `/opt/odoo`, after copying `Dockerfile` and `compose.yaml` from `deploy/` and `addons/l10n_ec_pos_sri` into `/opt/odoo/addons/`:
+From a store PC where `ssh vps` works, in PowerShell, in a copy of this repository:
 
-1. Add `/mnt/oca-addons` to `addons_path` in **both** `config/odoo.conf` and `config-staging/odoo.conf`:
-   `addons_path = /mnt/extra-addons,/mnt/oca-addons,/usr/lib/python3/dist-packages/odoo/addons`
-   (`setup-staging.sh` already writes it for future staging refreshes.)
-2. `docker compose build` then `docker compose up -d odoo odoo-staging`.
-3. Check memory for a day with `docker stats --no-stream`.
+```
+.\deploy\enable-sri.ps1 -Target staging      # first: jats_staging
+.\deploy\enable-sri.ps1 -Target production   # after the tests pass: jats
+```
 
-Production does not change until the modules are installed in `jats` (step 4).
+It copies `Dockerfile`, `compose.yaml`, `enable-sri.sh`, `sri-configure.py` and `addons/l10n_ec_pos_sri` to `/opt/odoo` and runs `enable-sri.sh`, which adds `/mnt/oca-addons` to `addons_path` (copy of the old file as `odoo.conf.before-sri`), builds `odoo-josheps:19`, makes a backup (production only), installs or updates `l10n_ec_pos_sri`, runs `sri-configure.py`, and starts the service again with `up -d --no-deps`. It can run again safely. On a failed install it starts the service as it was and leaves the database unchanged.
 
-## 2. Staging: install and configure
+Nothing changes on the store PCs: the till picks up the new version when the "Caja Josheps" shortcut is closed and opened again.
+
+The image needs a few hundred MB of disk and `docker compose build` downloads the Python libraries; check memory afterwards with `docker stats --no-stream`.
+
+## 2. Staging: configure (by hand, or what the script already did)
 
 In `jats_staging` (SSH tunnel, `http://localhost:8070`), Apps, remove the "Apps" filter:
 
@@ -77,8 +80,8 @@ Each case: make the sale in the POS, open the invoice, wait for (or run) the EDI
 
 ## 4. Production
 
-1. Fresh backup of `jats`.
-2. Install the same modules in `jats`, repeat the configuration of step 2 with Environment: **Production** and the real emission point.
+1. After closing the till: `.\deploy\enable-sri.ps1 -Target production` (it makes the backup first).
+2. Repeat the configuration of step 2 with Environment: **Production** and the real emission point.
 3. First day: keep the SRI's online invoicer at hand, check every invoice reaches *Sent*, and look at Invoicing > Configuration > Ecuadorian SRI > XML Electronic Documents at closing time.
 
 ## Safety
