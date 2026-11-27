@@ -1,0 +1,137 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* l10n_ec_pos_sri
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0-20261123\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-27 18:54+0000\n"
+"PO-Revision-Date: 2026-11-27 18:54+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: l10n_ec_pos_sri
+#. odoo-javascript
+#: code:addons/l10n_ec_pos_sri/static/src/order_payment_validation_patch.js:0
+msgid "Add it"
+msgstr "Agregarla"
+
+#. module: l10n_ec_pos_sri
+#. odoo-javascript
+#: code:addons/l10n_ec_pos_sri/static/src/order_payment_validation_patch.js:0
+msgid ""
+"An electronic invoice needs the customer's cédula, RUC or passport number."
+msgstr "Una factura electrónica necesita la cédula, el RUC o el pasaporte del cliente."
+
+#. module: l10n_ec_pos_sri
+#. odoo-javascript
+#: code:addons/l10n_ec_pos_sri/static/src/order_payment_validation_patch.js:0
+msgid "Customer required"
+msgstr "Falta el cliente"
+
+#. module: l10n_ec_pos_sri
+#: model:ir.model.fields,field_description:l10n_ec_pos_sri.field_account_edi_document__display_name
+#: model:ir.model.fields,field_description:l10n_ec_pos_sri.field_account_move_line__display_name
+#: model:ir.model.fields,field_description:l10n_ec_pos_sri.field_pos_config__display_name
+#: model:ir.model.fields,field_description:l10n_ec_pos_sri.field_pos_order__display_name
+#: model:ir.model.fields,field_description:l10n_ec_pos_sri.field_pos_payment_method__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: l10n_ec_pos_sri
+#: model:ir.model.fields,help:l10n_ec_pos_sri.field_pos_payment_method__l10n_ec_sri_payment_id
+msgid ""
+"Ecuador: payment method (formaPago) written on the electronic invoice when "
+"this method pays most of the order. Cash: 01 No use of the financial system;"
+" cards: 16 or 19; transfers: 20."
+msgstr ""
+
+#. module: l10n_ec_pos_sri
+#: model:ir.model,name:l10n_ec_pos_sri.model_account_edi_document
+msgid "Electronic Document for an account.move"
+msgstr ""
+
+#. module: l10n_ec_pos_sri
+#: model:ir.model.fields,field_description:l10n_ec_pos_sri.field_account_edi_document__id
+#: model:ir.model.fields,field_description:l10n_ec_pos_sri.field_account_move_line__id
+#: model:ir.model.fields,field_description:l10n_ec_pos_sri.field_pos_config__id
+#: model:ir.model.fields,field_description:l10n_ec_pos_sri.field_pos_order__id
+#: model:ir.model.fields,field_description:l10n_ec_pos_sri.field_pos_payment_method__id
+msgid "ID"
+msgstr ""
+
+#. module: l10n_ec_pos_sri
+#: model_terms:ir.ui.view,arch_db:l10n_ec_pos_sri.view_pos_order_filter_l10n_ec
+msgid "Invoice Failed"
+msgstr "Factura fallida"
+
+#. module: l10n_ec_pos_sri
+#. odoo-javascript
+#: code:addons/l10n_ec_pos_sri/static/src/order_payment_validation_patch.js:0
+msgid ""
+"Invoices to Consumidor Final cannot exceed %s. Ask for the customer's cédula"
+" or RUC."
+msgstr "Las facturas a Consumidor Final no pueden pasar de %s. Pide la cédula o el RUC del cliente."
+
+#. module: l10n_ec_pos_sri
+#: model:ir.model,name:l10n_ec_pos_sri.model_account_move_line
+msgid "Journal Item"
+msgstr ""
+
+#. module: l10n_ec_pos_sri
+#. odoo-javascript
+#: code:addons/l10n_ec_pos_sri/static/src/order_payment_validation_patch.js:0
+msgid "Missing identification"
+msgstr "Falta la identificación"
+
+#. module: l10n_ec_pos_sri
+#: model_terms:ir.ui.view,arch_db:l10n_ec_pos_sri.view_pos_order_filter_l10n_ec
+msgid "Not Invoiced"
+msgstr "Sin factura"
+
+#. module: l10n_ec_pos_sri
+#. odoo-python
+#: code:addons/l10n_ec_pos_sri/models/pos_order.py:0
+msgid ""
+"Only a return of an invoiced sale can become a credit note. Invoice the "
+"original sale first, or give a receipt."
+msgstr "Solo la devolución de una venta facturada puede ser nota de crédito. Factura primero la venta original, o entrega un ticket."
+
+#. module: l10n_ec_pos_sri
+#: model:ir.model,name:l10n_ec_pos_sri.model_pos_config
+msgid "Point of Sale Configuration"
+msgstr ""
+
+#. module: l10n_ec_pos_sri
+#: model:ir.model,name:l10n_ec_pos_sri.model_pos_order
+msgid "Point of Sale Orders"
+msgstr ""
+
+#. module: l10n_ec_pos_sri
+#: model:ir.model,name:l10n_ec_pos_sri.model_pos_payment_method
+msgid "Point of Sale Payment Methods"
+msgstr ""
+
+#. module: l10n_ec_pos_sri
+#: model:ir.model.fields,field_description:l10n_ec_pos_sri.field_pos_payment_method__l10n_ec_sri_payment_id
+msgid "SRI Payment Method"
+msgstr "Forma de pago SRI"
+
+#. module: l10n_ec_pos_sri
+#. odoo-python
+#: code:addons/l10n_ec_pos_sri/models/pos_order.py:0
+msgid "The SRI does not accept credit notes for Consumidor Final."
+msgstr "El SRI no acepta notas de crédito para Consumidor Final."
+
+#. module: l10n_ec_pos_sri
+#. odoo-python
+#: code:addons/l10n_ec_pos_sri/models/pos_order.py:0
+msgid ""
+"The sale was saved but the electronic invoice could not be created. Fix the "
+"problem and use the Invoice button on this order."
+msgstr "La venta se guardó, pero no se pudo crear la factura electrónica. Corrige el problema y usa el botón Factura de este pedido."

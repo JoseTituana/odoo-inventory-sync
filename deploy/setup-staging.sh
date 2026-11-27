@@ -41,6 +41,17 @@ echo "restoring from $BUNDLE"
 work=$(mktemp -d); trap 'rm -rf "$work"' EXIT
 tar -C "$work" -xzf "$BUNDLE"
 docker exec -i odoo-db-1 pg_restore -U odoo -d jats_staging --no-owner --role=odoo_staging --exit-on-error < "$work/odoo-db.dump"
+# Staging must never send electronic invoices to the SRI production servers:
+# a document authorized there is a real invoice. Force the SRI test
+# environment (celcer) when the e-invoicing module is installed.
+cat <<'SQL' | $PG -d jats_staging
+DO $$ BEGIN
+  IF EXISTS (SELECT 1 FROM information_schema.columns
+             WHERE table_name = 'res_company' AND column_name = 'l10n_ec_type_environment') THEN
+    UPDATE res_company SET l10n_ec_type_environment = 'test';
+  END IF;
+END $$;
+SQL
 
 # 3. Staging data dir (bind mount) with its own copy of the filestore.
 install -d -o "${OWNER%:*}" -g "${OWNER#*:}" -m 750 staging-data staging-data/filestore
@@ -63,7 +74,7 @@ db_name = jats_staging
 db_maxconn = 8
 dbfilter = ^jats_staging\$
 list_db = False
-addons_path = /mnt/extra-addons,/usr/lib/python3/dist-packages/odoo/addons
+addons_path = /mnt/extra-addons,/mnt/oca-addons,/usr/lib/python3/dist-packages/odoo/addons
 data_dir = /var/lib/odoo
 proxy_mode = False
 workers = 0
@@ -79,6 +90,8 @@ chmod 640 config-staging/odoo.conf
 echo "== checks"
 echo "objects not owned by odoo_staging in jats_staging:"
 echo "select count(*) from pg_class c join pg_namespace n on n.oid=c.relnamespace where n.nspname='public' and pg_get_userbyid(c.relowner) <> 'odoo_staging';" | $PG -d jats_staging -At
+echo "SRI environment in staging (expect only test):"
+echo "select string_agg(distinct l10n_ec_type_environment, ',') from res_company;" | $PG -d jats_staging -At 2>/dev/null || echo "(e-invoicing not installed)"
 echo "mail servers in staging:"; echo "select count(*) from ir_mail_server;" | $PG -d jats_staging -At
 echo "staging role can reach jats? (expect permission denied):"
 printf '%s\n' "$DBPASS" > /dev/null
