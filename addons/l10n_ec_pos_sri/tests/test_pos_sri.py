@@ -52,7 +52,7 @@ class TestPosSri(TestL10nECEdiCommon):
         self.pos_config.open_ui()
         self.session = self.pos_config.current_session_id
 
-    def _sync_order(self, partner=None, to_invoice=True, method=None, price=40.0, lines=None):
+    def _sync_order(self, partner=None, to_invoice=True, method=None, price=40.0, lines=None, user=None):
         """Send an order the way the till does.
 
         ``lines`` is a list of dicts with ``product``, ``price`` and the
@@ -105,7 +105,8 @@ class TestPosSri(TestL10nECEdiCommon):
             "to_invoice": to_invoice,
             "state": "paid",
         }
-        self.env["pos.order"].sync_from_ui([data])
+        PosOrder = self.env["pos.order"].with_user(user) if user else self.env["pos.order"]
+        PosOrder.sync_from_ui([data])
         # The answer also lists the refunded order, so look the order up.
         return self.env["pos.order"].search([("uuid", "=", uuid)])
 
@@ -325,3 +326,24 @@ class TestPosSri(TestL10nECEdiCommon):
         shoe_line = next(d for d in xml.iterfind(".//detalles/detalle") if float(d.findtext("descuento")))
         self.assertAlmostEqual(float(shoe_line.findtext("precioUnitario")), 40.0)  # 46.00 / 1.15
         self.assertAlmostEqual(float(shoe_line.findtext("precioTotalSinImpuesto")), 36.0)
+
+    def test_invoice_from_till_with_pos_user_rights(self):
+        """The store till logs in as a user with only Point of Sale: User rights."""
+        self._setup_edi_company_ec()
+        cashier = self.env["res.users"].create({
+            "name": "Caja",
+            "login": "caja_ec",
+            "company_id": self.company.id,
+            "company_ids": [(6, 0, self.company.ids)],
+            "group_ids": [(6, 0, [self.env.ref("point_of_sale.group_pos_user").id,
+                                  self.env.ref("base.group_user").id])],
+        })
+        order = self._sync_order(partner=self.partner_dni, user=cashier)
+        self.assertTrue(order.account_move, order.message_ids.mapped("body"))
+        self.assertEqual(order.account_move.state, "posted")
+        # A failing invoice is reported on the order under the same rights.
+        self.company.l10n_ec_key_type_id = False
+        failed = self._sync_order(partner=self.partner_dni, user=cashier)
+        self.assertEqual(failed.state, "paid")
+        self.assertFalse(failed.account_move)
+        self.assertIn("could not be created", " ".join(failed.message_ids.mapped("body")))
