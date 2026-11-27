@@ -284,3 +284,30 @@ test("cierre de caja: cuadra con las ventas del día, también las de sin conexi
         await stock(fx.no_stock), await stock(fx.last_pair),
     ]).toEqual([5, 0, -1, 0]);
 });
+
+test("día siguiente: un par con stock negativo pide PIN otra vez y se vende", async () => {
+    // After closing, Odoo reloads the till; open the next session.
+    await page.goto(`${fx.url}/pos/ui?config_id=${fx.config_id}`);
+    await page.getByText(/Abrir caja|Desbloquear/).first().click();
+    await page.locator("input.form-control").first().fill("1111");
+    await page.keyboard.press("Enter");
+    const opening = page.getByRole("button", { name: "Abrir caja registradora" });
+    await expect(opening).toBeVisible();
+    await opening.click();
+    expect(await stock(fx.no_stock)).toBe(-1); // oversold yesterday
+
+    await scan(fx.no_stock);
+    await expect(dialog()).toContainText("No hay stock suficiente");
+    await dialog().getByRole("button", { name: "Ingresar PIN del encargado" }).click();
+    await typePinOnPad("4321");
+    await expect(lines()).toHaveCount(1);
+    await payCash();
+    await expect.poll(() => stock(fx.no_stock)).toBe(-2);
+
+    // And again at -2: still the stock question, never an error.
+    await scan(fx.no_stock);
+    await expect(dialog()).toContainText("No hay stock suficiente");
+    await dialog().getByRole("button", { name: "Cancelar" }).click();
+    await expect(lines()).toHaveCount(0);
+    await expect(page.getByText("Ocurrió un error")).toHaveCount(0);
+});
