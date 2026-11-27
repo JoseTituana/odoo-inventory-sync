@@ -34,12 +34,31 @@ _ARGPARSE_ES = {
 argparse._ = lambda text: _ARGPARSE_ES.get(text, text)
 
 
-def load_dotenv(path: str = ".env") -> None:
-    """Load KEY=VALUE lines into the environment without overriding it."""
-    env_file = Path(path)
+def default_env_file() -> Path:
+    """Per-user settings file, so the command works from any folder."""
+    if os.name == "nt":
+        base = Path(os.environ.get("APPDATA") or Path.home() / "AppData" / "Roaming")
+    else:
+        base = Path(os.environ.get("XDG_CONFIG_HOME") or Path.home() / ".config")
+    return base / "odoo-sync" / ".env"
+
+
+def load_dotenv(path: str | None = None) -> None:
+    """Load KEY=VALUE lines into the environment without overriding it.
+
+    Reads ``path`` if given; otherwise ``.env`` in the current folder, or the
+    per-user file from :func:`default_env_file` when there is none.
+    """
+    if path is not None:
+        env_file = Path(path)
+    else:
+        env_file = Path(".env")
+        if not env_file.is_file():
+            env_file = default_env_file()
     if not env_file.is_file():
         return
-    for line in env_file.read_text(encoding="utf-8").splitlines():
+    # utf-8-sig: Notepad may save the file with a byte order mark.
+    for line in env_file.read_text(encoding="utf-8-sig").splitlines():
         line = line.strip()
         if not line or line.startswith("#") or "=" not in line:
             continue
@@ -64,13 +83,22 @@ def build_parser() -> argparse.ArgumentParser:
 ENV_KEYS = ("ODOO_URL", "ODOO_DB", "ODOO_USER", "ODOO_PASSWORD")
 
 
+def _protocol() -> str:
+    """ODOO_PROTOCOL: auto (default), json2 or xmlrpc."""
+    return os.environ.get("ODOO_PROTOCOL", "auto").strip().lower() or "auto"
+
+
 def _client_from_env() -> OdooClient | None:
     load_dotenv()
     missing = [k for k in ENV_KEYS if not os.environ.get(k)]
     if missing:
-        print(f"Faltan variables de entorno: {', '.join(missing)}", file=sys.stderr)
+        print(
+            f"Faltan datos de conexión: {', '.join(missing)}. "
+            f"Escríbelos en {default_env_file()} (o en un .env en esta carpeta).",
+            file=sys.stderr,
+        )
         return None
-    return OdooClient(*(os.environ[k] for k in ENV_KEYS))
+    return OdooClient(*(os.environ[k] for k in ENV_KEYS), protocol=_protocol())
 
 
 def build_catalog_parser() -> argparse.ArgumentParser:
@@ -154,7 +182,10 @@ def catalog_main(argv: list[str]) -> int:
                 return 1
         result = import_catalog(gateway, plans, dry_run=args.dry_run,
                                 location_id=args.location_id)
-    except (OdooError, CatalogSyncError) as error:
+    except CatalogSyncError as error:
+        print(f"No se importó nada: {error}", file=sys.stderr)
+        return 1
+    except OdooError as error:
         print(f"Error de Odoo: {error}", file=sys.stderr)
         return 1
 
@@ -181,7 +212,7 @@ def build_labels_parser() -> argparse.ArgumentParser:
         prog="odoo-sync labels",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         description="Imprime una etiqueta por cada par en stock, en un PDF.",
-        epilog=f"perfiles:\n{profiles}\n\nImprime el PDF al 100 %% (tamaño real), no 'ajustar a la "
+        epilog=f"perfiles:\n{profiles}\n\nImprime el PDF al 100 % (tamaño real), no 'ajustar a la "
                "página'.",
     )
     parser.add_argument("--profile", default="a4-21", choices=sorted(PROFILES))
@@ -229,6 +260,12 @@ def labels_main(argv: list[str]) -> int:
             print(f"  {count:>3} x {name}")
     for message in plan.skipped:
         print(f"aviso {message}", file=sys.stderr)
+    if not plan.labels:
+        filters = [f"{flag} {value!r}" for flag, value in
+                   (("--model", args.model), ("--category", args.category)) if value]
+        reason = (f"ninguna variante con stock coincide con {' y '.join(filters)}"
+                  if filters else "no hay variantes con stock en esa ubicación")
+        print(f"No hay etiquetas que imprimir: {reason}.", file=sys.stderr)
     if args.dry_run or not plan.labels:
         return 0
     output = args.output or f"labels-{profile.name}-{datetime.now():%Y%m%d-%H%M}.pdf"
@@ -253,7 +290,11 @@ def main(argv: list[str] | None = None) -> int:
 
     missing = [k for k in ENV_KEYS if not os.environ.get(k)]
     if missing:
-        print(f"Faltan variables de entorno: {', '.join(missing)}", file=sys.stderr)
+        print(
+            f"Faltan datos de conexión: {', '.join(missing)}. "
+            f"Escríbelos en {default_env_file()} (o en un .env en esta carpeta).",
+            file=sys.stderr,
+        )
         return 2
 
     try:
@@ -270,6 +311,7 @@ def main(argv: list[str] | None = None) -> int:
         os.environ["ODOO_DB"],
         os.environ["ODOO_USER"],
         os.environ["ODOO_PASSWORD"],
+        protocol=_protocol(),
     )
     try:
         client.authenticate()  # fail fast on bad credentials instead of once per row

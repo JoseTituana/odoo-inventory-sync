@@ -25,7 +25,11 @@ pip install -e ".[dev]"
 cp .env.example .env     # then set the Odoo URL, database, user and API key
 ```
 
+On the store's Windows PCs use `deploy/pos-pc/install-importer.ps1` instead: see [deploy/pos-pc/README.md](deploy/pos-pc/README.md). Without a `.env` in the current folder, the settings are read from `%APPDATA%\odoo-sync\.env` (`~/.config/odoo-sync/.env` on Linux and macOS).
+
 Use an API key, not a password, and a dedicated Odoo user with Inventory administrator rights only. `.env` is ignored by git.
+
+The tools talk to Odoo through its JSON-2 API (`/json/2`, Odoo 19 and later, needs the API key) and fall back to XML-RPC on older servers or when given a password. XML-RPC is deprecated in Odoo 19 and removed in Odoo 22. Set `ODOO_PROTOCOL=json2` or `xmlrpc` to force one.
 
 ## Catalog import
 
